@@ -1,0 +1,23 @@
+*.class
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+/GenComplete.iml
+/.idea
+/src/GenConfig.tokens
+/src/GenConfigBaseListener.java
+/src/GenConfigLexer.java
+/src/GenConfigLexer.tokens
+/src/GenConfigListener.java
+/src/GenConfigParser.java
+/out/production/GenComplete/GenConfig.g4
+/out/production/GenComplete/GenConfig.tokens
+/out/production/GenComplete/GenConfigLexer.tokens
