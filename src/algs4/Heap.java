@@ -1,4 +1,4 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac Heap.java
  *  Execution:    java Heap < input.txt
  *  Dependencies: StdOut.java StdIn.java
@@ -19,7 +19,9 @@ package algs4; /****************************************************************
  *  % java Heap < words3.txt
  *  all bad bed bug dad ... yes yet zoo   [ one string per line ]
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 /**
  *  The <tt>Heap</tt> class provides a static methods for heapsorting
@@ -41,33 +43,33 @@ public class Heap {
      * @param pq the array to be sorted
      */
     public static void sort(Comparable[] pq) {
-        int N = pq.length;
-        for (int k = N/2; k >= 1; k--)
-            sink(pq, k, N);
-        while (N > 1) {
-            exch(pq, 1, N--);
-            sink(pq, 1, N);
+        int n = pq.length;
+        for (int k = n/2; k >= 1; k--)
+            sink(pq, k, n);
+        while (n > 1) {
+            exch(pq, 1, n--);
+            sink(pq, 1, n);
         }
     }
 
-   /***********************************************************************
+   /***************************************************************************
     * Helper functions to restore the heap invariant.
-    **********************************************************************/
+    ***************************************************************************/
 
-    private static void sink(Comparable[] pq, int k, int N) {
-        while (2*k <= N) {
+    private static void sink(Comparable[] pq, int k, int n) {
+        while (2*k <= n) {
             int j = 2*k;
-            if (j < N && less(pq, j, j+1)) j++;
+            if (j < n && less(pq, j, j+1)) j++;
             if (!less(pq, k, j)) break;
             exch(pq, k, j);
             k = j;
         }
     }
 
-   /***********************************************************************
+   /***************************************************************************
     * Helper functions for comparisons and swaps.
     * Indices are "off-by-one" to support 1-based indexing.
-    **********************************************************************/
+    ***************************************************************************/
     private static boolean less(Comparable[] pq, int i, int j) {
         return pq[i-1].compareTo(pq[j-1]) < 0;
     }
@@ -80,13 +82,13 @@ public class Heap {
 
     // is v < w ?
     private static boolean less(Comparable v, Comparable w) {
-        return (v.compareTo(w) < 0);
+        return v.compareTo(w) < 0;
     }
         
 
-   /***********************************************************************
-    *  Check if array is sorted - useful for debugging
-    ***********************************************************************/
+   /***************************************************************************
+    *  Check if array is sorted - useful for debugging.
+    ***************************************************************************/
     private static boolean isSorted(Comparable[] a) {
         for (int i = 1; i < a.length; i++)
             if (less(a[i], a[i-1])) return false;
@@ -109,5 +111,30 @@ public class Heap {
         String[] a = StdIn.readAllStrings();
         Heap.sort(a);
         show(a);
+        assert isSorted(a);
     }
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

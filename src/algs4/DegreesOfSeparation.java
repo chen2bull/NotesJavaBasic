@@ -1,9 +1,9 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac DegreesOfSeparation.java
  *  Execution:    java DegreesOfSeparation filename delimiter source
  *  Dependencies: SymbolGraph.java Graph.java BreadthFirstPaths.java StdOut.java
- *  Data files:   http://algs4.cs.princeton.edu/41undirected/routes.txt
- *                http://algs4.cs.princeton.edu/41undirected/movies.txt
+ *  Data files:   http://algs4.cs.princeton.edu/41graph/routes.txt
+ *                http://algs4.cs.princeton.edu/41graph/movies.txt
  *  
  *  
  *  %  java DegreesOfSeparation routes.txt " " "JFK"
@@ -47,7 +47,9 @@ package algs4; /****************************************************************
  *     Hitchcock, Alfred (I)
  *     To Catch a Thief (1955)
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 /**
  *  The <tt>DegreesOfSeparation</tt> class provides a client for finding
@@ -66,7 +68,7 @@ package algs4; /****************************************************************
  *  each movie to all of the actors that appear in that movie.
  *  <p>
  *  For additional documentation,
- *  see <a href="http://algs4.cs.princeton.edu/41undirected">Section 4.1</a> of
+ *  see <a href="http://algs4.cs.princeton.edu/41graph">Section 4.1</a> of
  *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
  *
  *  @author Robert Sedgewick
@@ -95,22 +97,22 @@ public class DegreesOfSeparation {
         // StdOut.println("Source: " + source);
 
         SymbolGraph sg = new SymbolGraph(filename, delimiter);
-        Graph G = sg.G();
+        Graph G = sg.graph();
         if (!sg.contains(source)) {
             StdOut.println(source + " not in database.");
             return;
         }
 
-        int s = sg.index(source);
+        int s = sg.indexOf(source);
         BreadthFirstPaths bfs = new BreadthFirstPaths(G, s);
 
         while (!StdIn.isEmpty()) {
             String sink = StdIn.readLine();
             if (sg.contains(sink)) {
-                int t = sg.index(sink);
+                int t = sg.indexOf(sink);
                 if (bfs.hasPathTo(t)) {
                     for (int v : bfs.pathTo(t)) {
-                        StdOut.println("   " + sg.name(v));
+                        StdOut.println("   " + sg.nameOf(v));
                     }
                 }
                 else {
@@ -123,3 +125,27 @@ public class DegreesOfSeparation {
         }
     }
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

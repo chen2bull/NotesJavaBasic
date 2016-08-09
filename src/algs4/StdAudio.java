@@ -1,21 +1,37 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac StdAudio.java
  *  Execution:    java StdAudio
+ *  Dependencies: none
  *  
  *  Simple library for reading, writing, and manipulating .wav files.
-
+ *
  *
  *  Limitations
  *  -----------
  *    - Does not seem to work properly when reading .wav files from a .jar file.
  *    - Assumes the audio is monaural, with sampling rate of 44,100.
  *
- *************************************************************************/
+ ******************************************************************************/
 
-import java.applet.*;
-import java.io.*;
-import java.net.*;
-import javax.sound.sampled.*;
+package algs4;
+
+import javax.sound.sampled.Clip;
+
+import java.io.File;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.IOException;
+
+import java.net.URL;
+
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.SourceDataLine;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 /**
  *  <i>Standard audio</i>. This class provides a basic capability for
@@ -47,12 +63,14 @@ public final class StdAudio {
     private static byte[] buffer;         // our internal buffer
     private static int bufferSize = 0;    // number of samples currently in internal buffer
 
-    // do not instantiate
-    private StdAudio() { }
-
+    private StdAudio() {
+        // can not instantiate
+    }
    
     // static initializer
-    static { init(); }
+    static {
+        init();
+    }
 
     // open up an audio stream
     private static void init() {
@@ -68,9 +86,9 @@ public final class StdAudio {
             // it gets divided because we can't expect the buffered data to line up exactly with when
             // the sound card decides to push out its samples.
             buffer = new byte[SAMPLE_BUFFER_SIZE * BYTES_PER_SAMPLE/3];
-        } catch (Exception e) {
+        }
+        catch (LineUnavailableException e) {
             System.out.println(e.getMessage());
-            System.exit(1);
         }
 
         // no sound gets made before this call
@@ -79,7 +97,7 @@ public final class StdAudio {
 
 
     /**
-     * Close standard audio.
+     * Closes standard audio.
      */
     public static void close() {
         line.drain();
@@ -87,17 +105,21 @@ public final class StdAudio {
     }
     
     /**
-     * Write one sample (between -1.0 and +1.0) to standard audio. If the sample
-     * is outside the range, it will be clipped.
+     * Writes one sample (between -1.0 and +1.0) to standard audio.
+     * If the sample is outside the range, it will be clipped.
+     *
+     * @param  sample the sample to play
+     * @throws IllegalArgumentException if the sample is <tt>Double.NaN</tt>
      */
-    public static void play(double in) {
+    public static void play(double sample) {
 
         // clip if outside [-1, +1]
-        if (in < -1.0) in = -1.0;
-        if (in > +1.0) in = +1.0;
+        if (Double.isNaN(sample)) throw new IllegalArgumentException("sample is NaN");
+        if (sample < -1.0) sample = -1.0;
+        if (sample > +1.0) sample = +1.0;
 
         // convert to bytes
-        short s = (short) (MAX_16_BIT * in);
+        short s = (short) (MAX_16_BIT * sample);
         buffer[bufferSize++] = (byte) s;
         buffer[bufferSize++] = (byte) (s >> 8);   // little Endian
 
@@ -109,64 +131,87 @@ public final class StdAudio {
     }
 
     /**
-     * Write an array of samples (between -1.0 and +1.0) to standard audio. If a sample
-     * is outside the range, it will be clipped.
+     * Writes the array of samples (between -1.0 and +1.0) to standard audio.
+     * If a sample is outside the range, it will be clipped.
+     *
+     * @param  samples the array of samples to play
+     * @throws IllegalArgumentException if any sample is <tt>Double.NaN</tt>
      */
-    public static void play(double[] input) {
-        for (int i = 0; i < input.length; i++) {
-            play(input[i]);
+    public static void play(double[] samples) {
+        if (samples == null) throw new NullPointerException("argument to play() is null");
+        for (int i = 0; i < samples.length; i++) {
+            play(samples[i]);
         }
     }
 
     /**
-     * Read audio samples from a file (in .wav or .au format) and return them as a double array
-     * with values between -1.0 and +1.0.
+     * Reads audio samples from a file (in .wav or .au format) and returns
+     * them as a double array with values between -1.0 and +1.0.
+     *
+     * @param  filename the name of the audio file
+     * @return the array of samples
      */
     public static double[] read(String filename) {
         byte[] data = readByte(filename);
-        int N = data.length;
-        double[] d = new double[N/2];
-        for (int i = 0; i < N/2; i++) {
+        int n = data.length;
+        double[] d = new double[n/2];
+        for (int i = 0; i < n/2; i++) {
             d[i] = ((short) (((data[2*i+1] & 0xFF) << 8) + (data[2*i] & 0xFF))) / ((double) MAX_16_BIT);
         }
         return d;
     }
 
-
-
-
     /**
-     * Play a sound file (in .wav, .mid, or .au format) in a background thread.
+     * Plays an audio file (in .wav, .mid, or .au format) in a background thread.
+     *
+     * @param filename the name of the audio file
      */
-    public static void play(String filename) {
-        URL url = null;
+    public static synchronized void play(String filename) {
+        if (filename == null) throw new NullPointerException();
+
+        // code adapted from: http://stackoverflow.com/questions/26305/how-can-i-play-sound-in-java
         try {
-            File file = new File(filename);
-            if (file.canRead()) url = file.toURI().toURL();
+            Clip clip = AudioSystem.getClip();
+            InputStream is = StdAudio.class.getResourceAsStream(filename);
+            AudioInputStream ais = AudioSystem.getAudioInputStream(is);
+            clip.open(ais);
+            clip.start();
         }
-        catch (MalformedURLException e) { e.printStackTrace(); }
-        // URL url = StdAudio.class.getResource(filename);
-        if (url == null) throw new RuntimeException("audio " + filename + " not found");
-        AudioClip clip = Applet.newAudioClip(url);
-        clip.play();
+        catch (RuntimeException e) {
+            System.out.println("could not play '" + filename + "'");
+            throw e;
+        }
+        catch (Exception e) {
+            System.out.println("could not play '" + filename + "'");
+            e.printStackTrace();
+        }
     }
 
     /**
-     * Loop a sound file (in .wav, .mid, or .au format) in a background thread.
+     * Loops an audio file (in .wav, .mid, or .au format) in a background thread.
+     *
+     * @param filename the name of the audio file
      */
-    public static void loop(String filename) {
-        URL url = null;
-        try {
-            File file = new File(filename);
-            if (file.canRead()) url = file.toURI().toURL();
-        }
-        catch (MalformedURLException e) { e.printStackTrace(); }
-        // URL url = StdAudio.class.getResource(filename);
-        if (url == null) throw new RuntimeException("audio " + filename + " not found");
-        AudioClip clip = Applet.newAudioClip(url);
-        clip.loop();
-    }
+    public static synchronized void loop(String filename) {
+        if (filename == null) throw new NullPointerException();
 
+        // code adapted from: http://stackoverflow.com/questions/26305/how-can-i-play-sound-in-java
+        try {
+            Clip clip = AudioSystem.getClip();
+            InputStream is = StdAudio.class.getResourceAsStream(filename);
+            AudioInputStream ais = AudioSystem.getAudioInputStream(is);
+            clip.open(ais);
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+        }
+        catch (RuntimeException e) {
+            System.out.println("could not play '" + filename + "'");
+            throw e;
+        }
+        catch (Exception e) {
+            System.out.println("could not play '" + filename + "'");
+            e.printStackTrace();
+        }
+    }
 
     // return data as a byte array
     private static byte[] readByte(String filename) {
@@ -178,21 +223,30 @@ public final class StdAudio {
             File file = new File(filename);
             if (file.exists()) {
                 ais = AudioSystem.getAudioInputStream(file);
-                data = new byte[ais.available()];
-                ais.read(data);
+                int bytesToRead = ais.available();
+                data = new byte[bytesToRead];
+                int bytesRead = ais.read(data);
+                if (bytesToRead != bytesRead) throw new RuntimeException("read only " + bytesRead + " of " + bytesToRead + " bytes"); 
             }
 
             // try to read from URL
             else {
                 URL url = StdAudio.class.getResource(filename);
                 ais = AudioSystem.getAudioInputStream(url);
-                data = new byte[ais.available()];
-                ais.read(data);
+                int bytesToRead = ais.available();
+                data = new byte[bytesToRead];
+                int bytesRead = ais.read(data);
+                if (bytesToRead != bytesRead) throw new RuntimeException("read only " + bytesRead + " of " + bytesToRead + " bytes"); 
             }
         }
-        catch (Exception e) {
+        catch (IOException e) {
             System.out.println(e.getMessage());
             throw new RuntimeException("Could not read " + filename);
+        }
+
+        catch (UnsupportedAudioFileException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(filename + " in unsupported audio format");
         }
 
         return data;
@@ -201,16 +255,19 @@ public final class StdAudio {
 
 
     /**
-     * Save the double array as a sound file (using .wav or .au format).
+     * Saves the double array as an audio file (using .wav or .au format).
+     *
+     * @param  filename the name of the audio file
+     * @param  samples the array of samples
      */
-    public static void save(String filename, double[] input) {
+    public static void save(String filename, double[] samples) {
 
         // assumes 44,100 samples per second
         // use 16-bit audio, mono, signed PCM, little Endian
         AudioFormat format = new AudioFormat(SAMPLE_RATE, 16, 1, true, false);
-        byte[] data = new byte[2 * input.length];
-        for (int i = 0; i < input.length; i++) {
-            int temp = (short) (input[i] * MAX_16_BIT);
+        byte[] data = new byte[2 * samples.length];
+        for (int i = 0; i < samples.length; i++) {
+            int temp = (short) (samples[i] * MAX_16_BIT);
             data[2*i + 0] = (byte) temp;
             data[2*i + 1] = (byte) (temp >> 8);
         }
@@ -218,7 +275,7 @@ public final class StdAudio {
         // now save the file
         try {
             ByteArrayInputStream bais = new ByteArrayInputStream(data);
-            AudioInputStream ais = new AudioInputStream(bais, format, input.length);
+            AudioInputStream ais = new AudioInputStream(bais, format, samples.length);
             if (filename.endsWith(".wav") || filename.endsWith(".WAV")) {
                 AudioSystem.write(ais, AudioFileFormat.Type.WAVE, new File(filename));
             }
@@ -229,25 +286,24 @@ public final class StdAudio {
                 throw new RuntimeException("File format not supported: " + filename);
             }
         }
-        catch (Exception e) {
+        catch (IOException e) {
             System.out.println(e);
-            System.exit(1);
         }
     }
 
 
 
 
-   /***********************************************************************
-    * sample test client
-    ***********************************************************************/
+   /***************************************************************************
+    * Unit tests <tt>StdAudio</tt>.
+    ***************************************************************************/
 
     // create a note (sine wave) of the given frequency (Hz), for the given
     // duration (seconds) scaled to the given volume (amplitude)
     private static double[] note(double hz, double duration, double amplitude) {
-        int N = (int) (StdAudio.SAMPLE_RATE * duration);
-        double[] a = new double[N+1];
-        for (int i = 0; i <= N; i++)
+        int n = (int) (StdAudio.SAMPLE_RATE * duration);
+        double[] a = new double[n+1];
+        for (int i = 0; i <= n; i++)
             a[i] = amplitude * Math.sin(2 * Math.PI * i * hz / StdAudio.SAMPLE_RATE);
         return a;
     }
@@ -274,8 +330,29 @@ public final class StdAudio {
         // need to call this in non-interactive stuff so the program doesn't terminate
         // until all the sound leaves the speaker.
         StdAudio.close(); 
-
-        // need to terminate a Java program with sound
-        System.exit(0);
     }
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

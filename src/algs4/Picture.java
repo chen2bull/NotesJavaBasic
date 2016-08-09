@@ -1,6 +1,7 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac Picture.java
  *  Execution:    java Picture imagename
+ *  Dependencies: none
  *
  *  Data type for manipulating individual pixels of an image. The original
  *  image can be read from a file in jpg, gif, or png format, or the
@@ -15,7 +16,9 @@ package algs4; /****************************************************************
  *
  *   - see also GrayPicture.java for a grayscale version
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 import java.awt.Color;
 import java.awt.FileDialog;
@@ -67,6 +70,9 @@ public final class Picture implements ActionListener {
    /**
      * Initializes a blank <tt>width</tt>-by-<tt>height</tt> picture, with <tt>width</tt> columns
      * and <tt>height</tt> rows, where each pixel is black.
+     *
+     * @param width the width of the picture
+     * @param height the height of the picture
      */
     public Picture(int width, int height) {
         if (width  < 0) throw new IllegalArgumentException("width must be nonnegative");
@@ -79,7 +85,9 @@ public final class Picture implements ActionListener {
     }
 
    /**
-     * Initializes a new picture that is a deep copy of <tt>picture</tt>.
+     * Initializes a new picture that is a deep copy of the argument picture.
+     *
+     * @param picture the picture to copy
      */
     public Picture(Picture picture) {
         width  = picture.width();
@@ -92,8 +100,9 @@ public final class Picture implements ActionListener {
     }
 
    /**
-     * Initializes a picture by reading in a .png, .gif, or .jpg from
-     * the given filename or URL name.
+     * Initializes a picture by reading from a file or URL.
+     *
+     * @param filename the name of the file (.png, .gif, or .jpg) or URL.
      */
     public Picture(String filename) {
         this.filename = filename;
@@ -107,9 +116,16 @@ public final class Picture implements ActionListener {
             // now try to read from file in same directory as this .class file
             else {
                 URL url = getClass().getResource(filename);
-                if (url == null) { url = new URL(filename); }
+                if (url == null) {
+                    url = new URL(filename);
+                }
                 image = ImageIO.read(url);
             }
+
+            if (image == null) {
+                throw new IllegalArgumentException("Invalid image file: " + filename);
+            }
+
             width  = image.getWidth(null);
             height = image.getHeight(null);
         }
@@ -120,10 +136,14 @@ public final class Picture implements ActionListener {
     }
 
    /**
-     * Initializes a picture by reading in a .png, .gif, or .jpg from a File.
+     * Initializes a picture by reading in a .png, .gif, or .jpg from a file.
+     *
+     * @param file the file
      */
     public Picture(File file) {
-        try { image = ImageIO.read(file); }
+        try {
+            image = ImageIO.read(file);
+        }
         catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Could not open file: " + file);
@@ -139,10 +159,11 @@ public final class Picture implements ActionListener {
    /**
      * Returns a JLabel containing this picture, for embedding in a JPanel,
      * JFrame or other GUI widget.
+     *
      * @return the <tt>JLabel</tt>
      */
     public JLabel getJLabel() {
-        if (image == null) { return null; }         // no image available
+        if (image == null) return null;         // no image available
         ImageIcon icon = new ImageIcon(image);
         return new JLabel(icon);
     }
@@ -197,6 +218,7 @@ public final class Picture implements ActionListener {
 
    /**
      * Returns the height of the picture.
+     *
      * @return the height of the picture (in pixels)
      */
     public int height() {
@@ -205,6 +227,7 @@ public final class Picture implements ActionListener {
 
    /**
      * Returns the width of the picture.
+     *
      * @return the width of the picture (in pixels)
      */
     public int width() {
@@ -213,41 +236,50 @@ public final class Picture implements ActionListener {
 
    /**
      * Returns the color of pixel (<tt>col</tt>, <tt>row</tt>).
+     *
+     * @param col the column index
+     * @param row the row index
      * @return the color of pixel (<tt>col</tt>, <tt>row</tt>)
      * @throws IndexOutOfBoundsException unless both 0 &le; <tt>col</tt> &lt; <tt>width</tt>
-     * and 0 &le; <tt>row</tt> &lt; <tt>height</tt>
+     *         and 0 &le; <tt>row</tt> &lt; <tt>height</tt>
      */
     public Color get(int col, int row) {
-        if (col < 0 || col >= width())  throw new IndexOutOfBoundsException("col must be between 0 and " + (width()-1));
-        if (row < 0 || row >= height()) throw new IndexOutOfBoundsException("row must be between 0 and " + (height()-1));
+        if (col < 0 || col >= width())  throw new IndexOutOfBoundsException("col must be between 0 and " + (width()-1) + ": " + col);
+        if (row < 0 || row >= height()) throw new IndexOutOfBoundsException("row must be between 0 and " + (height()-1) + ": " + col);
         if (isOriginUpperLeft) return new Color(image.getRGB(col, row));
         else                   return new Color(image.getRGB(col, height - row - 1));
     }
 
    /**
      * Sets the color of pixel (<tt>col</tt>, <tt>row</tt>) to given color.
+     *
+     * @param col the column index
+     * @param row the row index
+     * @param color the color
      * @throws IndexOutOfBoundsException unless both 0 &le; <tt>col</tt> &lt; <tt>width</tt>
-     * and 0 &le; <tt>row</tt> &lt; <tt>height</tt>
+     *         and 0 &le; <tt>row</tt> &lt; <tt>height</tt>
      * @throws NullPointerException if <tt>color</tt> is <tt>null</tt>
      */
     public void set(int col, int row, Color color) {
-        if (col < 0 || col >= width())  throw new IndexOutOfBoundsException("col must be between 0 and " + (width()-1));
-        if (row < 0 || row >= height()) throw new IndexOutOfBoundsException("row must be between 0 and " + (height()-1));
+        if (col < 0 || col >= width())  throw new IndexOutOfBoundsException("col must be between 0 and " + (width()-1) + ": " + col);
+        if (row < 0 || row >= height()) throw new IndexOutOfBoundsException("row must be between 0 and " + (height()-1) + ": " + row);
         if (color == null) throw new NullPointerException("can't set Color to null");
         if (isOriginUpperLeft) image.setRGB(col, row, color.getRGB());
         else                   image.setRGB(col, height - row - 1, color.getRGB());
     }
 
    /**
-     * Is this Picture equal to obj?
-     * @return <tt>true</tt> if this picture is the same dimension as <tt>obj</tt>
-     * and if all pixels have the same color
+     * Returns true if this picture is equal to the argument picture.
+     *
+     * @param other the other picture
+     * @return <tt>true</tt> if this picture is the same dimension as <tt>other</tt>
+     *         and if all pixels have the same color; <tt>false</tt> otherwise
      */
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null) return false;
-        if (obj.getClass() != this.getClass()) return false;
-        Picture that = (Picture) obj;
+    public boolean equals(Object other) {
+        if (other == this) return true;
+        if (other == null) return false;
+        if (other.getClass() != this.getClass()) return false;
+        Picture that = (Picture) other;
         if (this.width()  != that.width())  return false;
         if (this.height() != that.height()) return false;
         for (int col = 0; col < width(); col++)
@@ -256,26 +288,43 @@ public final class Picture implements ActionListener {
         return true;
     }
 
+    /**
+     * This operation is not supported because pictures are mutable.
+     *
+     * @return does not return a value
+     * @throws UnsupportedOperationException if called
+     */
+    public int hashCode() {
+        throw new UnsupportedOperationException("hashCode() is not supported because pictures are mutable");
+    }
 
    /**
      * Saves the picture to a file in a standard image format.
      * The filetype must be .png or .jpg.
+     *
+     * @param name the name of the file
      */
     public void save(String name) {
         save(new File(name));
     }
 
    /**
-     * Saves the picture to a file in a standard image format.
+     * Saves the picture to a file in a PNG or JPEG image format.
+     *
+     * @param file the file
      */
     public void save(File file) {
-        this.filename = file.getName();
-        if (frame != null) { frame.setTitle(filename); }
+        filename = file.getName();
+        if (frame != null) frame.setTitle(filename);
         String suffix = filename.substring(filename.lastIndexOf('.') + 1);
         suffix = suffix.toLowerCase();
         if (suffix.equals("jpg") || suffix.equals("png")) {
-            try { ImageIO.write(image, suffix, file); }
-            catch (IOException e) { e.printStackTrace(); }
+            try {
+                ImageIO.write(image, suffix, file);
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         else {
             System.out.println("Error: filename must end in .jpg or .png");
@@ -285,6 +334,7 @@ public final class Picture implements ActionListener {
    /**
      * Opens a save dialog box when the user selects "Save As" from the menu.
      */
+    @Override
     public void actionPerformed(ActionEvent e) {
         FileDialog chooser = new FileDialog(frame,
                              "Use a .png or .jpg extension", FileDialog.SAVE);
@@ -296,7 +346,8 @@ public final class Picture implements ActionListener {
 
 
    /**
-     * Tests this <tt>Picture</tt> data type. Reads a picture specified by the command-line argument,
+     * Unit tests this <tt>Picture</tt> data type.
+     * Reads a picture specified by the command-line argument,
      * and shows it in a window on the screen.
      */
     public static void main(String[] args) {
@@ -307,3 +358,27 @@ public final class Picture implements ActionListener {
 
 }
 
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

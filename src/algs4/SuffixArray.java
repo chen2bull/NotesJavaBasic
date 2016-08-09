@@ -1,6 +1,7 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac SuffixArray.java
- *  Execution:  java SuffixArray < input.txt
+ *  Execution:    java SuffixArray < input.txt
+ *  Dependencies: StdIn.java StdOut.java
  *
  *  A data type that computes the suffix array of a string.
  *
@@ -23,13 +24,15 @@ package algs4; /****************************************************************
  *  See SuffixArrayX.java for an optimized version that uses 3-way
  *  radix quicksort and does not use the nested class Suffix.
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 import java.util.Arrays;
 
 /**
  *  The <tt>SuffixArray</tt> class represents a suffix array of a string of
- *  length <em>N</em>.
+ *  length <em>n</em>.
  *  It supports the <em>selecting</em> the <em>i</em>th smallest suffix,
  *  getting the <em>index</em> of the <em>i</em>th smallest suffix,
  *  computing the length of the <em>longest common prefix</em> between the
@@ -40,14 +43,18 @@ import java.util.Arrays;
  *  This implementation uses a nested class <tt>Suffix</tt> to represent
  *  a suffix of a string (using constant time and space) and
  *  <tt>Arrays.sort()</tt> to sort the array of suffixes.
- *  For alternate implementations of the same API, see
- *  {@link SuffixArrayX}, which is faster in practice (uses 3-way radix quicksort)
- *  and uses less memory (does not create <tt>Suffix</tt> objects).
  *  The <em>index</em> and <em>length</em> operations takes constant time 
  *  in the worst case. The <em>lcp</em> operation takes time proportional to the
  *  length of the longest common prefix.
  *  The <em>select</em> operation takes time proportional
  *  to the length of the suffix and should be used primarily for debugging.
+ *  <p>
+ *  For alternate implementations of the same API, see
+ *  {@link SuffixArrayX}, which is faster in practice (uses 3-way radix quicksort)
+ *  and uses less memory (does not create <tt>Suffix</tt> objects)
+ *  and <a href = "http://algs4.cs.princeton.edu/63suffix/SuffixArrayJava6.java.html">SuffixArrayJava6.java</a>,
+ *  which relies on the constant-time substring extraction method that existed
+ *  in Java 6.
  *  <p>
  *  For additional documentation, see <a href="http://algs4.cs.princeton.edu/63suffix">Section 6.3</a> of
  *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
@@ -60,9 +67,9 @@ public class SuffixArray {
      * @param text the input string
      */
     public SuffixArray(String text) {
-        int N = text.length();
-        this.suffixes = new Suffix[N];
-        for (int i = 0; i < N; i++)
+        int n = text.length();
+        this.suffixes = new Suffix[n];
+        for (int i = 0; i < n; i++)
             suffixes[i] = new Suffix(text, i);
         Arrays.sort(suffixes);
     }
@@ -84,8 +91,8 @@ public class SuffixArray {
 
         public int compareTo(Suffix that) {
             if (this == that) return 0;  // optimization
-            int N = Math.min(this.length(), that.length());
-            for (int i = 0; i < N; i++) {
+            int n = Math.min(this.length(), that.length());
+            for (int i = 0; i < n; i++) {
                 if (this.charAt(i) < that.charAt(i)) return -1;
                 if (this.charAt(i) > that.charAt(i)) return +1;
             }
@@ -109,9 +116,9 @@ public class SuffixArray {
     /**
      * Returns the index into the original string of the <em>i</em>th smallest suffix.
      * That is, <tt>text.substring(sa.index(i))</tt> is the <em>i</em>th smallest suffix.
-     * @param i an integer between 0 and <em>N</em>-1
+     * @param i an integer between 0 and <em>n</em>-1
      * @return the index into the original string of the <em>i</em>th smallest suffix
-     * @throws IndexOutOfBoundsException unless 0 &le; <em>i</em> &lt; <Em>N</em>
+     * @throws java.lang.IndexOutOfBoundsException unless 0 &le; <em>i</em> &lt; <em>n</em>
      */
     public int index(int i) {
         if (i < 0 || i >= suffixes.length) throw new IndexOutOfBoundsException();
@@ -122,10 +129,10 @@ public class SuffixArray {
     /**
      * Returns the length of the longest common prefix of the <em>i</em>th
      * smallest suffix and the <em>i</em>-1st smallest suffix.
-     * @param i an integer between 1 and <em>N</em>-1
+     * @param i an integer between 1 and <em>n</em>-1
      * @return the length of the longest common prefix of the <em>i</em>th
      * smallest suffix and the <em>i</em>-1st smallest suffix.
-     * @throws IndexOutOfBoundsException unless 1 &le; <em>i</em> &lt; <em>N</em>
+     * @throws java.lang.IndexOutOfBoundsException unless 1 &le; <em>i</em> &lt; <em>n</em>
      */
     public int lcp(int i) {
         if (i < 1 || i >= suffixes.length) throw new IndexOutOfBoundsException();
@@ -134,28 +141,28 @@ public class SuffixArray {
 
     // longest common prefix of s and t
     private static int lcp(Suffix s, Suffix t) {
-        int N = Math.min(s.length(), t.length());
-        for (int i = 0; i < N; i++) {
+        int n = Math.min(s.length(), t.length());
+        for (int i = 0; i < n; i++) {
             if (s.charAt(i) != t.charAt(i)) return i;
         }
-        return N;
+        return n;
     }
 
     /**
      * Returns the <em>i</em>th smallest suffix as a string.
      * @param i the index
      * @return the <em>i</em> smallest suffix as a string
-     * @throws IndexOutOfBoundsException unless 0 &le; <em>i</em> &lt; <Em>N</em>
+     * @throws java.lang.IndexOutOfBoundsException unless 0 &le; <em>i</em> &lt; <em>n</em>
      */
     public String select(int i) {
         if (i < 0 || i >= suffixes.length) throw new IndexOutOfBoundsException();
-         return suffixes[i].toString();
+        return suffixes[i].toString();
     }
 
     /**
      * Returns the number of suffixes strictly less than the <tt>query</tt> string.
      * We note that <tt>rank(select(i))</tt> equals <tt>i</tt> for each <tt>i</tt>
-     * between 0 and <em>N</em>-1.
+     * between 0 and <em>n</em>-1.
      * @param query the query string
      * @return the number of suffixes strictly less than <tt>query</tt>
      */
@@ -173,8 +180,8 @@ public class SuffixArray {
 
     // compare query string to suffix
     private static int compare(String query, Suffix suffix) {
-        int N = Math.min(query.length(), suffix.length());
-        for (int i = 0; i < N; i++) {
+        int n = Math.min(query.length(), suffix.length());
+        for (int i = 0; i < n; i++) {
             if (query.charAt(i) < suffix.charAt(i)) return -1;
             if (query.charAt(i) > suffix.charAt(i)) return +1;
         }
@@ -209,3 +216,27 @@ public class SuffixArray {
     }
 
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

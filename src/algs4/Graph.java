@@ -1,8 +1,8 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac Graph.java        
  *  Execution:    java Graph input.txt
- *  Dependencies: Bag.java In.java StdOut.java
- *  Data files:   http://algs4.cs.princeton.edu/41undirected/tinyG.txt
+ *  Dependencies: Bag.java Stack.java In.java StdOut.java
+ *  Data files:   http://algs4.cs.princeton.edu/41graph/tinyG.txt
  *
  *  A graph, implemented using an array of sets.
  *  Parallel edges and self-loops allowed.
@@ -30,7 +30,9 @@ package algs4; /****************************************************************
  *  2: 141 110 108 86 79 51 42 18 14 
  *  ...
  *  
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 
 /**
@@ -47,13 +49,15 @@ package algs4; /****************************************************************
  *  iterating over the vertices adjacent to a given vertex, which takes
  *  time proportional to the number of such vertices.
  *  <p>
- *  For additional documentation, see <a href="http://algs4.cs.princeton.edu/41undirected">Section 4.1</a> of
- *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
+ *  For additional documentation, see <a href="http://algs4.cs.princeton.edu/41graph">Section 4.1</a>
+ *  of <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
  *
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
  */
 public class Graph {
+    private static final String NEWLINE = System.getProperty("line.separator");
+
     private final int V;
     private int E;
     private Bag<Integer>[] adj;
@@ -61,6 +65,8 @@ public class Graph {
     /**
      * Initializes an empty graph with <tt>V</tt> vertices and 0 edges.
      * param V the number of vertices
+     *
+     * @param  V number of vertices
      * @throws IllegalArgumentException if <tt>V</tt> < 0
      */
     public Graph(int V) {
@@ -78,7 +84,8 @@ public class Graph {
      * The format is the number of vertices <em>V</em>,
      * followed by the number of edges <em>E</em>,
      * followed by <em>E</em> pairs of vertices, with each entry separated by whitespace.
-     * @param in the input stream
+     *
+     * @param  in the input stream
      * @throws IndexOutOfBoundsException if the endpoints of any edge are not in prescribed range
      * @throws IllegalArgumentException if the number of vertices or edges is negative
      */
@@ -95,7 +102,8 @@ public class Graph {
 
     /**
      * Initializes a new graph that is a deep copy of <tt>G</tt>.
-     * @param G the graph to copy
+     *
+     * @param  G the graph to copy
      */
     public Graph(Graph G) {
         this(G.V());
@@ -113,16 +121,18 @@ public class Graph {
     }
 
     /**
-     * Returns the number of vertices in the graph.
-     * @return the number of vertices in the graph
+     * Returns the number of vertices in this graph.
+     *
+     * @return the number of vertices in this graph
      */
     public int V() {
         return V;
     }
 
     /**
-     * Returns the number of edges in the graph.
-     * @return the number of edges in the graph
+     * Returns the number of edges in this graph.
+     *
+     * @return the number of edges in this graph
      */
     public int E() {
         return E;
@@ -135,9 +145,10 @@ public class Graph {
     }
 
     /**
-     * Adds the undirected edge v-w to the graph.
-     * @param v one vertex in the edge
-     * @param w the other vertex in the edge
+     * Adds the undirected edge v-w to this graph.
+     *
+     * @param  v one vertex in the edge
+     * @param  w the other vertex in the edge
      * @throws IndexOutOfBoundsException unless both 0 <= v < V and 0 <= w < V
      */
     public void addEdge(int v, int w) {
@@ -151,8 +162,9 @@ public class Graph {
 
     /**
      * Returns the vertices adjacent to vertex <tt>v</tt>.
-     * @return the vertices adjacent to vertex <tt>v</tt> as an Iterable
-     * @param v the vertex
+     *
+     * @param  v the vertex
+     * @return the vertices adjacent to vertex <tt>v</tt>, as an iterable
      * @throws IndexOutOfBoundsException unless 0 <= v < V
      */
     public Iterable<Integer> adj(int v) {
@@ -162,8 +174,9 @@ public class Graph {
 
     /**
      * Returns the degree of vertex <tt>v</tt>.
+     *
+     * @param  v the vertex
      * @return the degree of vertex <tt>v</tt>
-     * @param v the vertex
      * @throws IndexOutOfBoundsException unless 0 <= v < V
      */
     public int degree(int v) {
@@ -173,14 +186,13 @@ public class Graph {
 
 
     /**
-     * Returns a string representation of the graph.
-     * This method takes time proportional to <em>E</em> + <em>V</em>.
+     * Returns a string representation of this graph.
+     *
      * @return the number of vertices <em>V</em>, followed by the number of edges <em>E</em>,
-     *    followed by the <em>V</em> adjacency lists
+     *         followed by the <em>V</em> adjacency lists
      */
     public String toString() {
         StringBuilder s = new StringBuilder();
-        String NEWLINE = System.getProperty("line.separator");
         s.append(V + " vertices, " + E + " edges " + NEWLINE);
         for (int v = 0; v < V; v++) {
             s.append(v + ": ");
@@ -203,3 +215,27 @@ public class Graph {
     }
 
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

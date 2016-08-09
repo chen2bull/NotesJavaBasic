@@ -1,4 +1,4 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac GabowSCC.java
  *  Execution:    java GabowSCC V E
  *  Dependencies: Digraph.java Stack.java TransitiveClosure.java StdOut.java
@@ -16,7 +16,9 @@ package algs4; /****************************************************************
  *  6 8
  *  7 
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 /**
  *  The <tt>GabowSCC</tt> class represents a data type for 
  *  determining the strong components in a digraph.
@@ -40,7 +42,8 @@ package algs4; /****************************************************************
  *  For alternate implementations of the same API, see
  *  {@link KosarajuSharirSCC} and {@link TarjanSCC}.
  *  <p>
- *  For additional documentation, see <a href="/algs4/42digraph">Section 4.2</a> of
+ *  For additional documentation,
+ *  see <a href="http://algs4.cs.princeton.edu/42digraph">Section 4.2</a> of
  *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
  *
  *  @author Robert Sedgewick
@@ -67,7 +70,8 @@ public class GabowSCC {
         stack2 = new Stack<Integer>();
         id = new int[G.V()]; 
         preorder = new int[G.V()];
-        for (int v = 0; v < G.V(); v++) id[v] = -1;
+        for (int v = 0; v < G.V(); v++)
+            id[v] = -1;
 
         for (int v = 0; v < G.V(); v++) {
             if (!marked[v]) dfs(G, v);
@@ -174,3 +178,27 @@ public class GabowSCC {
     }
 
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

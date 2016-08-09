@@ -1,4 +1,4 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac TrieSET.java
  *  Execution:    java TrieSET < words.txt
  *  Dependencies: StdIn.java
@@ -8,7 +8,9 @@ package algs4; /****************************************************************
  *  Sample client reads in a list of words from standard input and
  *  prints out each word, removing any duplicates.
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 import java.util.Iterator;
 
@@ -182,9 +184,9 @@ public class TrieSET implements Iterable<String> {
      * Returns the string in the set that is the longest prefix of <tt>query</tt>,
      * or <tt>null</tt>, if no such string.
      * @param query the query string
-     * @throws NullPointerException if <tt>query</tt> is <tt>null</tt>
      * @return the string in the set that is the longest prefix of <tt>query</tt>,
      *     or <tt>null</tt> if no such string
+     * @throws NullPointerException if <tt>query</tt> is <tt>null</tt>
      */
     public String longestPrefixOf(String query) {
         int length = longestPrefixOf(root, query, 0, -1);
@@ -275,3 +277,27 @@ public class TrieSET implements Iterable<String> {
             StdOut.println(s);
     }
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

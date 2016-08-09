@@ -1,4 +1,4 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac FordFulkerson.java
  *  Execution:    java FordFulkerson V E
  *  Dependencies: FlowNetwork.java FlowEdge.java Queue.java
@@ -6,7 +6,9 @@ package algs4; /****************************************************************
  *  Ford-Fulkerson algorithm for computing a max flow and 
  *  a min cut using shortest augmenting path rule.
  *
- *********************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 /**
  *  The <tt>FordFulkerson</tt> class represents a data type for computing a
@@ -28,13 +30,16 @@ package algs4; /****************************************************************
  *  If the capacities and floating-point numbers, then floating-point
  *  roundoff error can accumulate.
  *  <p>
- *  For additional documentation, see <a href="http://algs4.cs.princeton.edu/64maxflow">Section 6.4</a>
+ *  For additional documentation,
+ *  see <a href="http://algs4.cs.princeton.edu/64maxflow">Section 6.4</a> of
  *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
  *
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
  */
 public class FordFulkerson {
+    private static final double FLOATING_POINT_EPSILON = 1E-11;
+
     private boolean[] marked;     // marked[v] = true iff s->v path in residual graph
     private FlowEdge[] edgeTo;    // edgeTo[v] = last edge on shortest residual s->v path
     private double value;         // current value of max flow
@@ -42,9 +47,10 @@ public class FordFulkerson {
     /**
      * Compute a maximum flow and minimum cut in the network <tt>G</tt>
      * from vertex <tt>s</tt> to vertex <tt>t</tt>.
-     * @param G the flow network
-     * @param s the source vertex
-     * @param t the sink vertex
+     *
+     * @param  G the flow network
+     * @param  s the source vertex
+     * @param  t the sink vertex
      * @throws IndexOutOfBoundsException unless 0 <= s < V
      * @throws IndexOutOfBoundsException unless 0 <= t < V
      * @throws IllegalArgumentException if s = t
@@ -80,17 +86,18 @@ public class FordFulkerson {
 
     /**
      * Returns the value of the maximum flow.
+     *
      * @return the value of the maximum flow
      */
     public double value()  {
         return value;
     }
 
-    // is v in the s side of the min s-t cut?
     /**
-     * Is vertex <tt>v</tt> on the <tt>s</tt> side of the minimum st-cut?
-     * @return <tt>true</tt> if vertex <tt>v</tt> is on the <tt>s</tt> side of the micut,
-     *    and <tt>false</tt> if vertex <tt>v</tt> is on the <tt>t</tt> side.
+     * Returns true if the specified vertex is on the <tt>s</tt> side of the mincut.
+     *
+     * @return <tt>true</tt> if vertex <tt>v</tt> is on the <tt>s</tt> side of the micut;
+     *         <tt>false</tt> otherwise
      * @throws IndexOutOfBoundsException unless 0 <= v < V
      */
     public boolean inCut(int v)  {
@@ -107,6 +114,8 @@ public class FordFulkerson {
 
     // is there an augmenting path? 
     // if so, upon termination edgeTo[] will contain a parent-link representation of such a path
+    // this implementation finds a shortest augmenting path (fewest number of edges),
+    // which performs well both in theory and in practice
     private boolean hasAugmentingPath(FlowNetwork G, int s, int t) {
         edgeTo = new FlowEdge[G.V()];
         marked = new boolean[G.V()];
@@ -150,12 +159,11 @@ public class FordFulkerson {
 
     // return excess flow at vertex v
     private boolean isFeasible(FlowNetwork G, int s, int t) {
-        double EPSILON = 1E-11;
 
         // check that capacity constraints are satisfied
         for (int v = 0; v < G.V(); v++) {
             for (FlowEdge e : G.adj(v)) {
-                if (e.flow() < -EPSILON || e.flow() > e.capacity() + EPSILON) {
+                if (e.flow() < -FLOATING_POINT_EPSILON || e.flow() > e.capacity() + FLOATING_POINT_EPSILON) {
                     System.err.println("Edge does not satisfy capacity constraints: " + e);
                     return false;
                 }
@@ -163,19 +171,19 @@ public class FordFulkerson {
         }
 
         // check that net flow into a vertex equals zero, except at source and sink
-        if (Math.abs(value + excess(G, s)) > EPSILON) {
+        if (Math.abs(value + excess(G, s)) > FLOATING_POINT_EPSILON) {
             System.err.println("Excess at source = " + excess(G, s));
             System.err.println("Max flow         = " + value);
             return false;
         }
-        if (Math.abs(value - excess(G, t)) > EPSILON) {
+        if (Math.abs(value - excess(G, t)) > FLOATING_POINT_EPSILON) {
             System.err.println("Excess at sink   = " + excess(G, t));
             System.err.println("Max flow         = " + value);
             return false;
         }
         for (int v = 0; v < G.V(); v++) {
             if (v == s || v == t) continue;
-            else if (Math.abs(excess(G, v)) > EPSILON) {
+            else if (Math.abs(excess(G, v)) > FLOATING_POINT_EPSILON) {
                 System.err.println("Net flow out of " + v + " doesn't equal zero");
                 return false;
             }
@@ -213,8 +221,7 @@ public class FordFulkerson {
             }
         }
 
-        double EPSILON = 1E-11;
-        if (Math.abs(mincutValue - value) > EPSILON) {
+        if (Math.abs(mincutValue - value) > FLOATING_POINT_EPSILON) {
             System.err.println("Max flow value = " + value + ", min cut value = " + mincutValue);
             return false;
         }
@@ -252,7 +259,31 @@ public class FordFulkerson {
         }
         StdOut.println();
 
-        StdOut.println("Max flow value = " + maxflow.value());
+        StdOut.println("Max flow value = " +  maxflow.value());
     }
 
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

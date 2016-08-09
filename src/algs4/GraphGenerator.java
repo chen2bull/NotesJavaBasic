@@ -1,4 +1,4 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac GraphGenerator.java
  *  Execution:    java GraphGenerator V E
  *  Dependencies: Graph.java
@@ -8,14 +8,16 @@ package algs4; /****************************************************************
  *  For many more graph generators, see
  *  http://networkx.github.io/documentation/latest/reference/generators.html
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 /**
  *  The <tt>GraphGenerator</tt> class provides static methods for creating
  *  various graphs, including Erdos-Renyi random graphs, random bipartite
  *  graphs, random k-regular graphs, and random rooted trees.
  *  <p>
- *  For additional documentation, see <a href="http://algs4.cs.princeton.edu/41undirected">Section 4.1</a> of
+ *  For additional documentation, see <a href="http://algs4.cs.princeton.edu/41graph">Section 4.1</a> of
  *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
  *
  *  @author Robert Sedgewick
@@ -25,6 +27,7 @@ public class GraphGenerator {
     private static final class Edge implements Comparable<Edge> {
         private int v;
         private int w;
+
         private Edge(int v, int w) {
             if (v < w) {
                 this.v = v;
@@ -35,6 +38,7 @@ public class GraphGenerator {
                 this.w = v;
             }
         }
+
         public int compareTo(Edge that) {
             if (this.v < that.v) return -1;
             if (this.v > that.v) return +1;
@@ -43,6 +47,9 @@ public class GraphGenerator {
             return 0;
         }
     }
+
+    // this class cannot be instantiated
+    private GraphGenerator() { }
 
     /**
      * Returns a random simple graph containing <tt>V</tt> vertices and <tt>E</tt> edges.
@@ -126,7 +133,8 @@ public class GraphGenerator {
         Graph G = new Graph(V1 + V2);
 
         int[] vertices = new int[V1 + V2];
-        for (int i = 0; i < V1 + V2; i++) vertices[i] = i;
+        for (int i = 0; i < V1 + V2; i++)
+            vertices[i] = i;
         StdRandom.shuffle(vertices);
 
         SET<Edge> set = new SET<Edge>();
@@ -156,7 +164,8 @@ public class GraphGenerator {
         if (p < 0.0 || p > 1.0)
             throw new IllegalArgumentException("Probability must be between 0 and 1");
         int[] vertices = new int[V1 + V2];
-        for (int i = 0; i < V1 + V2; i++) vertices[i] = i;
+        for (int i = 0; i < V1 + V2; i++)
+            vertices[i] = i;
         StdRandom.shuffle(vertices);
         Graph G = new Graph(V1 + V2);
         for (int i = 0; i < V1; i++)
@@ -174,7 +183,8 @@ public class GraphGenerator {
     public static Graph path(int V) {
         Graph G = new Graph(V);
         int[] vertices = new int[V];
-        for (int i = 0; i < V; i++) vertices[i] = i;
+        for (int i = 0; i < V; i++)
+            vertices[i] = i;
         StdRandom.shuffle(vertices);
         for (int i = 0; i < V-1; i++) {
             G.addEdge(vertices[i], vertices[i+1]);
@@ -190,7 +200,8 @@ public class GraphGenerator {
     public static Graph binaryTree(int V) {
         Graph G = new Graph(V);
         int[] vertices = new int[V];
-        for (int i = 0; i < V; i++) vertices[i] = i;
+        for (int i = 0; i < V; i++)
+            vertices[i] = i;
         StdRandom.shuffle(vertices);
         for (int i = 1; i < V; i++) {
             G.addEdge(vertices[i], vertices[(i-1)/2]);
@@ -206,12 +217,62 @@ public class GraphGenerator {
     public static Graph cycle(int V) {
         Graph G = new Graph(V);
         int[] vertices = new int[V];
-        for (int i = 0; i < V; i++) vertices[i] = i;
+        for (int i = 0; i < V; i++)
+            vertices[i] = i;
         StdRandom.shuffle(vertices);
         for (int i = 0; i < V-1; i++) {
             G.addEdge(vertices[i], vertices[i+1]);
         }
         G.addEdge(vertices[V-1], vertices[0]);
+        return G;
+    }
+
+    /**
+     * Returns an Eulerian cycle graph on <tt>V</tt> vertices.
+     *
+     * @param  V the number of vertices in the cycle
+     * @param  E the number of edges in the cycle
+     * @return a graph that is an Eulerian cycle on <tt>V</tt> vertices
+     *         and <tt>E</tt> edges
+     * @throws IllegalArgumentException if either V &le; 0 or E &le; 0
+     */
+    public static Graph eulerianCycle(int V, int E) {
+        if (E <= 0)
+            throw new IllegalArgumentException("An Eulerian cycle must have at least one edge");
+        if (V <= 0)
+            throw new IllegalArgumentException("An Eulerian cycle must have at least one vertex");
+        Graph G = new Graph(V);
+        int[] vertices = new int[E];
+        for (int i = 0; i < E; i++)
+            vertices[i] = StdRandom.uniform(V);
+        for (int i = 0; i < E-1; i++) {
+            G.addEdge(vertices[i], vertices[i+1]);
+        }
+        G.addEdge(vertices[E-1], vertices[0]);
+        return G;
+    }
+
+    /**
+     * Returns an Eulerian path graph on <tt>V</tt> vertices.
+     *
+     * @param  V the number of vertices in the path
+     * @param  E the number of edges in the path
+     * @return a graph that is an Eulerian path on <tt>V</tt> vertices
+     *         and <tt>E</tt> edges
+     * @throws IllegalArgumentException if either V &le; 0 or E &lt; 0
+     */
+    public static Graph eulerianPath(int V, int E) {
+        if (E < 0)
+            throw new IllegalArgumentException("negative number of edges");
+        if (V <= 0)
+            throw new IllegalArgumentException("An Eulerian path must have at least one vertex");
+        Graph G = new Graph(V);
+        int[] vertices = new int[E+1];
+        for (int i = 0; i < E+1; i++)
+            vertices[i] = StdRandom.uniform(V);
+        for (int i = 0; i < E; i++) {
+            G.addEdge(vertices[i], vertices[i+1]);
+        }
         return G;
     }
 
@@ -225,7 +286,8 @@ public class GraphGenerator {
         if (V <= 1) throw new IllegalArgumentException("Number of vertices must be at least 2");
         Graph G = new Graph(V);
         int[] vertices = new int[V];
-        for (int i = 0; i < V; i++) vertices[i] = i;
+        for (int i = 0; i < V; i++)
+            vertices[i] = i;
         StdRandom.shuffle(vertices);
 
         // simple cycle on V-1 vertices
@@ -252,7 +314,8 @@ public class GraphGenerator {
         if (V <= 0) throw new IllegalArgumentException("Number of vertices must be at least 1");
         Graph G = new Graph(V);
         int[] vertices = new int[V];
-        for (int i = 0; i < V; i++) vertices[i] = i;
+        for (int i = 0; i < V; i++)
+            vertices[i] = i;
         StdRandom.shuffle(vertices);
 
         // connect vertices[0] to every other vertex
@@ -401,3 +464,27 @@ public class GraphGenerator {
     }
 
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

@@ -1,4 +1,4 @@
-package algs4; /******************************************************************************
+/******************************************************************************
  *  Compilation:  javac PrimMST.java
  *  Execution:    java PrimMST filename.txt
  *  Dependencies: EdgeWeightedGraph.java Edge.java Queue.java
@@ -36,6 +36,8 @@ package algs4; /****************************************************************
  *
  ******************************************************************************/
 
+package algs4;
+
 /**
  *  The <tt>PrimMST</tt> class represents a data type for computing a
  *  <em>minimum spanning tree</em> in an edge-weighted graph.
@@ -54,7 +56,8 @@ package algs4; /****************************************************************
  *  Afterwards, the <tt>weight()</tt> method takes constant time
  *  and the <tt>edges()</tt> method takes time proportional to <em>V</em>.
  *  <p>
- *  For additional documentation, see <a href="/algs4/44sp">Section 4.4</a> of
+ *  For additional documentation,
+ *  see <a href="http://algs4.cs.princeton.edu/43mst">Section 4.3</a> of
  *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
  *  For alternate implementations, see {@link LazyPrimMST}, {@link KruskalMST},
  *  and {@link BoruvkaMST}.
@@ -63,6 +66,8 @@ package algs4; /****************************************************************
  *  @author Kevin Wayne
  */
 public class PrimMST {
+    private static final double FLOATING_POINT_EPSILON = 1E-12;
+
     private Edge[] edgeTo;        // edgeTo[v] = shortest edge from tree vertex to non-tree vertex
     private double[] distTo;      // distTo[v] = weight of shortest such edge
     private boolean[] marked;     // marked[v] = true if v on tree, false otherwise
@@ -77,7 +82,8 @@ public class PrimMST {
         distTo = new double[G.V()];
         marked = new boolean[G.V()];
         pq = new IndexMinPQ<Double>(G.V());
-        for (int v = 0; v < G.V(); v++) distTo[v] = Double.POSITIVE_INFINITY;
+        for (int v = 0; v < G.V(); v++)
+            distTo[v] = Double.POSITIVE_INFINITY;
 
         for (int v = 0; v < G.V(); v++)      // run from each vertex to find
             if (!marked[v]) prim(G, v);      // minimum spanning forest
@@ -147,8 +153,7 @@ public class PrimMST {
         for (Edge e : edges()) {
             totalWeight += e.weight();
         }
-        double EPSILON = 1E-12;
-        if (Math.abs(totalWeight - weight()) > EPSILON) {
+        if (Math.abs(totalWeight - weight()) > FLOATING_POINT_EPSILON) {
             System.err.printf("Weight of edges does not equal weight(): %f vs. %f\n", totalWeight, weight());
             return false;
         }
@@ -214,3 +219,27 @@ public class PrimMST {
 
 
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

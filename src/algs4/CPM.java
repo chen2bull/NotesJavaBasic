@@ -1,4 +1,4 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac CPM.java
  *  Execution:    java CPM < input.txt
  *  Dependencies: EdgeWeightedDigraph.java AcyclicDigraphLP.java StdOut.java
@@ -21,7 +21,9 @@ package algs4; /****************************************************************
  *     9    41.0    70.0
  *  Finish time:   173.0
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 /**
  *  The <tt>CPM</tt> class provides a client that solves the
@@ -58,25 +60,25 @@ public class CPM {
     public static void main(String[] args) {
 
         // number of jobs
-        int N = StdIn.readInt();
+        int n = StdIn.readInt();
 
         // source and sink
-        int source = 2*N;
-        int sink   = 2*N + 1;
+        int source = 2*n;
+        int sink   = 2*n + 1;
 
         // build network
-        EdgeWeightedDigraph G = new EdgeWeightedDigraph(2*N + 2);
-        for (int i = 0; i < N; i++) {
+        EdgeWeightedDigraph G = new EdgeWeightedDigraph(2*n + 2);
+        for (int i = 0; i < n; i++) {
             double duration = StdIn.readDouble();
             G.addEdge(new DirectedEdge(source, i, 0.0));
-            G.addEdge(new DirectedEdge(i+N, sink, 0.0));
-            G.addEdge(new DirectedEdge(i, i+N,    duration));
+            G.addEdge(new DirectedEdge(i+n, sink, 0.0));
+            G.addEdge(new DirectedEdge(i, i+n,    duration));
 
             // precedence constraints
-            int M = StdIn.readInt();
-            for (int j = 0; j < M; j++) {
+            int m = StdIn.readInt();
+            for (int j = 0; j < m; j++) {
                 int precedent = StdIn.readInt();
-                G.addEdge(new DirectedEdge(N+i, precedent, 0.0));
+                G.addEdge(new DirectedEdge(n+i, precedent, 0.0));
             }
         }
 
@@ -86,10 +88,34 @@ public class CPM {
         // print results
         StdOut.println(" job   start  finish");
         StdOut.println("--------------------");
-        for (int i = 0; i < N; i++) {
-            StdOut.printf("%4d %7.1f %7.1f\n", i, lp.distTo(i), lp.distTo(i + N));
+        for (int i = 0; i < n; i++) {
+            StdOut.printf("%4d %7.1f %7.1f\n", i, lp.distTo(i), lp.distTo(i+n));
         }
         StdOut.printf("Finish time: %7.1f\n", lp.distTo(sink));
     }
 
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

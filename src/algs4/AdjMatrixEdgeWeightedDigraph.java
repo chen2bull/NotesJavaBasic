@@ -1,4 +1,4 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac AdjMatrixEdgeWeightedDigraph.java
  *  Execution:    java AdjMatrixEdgeWeightedDigraph V E
  *  Dependencies: StdOut.java
@@ -6,7 +6,9 @@ package algs4; /****************************************************************
  *  An edge-weighted digraph, implemented using an adjacency matrix.
  *  Parallel edges are disallowed; self-loops are allowed.
  *  
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -34,6 +36,8 @@ import java.util.NoSuchElementException;
  *  @author Kevin Wayne
  */
 public class AdjMatrixEdgeWeightedDigraph {
+    private static final String NEWLINE = System.getProperty("line.separator");
+
     private int V;
     private int E;
     private DirectedEdge[][] adj;
@@ -41,7 +45,7 @@ public class AdjMatrixEdgeWeightedDigraph {
     /**
      * Initializes an empty edge-weighted digraph with <tt>V</tt> vertices and 0 edges.
      * param V the number of vertices
-     * @throws IllegalArgumentException if <tt>V</tt> < 0
+     * @throws java.lang.IllegalArgumentException if <tt>V</tt> < 0
      */
     public AdjMatrixEdgeWeightedDigraph(int V) {
         if (V < 0) throw new RuntimeException("Number of vertices must be nonnegative");
@@ -54,8 +58,8 @@ public class AdjMatrixEdgeWeightedDigraph {
      * Initializes a random edge-weighted digraph with <tt>V</tt> vertices and <em>E</em> edges.
      * param V the number of vertices
      * param E the number of edges
-     * @throws IllegalArgumentException if <tt>V</tt> < 0
-     * @throws IllegalArgumentException if <tt>E</tt> < 0
+     * @throws java.lang.IllegalArgumentException if <tt>V</tt> < 0
+     * @throws java.lang.IllegalArgumentException if <tt>E</tt> < 0
      */
     public AdjMatrixEdgeWeightedDigraph(int V, int E) {
         this(V);
@@ -64,9 +68,9 @@ public class AdjMatrixEdgeWeightedDigraph {
 
         // can be inefficient
         while (this.E != E) {
-            int v = (int) (V * Math.random());
-            int w = (int) (V * Math.random());
-            double weight = Math.round(100 * Math.random()) / 100.0;
+            int v = StdRandom.uniform(V);
+            int w = StdRandom.uniform(V);
+            double weight = Math.round(100 * StdRandom.uniform()) / 100.0;
             addEdge(new DirectedEdge(v, w, weight));
         }
     }
@@ -103,9 +107,9 @@ public class AdjMatrixEdgeWeightedDigraph {
 
     /**
      * Returns the directed edges incident from vertex <tt>v</tt>.
-     * @return the directed edges incident from vertex <tt>v</tt> as an Iterable
      * @param v the vertex
-     * @throws IndexOutOfBoundsException unless 0 <= v < V
+     * @return the directed edges incident from vertex <tt>v</tt> as an Iterable
+     * @throws java.lang.IndexOutOfBoundsException unless 0 <= v < V
      */
     public Iterable<DirectedEdge> adj(int v) {
         return new AdjIterator(v);
@@ -113,10 +117,16 @@ public class AdjMatrixEdgeWeightedDigraph {
 
     // support iteration over graph vertices
     private class AdjIterator implements Iterator<DirectedEdge>, Iterable<DirectedEdge> {
-        private int v, w = 0;
-        public AdjIterator(int v) { this.v = v; }
+        private int v;
+        private int w = 0;
 
-        public Iterator<DirectedEdge> iterator() { return this; }
+        public AdjIterator(int v) {
+            this.v = v;
+        }
+
+        public Iterator<DirectedEdge> iterator() {
+            return this;
+        }
 
         public boolean hasNext() {
             while (w < V) {
@@ -127,11 +137,15 @@ public class AdjMatrixEdgeWeightedDigraph {
         }
 
         public DirectedEdge next() {
-            if (hasNext()) { return adj[v][w++];                 }
-            else           { throw new NoSuchElementException(); }
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            return adj[v][w++];
         }
 
-        public void remove()  { throw new UnsupportedOperationException();  }
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
     }
 
     /**
@@ -141,7 +155,6 @@ public class AdjMatrixEdgeWeightedDigraph {
      *   followed by the <em>V</em> adjacency lists of edges
      */
     public String toString() {
-        String NEWLINE = System.getProperty("line.separator");
         StringBuilder s = new StringBuilder();
         s.append(V + " " + E + NEWLINE);
         for (int v = 0; v < V; v++) {
@@ -165,3 +178,27 @@ public class AdjMatrixEdgeWeightedDigraph {
     }
 
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

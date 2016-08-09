@@ -1,7 +1,7 @@
-package algs4;
-/*************************************************************************
+/******************************************************************************
  *  Compilation:  javac StdArrayIO.java
  *  Execution:    java StdArrayIO < input.txt
+ *  Dependencies: StdOut.java
  *
  *  A library for reading in 1D and 2D arrays of integers, doubles,
  *  and booleans from standard input and printing them out to
@@ -41,7 +41,9 @@ package algs4;
  *  0 1 1 
  *  1 1 1 
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 
 /**
@@ -63,24 +65,28 @@ public class StdArrayIO {
     private StdArrayIO() { }
 
     /**
-     * Read in and return an array of doubles from standard input.
+     * Reads a 1D array of doubles from standard input and returns it.
+     *
+     * @return the 1D array of doubles
      */
     public static double[] readDouble1D() {
-        int N = StdIn.readInt();
-        double[] a = new double[N];
-        for (int i = 0; i < N; i++) {
+        int n = StdIn.readInt();
+        double[] a = new double[n];
+        for (int i = 0; i < n; i++) {
             a[i] = StdIn.readDouble();
         }
         return a;
     }
 
     /**
-     * Print an array of doubles to standard output.
+     * Prints an array of doubles to standard output.
+     *
+     * @param a the 1D array of doubles
      */
     public static void print(double[] a) {
-        int N = a.length;
-        StdOut.println(N);
-        for (int i = 0; i < N; i++) {
+        int n = a.length;
+        StdOut.println(n);
+        for (int i = 0; i < n; i++) {
             StdOut.printf("%9.5f ", a[i]);
         }
         StdOut.println();
@@ -88,14 +94,16 @@ public class StdArrayIO {
 
         
     /**
-     * Read in and return an M-by-N array of doubles from standard input.
+     * Reads a 2D array of doubles from standard input and returns it.
+     *
+     * @return the 2D array of doubles
      */
     public static double[][] readDouble2D() {
-        int M = StdIn.readInt();
-        int N = StdIn.readInt();
-        double[][] a = new double[M][N];
-        for (int i = 0; i < M; i++) {
-            for (int j = 0; j < N; j++) {
+        int m = StdIn.readInt();
+        int n = StdIn.readInt();
+        double[][] a = new double[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
                 a[i][j] = StdIn.readDouble();
             }
         }
@@ -103,14 +111,16 @@ public class StdArrayIO {
     }
 
     /**
-     * Print the M-by-N array of doubles to standard output.
+     * Prints the 2D array of doubles to standard output.
+     *
+     * @param a the 2D array of doubles
      */
     public static void print(double[][] a) {
-        int M = a.length;
-        int N = a[0].length;
-        StdOut.println(M + " " + N);
-        for (int i = 0; i < M; i++) {
-            for (int j = 0; j < N; j++) {
+        int m = a.length;
+        int n = a[0].length;
+        StdOut.println(m + " " + n);
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
                 StdOut.printf("%9.5f ", a[i][j]);
             }
             StdOut.println();
@@ -119,24 +129,28 @@ public class StdArrayIO {
 
 
     /**
-     * Read in and return an array of ints from standard input.
+     * Reads a 1D array of integers from standard input and returns it.
+     *
+     * @return the 1D array of integers
      */
     public static int[] readInt1D() {
-        int N = StdIn.readInt();
-        int[] a = new int[N];
-        for (int i = 0; i < N; i++) {
+        int n = StdIn.readInt();
+        int[] a = new int[n];
+        for (int i = 0; i < n; i++) {
             a[i] = StdIn.readInt();
         }
         return a;
     }
 
     /**
-     * Print an array of ints to standard output.
+     * Prints an array of integers to standard output.
+     *
+     * @param a the 1D array of integers
      */
     public static void print(int[] a) {
-        int N = a.length;
-        StdOut.println(N);
-        for (int i = 0; i < N; i++) {
+        int n = a.length;
+        StdOut.println(n);
+        for (int i = 0; i < n; i++) {
             StdOut.printf("%9d ", a[i]);
         }
         StdOut.println();
@@ -144,14 +158,16 @@ public class StdArrayIO {
 
         
     /**
-     * Read in and return an M-by-N array of ints from standard input.
+     * Reads a 2D array of integers from standard input and returns it.
+     *
+     * @return the 2D array of integers
      */
     public static int[][] readInt2D() {
-        int M = StdIn.readInt();
-        int N = StdIn.readInt();
-        int[][] a = new int[M][N];
-        for (int i = 0; i < M; i++) {
-            for (int j = 0; j < N; j++) {
+        int m = StdIn.readInt();
+        int n = StdIn.readInt();
+        int[][] a = new int[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
                 a[i][j] = StdIn.readInt();
             }
         }
@@ -159,14 +175,16 @@ public class StdArrayIO {
     }
 
     /**
-     * Print the M-by-N array of ints to standard output.
+     * Print a 2D array of integers to standard output.
+     *
+     * @param a the 2D array of integers
      */
     public static void print(int[][] a) {
-        int M = a.length;
-        int N = a[0].length;
-        StdOut.println(M + " " + N);
-        for (int i = 0; i < M; i++) {
-            for (int j = 0; j < N; j++) {
+        int m = a.length;
+        int n = a[0].length;
+        StdOut.println(m + " " + n);
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
                 StdOut.printf("%9d ", a[i][j]);
             }
             StdOut.println();
@@ -175,24 +193,28 @@ public class StdArrayIO {
 
 
     /**
-     * Read in and return an array of booleans from standard input.
+     * Reads a 1D array of booleans from standard input and returns it.
+     *
+     * @return the 1D array of booleans
      */
     public static boolean[] readBoolean1D() {
-        int N = StdIn.readInt();
-        boolean[] a = new boolean[N];
-        for (int i = 0; i < N; i++) {
+        int n = StdIn.readInt();
+        boolean[] a = new boolean[n];
+        for (int i = 0; i < n; i++) {
             a[i] = StdIn.readBoolean();
         }
         return a;
     }
 
     /**
-     * Print an array of booleans to standard output.
+     * Prints a 1D array of booleans to standard output.
+     *
+     * @param a the 1D array of booleans
      */
     public static void print(boolean[] a) {
-        int N = a.length;
-        StdOut.println(N);
-        for (int i = 0; i < N; i++) {
+        int n = a.length;
+        StdOut.println(n);
+        for (int i = 0; i < n; i++) {
             if (a[i]) StdOut.print("1 ");
             else      StdOut.print("0 ");
         }
@@ -200,14 +222,16 @@ public class StdArrayIO {
     }
 
     /**
-     * Read in and return an M-by-N array of booleans from standard input.
+     * Reads a 2D array of booleans from standard input and returns it.
+     *
+     * @return the 2D array of booleans
      */
     public static boolean[][] readBoolean2D() {
-        int M = StdIn.readInt();
-        int N = StdIn.readInt();
-        boolean[][] a = new boolean[M][N];
-        for (int i = 0; i < M; i++) {
-            for (int j = 0; j < N; j++) {
+        int m = StdIn.readInt();
+        int n = StdIn.readInt();
+        boolean[][] a = new boolean[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
                 a[i][j] = StdIn.readBoolean();
             }
         }
@@ -215,14 +239,16 @@ public class StdArrayIO {
     }
 
    /**
-     * Print the  M-by-N array of booleans to standard output.
+     * Prints a 2D array of booleans to standard output.
+     *
+     * @param a the 2D array of booleans
      */
     public static void print(boolean[][] a) {
-        int M = a.length;
-        int N = a[0].length;
-        StdOut.println(M + " " + N);
-        for (int i = 0; i < M; i++) {
-            for (int j = 0; j < N; j++) {
+        int m = a.length;
+        int n = a[0].length;
+        StdOut.println(m + " " + n);
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
                 if (a[i][j]) StdOut.print("1 ");
                 else         StdOut.print("0 ");
             }
@@ -232,7 +258,7 @@ public class StdArrayIO {
 
 
    /**
-     * Test client.
+     * Unit tests <tt>StdArrayIO</tt>.
      */
     public static void main(String[] args) {
 
@@ -253,3 +279,27 @@ public class StdArrayIO {
     }
 
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

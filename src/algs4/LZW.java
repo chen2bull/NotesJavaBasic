@@ -1,6 +1,4 @@
-package algs4;
-
-/*************************************************************************
+/******************************************************************************
  *  Compilation:  javac LZW.java
  *  Execution:    java LZW - < input.txt   (compress)
  *  Execution:    java LZW + < input.txt   (expand)
@@ -16,13 +14,35 @@ package algs4;
  *  See <a href = "http://java-performance.info/changes-to-string-java-1-7-0_06/">this article</a>
  *  for more details.
  *
- *************************************************************************/
+ ******************************************************************************/
 
+package algs4;
+
+/**
+ *  The <tt>LZW</tt> class provides static methods for compressing
+ *  and expanding a binary input using LZW compression over the 8-bit extended
+ *  ASCII alphabet with 12-bit codewords.
+ *  <p>
+ *  For additional documentation,
+ *  see <a href="http://algs4.cs.princeton.edu/55compress">Section 5.5</a> of
+ *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
+ *
+ *  @author Robert Sedgewick  
+ *  @author Kevin Wayne
+ */
 public class LZW {
     private static final int R = 256;        // number of input chars
     private static final int L = 4096;       // number of codewords = 2^W
     private static final int W = 12;         // codeword width
 
+    // Do not instantiate.
+    private LZW() { }
+
+    /**
+     * Reads a sequence of 8-bit bytes from standard input; compresses
+     * them using LZW compression with 12-bit codewords; and writes the results
+     * to standard output.
+     */
     public static void compress() { 
         String input = BinaryStdIn.readString();
         TST<Integer> st = new TST<Integer>();
@@ -42,7 +62,11 @@ public class LZW {
         BinaryStdOut.close();
     } 
 
-
+    /**
+     * Reads a sequence of bit encoded using LZW compression with
+     * 12-bit codewords from standard input; expands them; and writes
+     * the results to standard output.
+     */
     public static void expand() {
         String[] st = new String[L];
         int i; // next available codeword value
@@ -68,8 +92,10 @@ public class LZW {
         BinaryStdOut.close();
     }
 
-
-
+    /**
+     * Sample client that calls <tt>compress()</tt> if the command-line
+     * argument is "-" an <tt>expand()</tt> if it is "+".
+     */
     public static void main(String[] args) {
         if      (args[0].equals("-")) compress();
         else if (args[0].equals("+")) expand();
@@ -77,3 +103,27 @@ public class LZW {
     }
 
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

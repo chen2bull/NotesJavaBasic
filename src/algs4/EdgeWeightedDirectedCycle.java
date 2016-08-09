@@ -1,13 +1,15 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac EdgeWeightedDirectedCycle.java
  *  Execution:    java EdgeWeightedDirectedCycle V E F
- *  Dependencies: EdgeWeightedDigraph.java DirectedEdge Stack.java
+ *  Dependencies: EdgeWeightedDigraph.java DirectedEdge.java Stack.java
  *
  *  Finds a directed cycle in an edge-weighted digraph.
  *  Runs in O(E + V) time.
  *
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 /**
  *  The <tt>EdgeWeightedDirectedCycle</tt> class represents a data type for 
@@ -27,8 +29,9 @@ package algs4; /****************************************************************
  *  See {@link Topological} to compute a topological order if the edge-weighted
  *  digraph is acyclic.
  *  <p>
- *  For additional documentation, see <a href="/algs4/44sp">Section 4.4</a> of
- *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
+ *  For additional documentation,   
+ *  see <a href="http://algs4.cs.princeton.edu/44sp">Section 4.4</a> of   
+ *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne. 
  *
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
@@ -79,6 +82,7 @@ public class EdgeWeightedDirectedCycle {
                     e = edgeTo[e.from()];
                 }
                 cycle.push(e);
+                return;
             }
         }
 
@@ -144,7 +148,8 @@ public class EdgeWeightedDirectedCycle {
         int F = Integer.parseInt(args[2]);
         EdgeWeightedDigraph G = new EdgeWeightedDigraph(V);
         int[] vertices = new int[V];
-        for (int i = 0; i < V; i++) vertices[i] = i;
+        for (int i = 0; i < V; i++)
+            vertices[i] = i;
         StdRandom.shuffle(vertices);
         for (int i = 0; i < E; i++) {
             int v, w;
@@ -152,15 +157,15 @@ public class EdgeWeightedDirectedCycle {
                 v = StdRandom.uniform(V);
                 w = StdRandom.uniform(V);
             } while (v >= w);
-            double weight = Math.random();
+            double weight = StdRandom.uniform();
             G.addEdge(new DirectedEdge(v, w, weight));
         }
 
         // add F extra edges
         for (int i = 0; i < F; i++) {
-            int v = (int) (Math.random() * V);
-            int w = (int) (Math.random() * V);
-            double weight = Math.random();
+            int v = StdRandom.uniform(V);
+            int w = StdRandom.uniform(V);
+            double weight = StdRandom.uniform(0.0, 1.0);
             G.addEdge(new DirectedEdge(v, w, weight));
         }
 
@@ -183,3 +188,27 @@ public class EdgeWeightedDirectedCycle {
     }
 
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

@@ -1,6 +1,7 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac LinkedStack.java
  *  Execution:    java LinkedStack < input.txt
+ *  Dependencies: StdIn.java StdOut.java
  *
  *  A generic stack, implemented using a linked list. Each stack
  *  element is of type Item.
@@ -11,7 +12,9 @@ package algs4; /****************************************************************
  *  % java LinkedStack < tobe.txt
  *  to be not that or be (2 left on stack)
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -29,14 +32,15 @@ import java.util.NoSuchElementException;
  *  The <em>push</em>, <em>pop</em>, <em>peek</em>, <em>size</em>, and <em>is-empty</em>
  *  operations all take constant time in the worst case.
  *  <p>
- *  For additional documentation, see <a href="/algs4/13stacks">Section 1.3</a> of
+ *  For additional documentation,
+ *  see <a href="http://algs4.cs.princeton.edu/13stacks">Section 1.3</a> of
  *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
  *
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
  */
 public class LinkedStack<Item> implements Iterable<Item> {
-    private int N;          // size of the stack
+    private int n;          // size of the stack
     private Node first;     // top of stack
 
     // helper linked list class
@@ -50,7 +54,7 @@ public class LinkedStack<Item> implements Iterable<Item> {
      */
     public LinkedStack() {
         first = null;
-        N = 0;
+        n = 0;
         assert check();
     }
 
@@ -67,7 +71,7 @@ public class LinkedStack<Item> implements Iterable<Item> {
      * @return the number of items in the stack
      */
     public int size() {
-        return N;
+        return n;
     }
 
     /**
@@ -79,7 +83,7 @@ public class LinkedStack<Item> implements Iterable<Item> {
         first = new Node();
         first.item = item;
         first.next = oldfirst;
-        N++;
+        n++;
         assert check();
     }
 
@@ -92,7 +96,7 @@ public class LinkedStack<Item> implements Iterable<Item> {
         if (isEmpty()) throw new NoSuchElementException("Stack underflow");
         Item item = first.item;        // save item to return
         first = first.next;            // delete first node
-        N--;
+        n--;
         assert check();
         return item;                   // return the saved item
     }
@@ -123,7 +127,9 @@ public class LinkedStack<Item> implements Iterable<Item> {
      * Returns an iterator to this stack that iterates through the items in LIFO order.
      * @return an iterator to this stack that iterates through the items in LIFO order.
      */
-    public Iterator<Item> iterator()  { return new ListIterator();  }
+    public Iterator<Item> iterator() {
+        return new ListIterator();
+    }
 
     // an iterator, doesn't implement remove() since it's optional
     private class ListIterator implements Iterator<Item> {
@@ -142,23 +148,29 @@ public class LinkedStack<Item> implements Iterable<Item> {
 
     // check internal invariants
     private boolean check() {
-        if (N == 0) {
+
+        // check a few properties of instance variable 'first'
+        if (n < 0) {
+            return false;
+        }
+        if (n == 0) {
             if (first != null) return false;
         }
-        else if (N == 1) {
+        else if (n == 1) {
             if (first == null)      return false;
             if (first.next != null) return false;
         }
         else {
+            if (first == null)      return false;
             if (first.next == null) return false;
         }
 
-        // check internal consistency of instance variable N
+        // check internal consistency of instance variable n
         int numberOfNodes = 0;
-        for (Node x = first; x != null; x = x.next) {
+        for (Node x = first; x != null && numberOfNodes <= n; x = x.next) {
             numberOfNodes++;
         }
-        if (numberOfNodes != N) return false;
+        if (numberOfNodes != n) return false;
 
         return true;
     }
@@ -167,13 +179,39 @@ public class LinkedStack<Item> implements Iterable<Item> {
      * Unit tests the <tt>LinkedStack</tt> data type.
      */
     public static void main(String[] args) {
-        LinkedStack<String> s = new LinkedStack<String>();
+        LinkedStack<String> stack = new LinkedStack<String>();
         while (!StdIn.isEmpty()) {
             String item = StdIn.readString();
-            if (!item.equals("-")) s.push(item);
-            else if (!s.isEmpty()) StdOut.print(s.pop() + " ");
+            if (!item.equals("-"))
+                stack.push(item);
+            else if (!stack.isEmpty())
+                StdOut.print(stack.pop() + " ");
         }
-        StdOut.println("(" + s.size() + " left on stack)");
+        StdOut.println("(" + stack.size() + " left on stack)");
     }
 }
 
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

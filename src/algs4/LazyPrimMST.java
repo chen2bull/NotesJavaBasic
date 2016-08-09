@@ -1,4 +1,4 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac LazyPrimMST.java
  *  Execution:    java LazyPrimMST filename.txt
  *  Dependencies: EdgeWeightedGraph.java Edge.java Queue.java
@@ -37,7 +37,9 @@ package algs4; /****************************************************************
  *  ...
  *  647.66307
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 /**
  *  The <tt>LazyPrimMST</tt> class represents a data type for computing a
@@ -57,7 +59,8 @@ package algs4; /****************************************************************
  *  Afterwards, the <tt>weight()</tt> method takes constant time
  *  and the <tt>edges()</tt> method takes time proportional to <em>V</em>.
  *  <p>
- *  For additional documentation, see <a href="/algs4/44sp">Section 4.4</a> of
+ *  For additional documentation,
+ *  see <a href="http://algs4.cs.princeton.edu/43mst">Section 4.3</a> of
  *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
  *  For alternate implementations, see {@link PrimMST}, {@link KruskalMST},
  *  and {@link BoruvkaMST}.
@@ -66,6 +69,8 @@ package algs4; /****************************************************************
  *  @author Kevin Wayne
  */
 public class LazyPrimMST {
+    private static final double FLOATING_POINT_EPSILON = 1E-12;
+
     private double weight;       // total weight of MST
     private Queue<Edge> mst;     // edges in the MST
     private boolean[] marked;    // marked[v] = true if v on tree
@@ -134,8 +139,7 @@ public class LazyPrimMST {
         for (Edge e : edges()) {
             totalWeight += e.weight();
         }
-        double EPSILON = 1E-12;
-        if (Math.abs(totalWeight - weight()) > EPSILON) {
+        if (Math.abs(totalWeight - weight()) > FLOATING_POINT_EPSILON) {
             System.err.printf("Weight of edges does not equal weight(): %f vs. %f\n", totalWeight, weight());
             return false;
         }
@@ -201,3 +205,27 @@ public class LazyPrimMST {
     }
 
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

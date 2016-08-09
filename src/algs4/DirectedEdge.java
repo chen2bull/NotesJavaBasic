@@ -1,10 +1,13 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac DirectedEdge.java
  *  Execution:    java DirectedEdge
+ *  Dependencies: StdOut.java
  *
  *  Immutable weighted directed edge.
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 /**
  *  The <tt>DirectedEdge</tt> class represents a weighted edge in an 
  *  {@link EdgeWeightedDigraph}. Each edge consists of two integers
@@ -79,7 +82,31 @@ public class DirectedEdge {
      * Unit tests the <tt>DirectedEdge</tt> data type.
      */
     public static void main(String[] args) {
-        DirectedEdge e = new DirectedEdge(12, 23, 3.14);
+        DirectedEdge e = new DirectedEdge(12, 34, 5.67);
         StdOut.println(e);
     }
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

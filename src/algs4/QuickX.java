@@ -1,6 +1,7 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac QuickX.java
  *  Execution:    java QuickX N
+ *  Dependencies: StdOut.java StdIn.java
  *  
  *  Uses the Bentley-McIlroy 3-way partitioning scheme,
  *  chooses the partitioning element using Tukey's ninther,
@@ -10,7 +11,9 @@ package algs4; /****************************************************************
  *  and M. Douglas McIlroy. Softwae-Practice and Experience,
  *  Vol. 23 (11), 1249-1265 (November 1993).
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 /**
  *  The <tt>QuickX</tt> class provides static methods for sorting an
@@ -24,7 +27,12 @@ package algs4; /****************************************************************
  *  @author Kevin Wayne
  */
 public class QuickX {
-    private static final int CUTOFF = 8;  // cutoff to insertion sort, must be >= 1
+
+    // cutoff to insertion sort, must be >= 1
+    private static final int INSERTION_SORT_CUTOFF = 8;
+
+    // cutoff to median-of-3 partitioning
+    private static final int MEDIAN_OF_3_CUTOFF = 40;
 
     // This class should not be instantiated.
     private QuickX() { }
@@ -38,24 +46,24 @@ public class QuickX {
     }
 
     private static void sort(Comparable[] a, int lo, int hi) { 
-        int N = hi - lo + 1;
+        int n = hi - lo + 1;
 
         // cutoff to insertion sort
-        if (N <= CUTOFF) {
+        if (n <= INSERTION_SORT_CUTOFF) {
             insertionSort(a, lo, hi);
             return;
         }
 
         // use median-of-3 as partitioning element
-        else if (N <= 40) {
-            int m = median3(a, lo, lo + N/2, hi);
+        else if (n <= MEDIAN_OF_3_CUTOFF) {
+            int m = median3(a, lo, lo + n/2, hi);
             exch(a, m, lo);
         }
 
         // use Tukey ninther as partitioning element
         else  {
-            int eps = N/8;
-            int mid = lo + N/2;
+            int eps = n/8;
+            int mid = lo + n/2;
             int m1 = median3(a, lo, lo + eps, lo + eps + eps);
             int m2 = median3(a, mid - eps, mid, mid + eps);
             int m3 = median3(a, hi - eps - eps, hi - eps, hi); 
@@ -85,8 +93,10 @@ public class QuickX {
 
 
         i = j + 1;
-        for (int k = lo; k <= p; k++) exch(a, k, j--);
-        for (int k = hi; k >= q; k--) exch(a, k, i++);
+        for (int k = lo; k <= p; k++)
+            exch(a, k, j--);
+        for (int k = hi; k >= q; k--)
+            exch(a, k, i++);
 
         sort(a, lo, j);
         sort(a, i, hi);
@@ -108,18 +118,18 @@ public class QuickX {
                (less(a[k], a[j]) ? j : less(a[k], a[i]) ? k : i));
     }
 
-   /***********************************************************************
-    *  Helper sorting functions
-    ***********************************************************************/
+   /***************************************************************************
+    *  Helper sorting functions.
+    ***************************************************************************/
     
     // is v < w ?
     private static boolean less(Comparable v, Comparable w) {
-        return (v.compareTo(w) < 0);
+        return v.compareTo(w) < 0;
     }
 
     // does v == w ?
     private static boolean eq(Comparable v, Comparable w) {
-        return (v.compareTo(w) == 0);
+        return v.compareTo(w) == 0;
     }
         
     // exchange a[i] and a[j]
@@ -130,9 +140,9 @@ public class QuickX {
     }
 
 
-   /***********************************************************************
-    *  Check if array is sorted - useful for debugging
-    ***********************************************************************/
+   /***************************************************************************
+    *  Check if array is sorted - useful for debugging.
+    ***************************************************************************/
     private static boolean isSorted(Comparable[] a) {
         for (int i = 1; i < a.length; i++)
             if (less(a[i], a[i-1])) return false;
@@ -154,7 +164,32 @@ public class QuickX {
     public static void main(String[] args) {
         String[] a = StdIn.readAllStrings();
         QuickX.sort(a);
+        assert isSorted(a);
         show(a);
     }
 
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

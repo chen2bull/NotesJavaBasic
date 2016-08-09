@@ -1,4 +1,4 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac Cat.java
  *  Execution:    java Cat input0.txt input1.txt ... output.txt
  *  Dependencies: In.java Out.java
@@ -21,7 +21,9 @@ package algs4; /****************************************************************
  *  a tiny
  *  test.
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 /**
  *  The <tt>Cat</tt> class provides a client for concatenating the results
@@ -35,8 +37,8 @@ package algs4; /****************************************************************
  */
 public class Cat { 
 
-   // this class should not be instantiated
-   private Cat() { }
+    // this class should not be instantiated
+    private Cat() { }
 
     /**
      * Reads in a sequence of text files specified as the first command-line
@@ -55,3 +57,27 @@ public class Cat {
     }
 
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

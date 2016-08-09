@@ -1,6 +1,7 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac ResizingArrayStack.java
  *  Execution:    java ResizingArrayStack < input.txt
+ *  Dependencies: StdIn.java StdOut.java
  *  Data files:   http://algs4.cs.princeton.edu/13stacks/tobe.txt
  *  
  *  Stack implementation with a resizing array.
@@ -11,7 +12,9 @@ package algs4; /****************************************************************
  *  % java ResizingArrayStack < tobe.txt
  *  to be not that or be (2 left on stack)
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -29,7 +32,8 @@ import java.util.NoSuchElementException;
  *  The <em>size</em>, <em>peek</em>, and <em>is-empty</em> operations takes
  *  constant time in the worst case. 
  *  <p>
- *  For additional documentation, see <a href="/algs4/13stacks">Section 1.3</a> of
+ *  For additional documentation,
+ *  see <a href="http://algs4.cs.princeton.edu/13stacks">Section 1.3</a> of
  *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
  *
  *  @author Robert Sedgewick
@@ -37,7 +41,7 @@ import java.util.NoSuchElementException;
  */
 public class ResizingArrayStack<Item> implements Iterable<Item> {
     private Item[] a;         // array of items
-    private int N;            // number of elements on stack
+    private int n;            // number of elements on stack
 
 
     /**
@@ -45,6 +49,7 @@ public class ResizingArrayStack<Item> implements Iterable<Item> {
      */
     public ResizingArrayStack() {
         a = (Item[]) new Object[2];
+        n = 0;
     }
 
     /**
@@ -52,7 +57,7 @@ public class ResizingArrayStack<Item> implements Iterable<Item> {
      * @return true if this stack is empty; false otherwise
      */
     public boolean isEmpty() {
-        return N == 0;
+        return n == 0;
     }
 
     /**
@@ -60,15 +65,15 @@ public class ResizingArrayStack<Item> implements Iterable<Item> {
      * @return the number of items in the stack
      */
     public int size() {
-        return N;
+        return n;
     }
 
 
     // resize the underlying array holding the elements
     private void resize(int capacity) {
-        assert capacity >= N;
+        assert capacity >= n;
         Item[] temp = (Item[]) new Object[capacity];
-        for (int i = 0; i < N; i++) {
+        for (int i = 0; i < n; i++) {
             temp[i] = a[i];
         }
         a = temp;
@@ -79,8 +84,8 @@ public class ResizingArrayStack<Item> implements Iterable<Item> {
      * @param item the item to add
      */
     public void push(Item item) {
-        if (N == a.length) resize(2*a.length);    // double size of array if necessary
-        a[N++] = item;                            // add item
+        if (n == a.length) resize(2*a.length);    // double size of array if necessary
+        a[n++] = item;                            // add item
     }
 
     /**
@@ -90,11 +95,11 @@ public class ResizingArrayStack<Item> implements Iterable<Item> {
      */
     public Item pop() {
         if (isEmpty()) throw new NoSuchElementException("Stack underflow");
-        Item item = a[N-1];
-        a[N-1] = null;                              // to avoid loitering
-        N--;
+        Item item = a[n-1];
+        a[n-1] = null;                              // to avoid loitering
+        n--;
         // shrink size of array if necessary
-        if (N > 0 && N == a.length/4) resize(a.length/2);
+        if (n > 0 && n == a.length/4) resize(a.length/2);
         return item;
     }
 
@@ -106,7 +111,7 @@ public class ResizingArrayStack<Item> implements Iterable<Item> {
      */
     public Item peek() {
         if (isEmpty()) throw new NoSuchElementException("Stack underflow");
-        return a[N-1];
+        return a[n-1];
     }
 
     /**
@@ -122,11 +127,11 @@ public class ResizingArrayStack<Item> implements Iterable<Item> {
         private int i;
 
         public ReverseArrayIterator() {
-            i = N;
+            i = n-1;
         }
 
         public boolean hasNext() {
-            return i > 0;
+            return i >= 0;
         }
 
         public void remove() {
@@ -135,7 +140,7 @@ public class ResizingArrayStack<Item> implements Iterable<Item> {
 
         public Item next() {
             if (!hasNext()) throw new NoSuchElementException();
-            return a[--i];
+            return a[i--];
         }
     }
 
@@ -144,12 +149,36 @@ public class ResizingArrayStack<Item> implements Iterable<Item> {
      * Unit tests the <tt>Stack</tt> data type.
      */
     public static void main(String[] args) {
-        ResizingArrayStack<String> s = new ResizingArrayStack<String>();
+        ResizingArrayStack<String> stack = new ResizingArrayStack<String>();
         while (!StdIn.isEmpty()) {
             String item = StdIn.readString();
-            if (!item.equals("-")) s.push(item);
-            else if (!s.isEmpty()) StdOut.print(s.pop() + " ");
+            if (!item.equals("-")) stack.push(item);
+            else if (!stack.isEmpty()) StdOut.print(stack.pop() + " ");
         }
-        StdOut.println("(" + s.size() + " left on stack)");
+        StdOut.println("(" + stack.size() + " left on stack)");
     }
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

@@ -1,11 +1,14 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac DijkstraAllPairsSP.java
+ *  Execution:    none
  *  Dependencies: EdgeWeightedDigraph.java Dijkstra.java
  *
  *  Dijkstra's algorithm run from each vertex. 
  *  Takes time proportional to E V log V and space proportional to EV.
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 /**
  *  The <tt>DijkstraAllPairsSP</tt> class represents a data type for solving the
@@ -20,8 +23,9 @@ package algs4; /****************************************************************
  *  constant time and the <tt>path()</tt> method takes time proportional to the
  *  number of edges in the shortest path returned.
  *  <p>
- *  For additional documentation, see <a href="/algs4/44sp">Section 4.4</a> of
- *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
+ *  For additional documentation,    
+ *  see <a href="http://algs4.cs.princeton.edu/44sp">Section 4.4</a> of    
+ *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne. 
  *
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
@@ -75,3 +79,27 @@ public class DijkstraAllPairsSP {
         return all[s].distTo(t);
     }
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

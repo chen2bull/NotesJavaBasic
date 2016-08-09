@@ -1,13 +1,16 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac BinaryStdIn.java
  *  Execution:    java BinaryStdIn < input > output
+ *  Dependencies: none             
  *  
  *  Supports reading binary data from standard input.
  *
  *  % java BinaryStdIn < input.jpg > output.jpg
  *  % diff input.jpg output.jpg
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -36,17 +39,26 @@ public final class BinaryStdIn {
     private static final int EOF = -1;    // end of file
 
     private static int buffer;            // one character buffer
-    private static int N;                 // number of bits left in buffer
+    private static int n;                 // number of bits left in buffer
 
     // static initializer
-    static { fillBuffer(); }
+    static {
+        fillBuffer();
+    }
 
     // don't instantiate
     private BinaryStdIn() { }
 
     private static void fillBuffer() {
-        try { buffer = in.read(); N = 8; }
-        catch (IOException e) { System.out.println("EOF"); buffer = EOF; N = -1; }
+        try {
+            buffer = in.read();
+            n = 8;
+        }
+        catch (IOException e) {
+            System.out.println("EOF");
+            buffer = EOF;
+            n = -1;
+        }
     }
 
    /**
@@ -71,22 +83,24 @@ public final class BinaryStdIn {
     }
 
    /**
-     * Read the next bit of data from standard input and return as a boolean.
+     * Reads the next bit of data from standard input and return as a boolean.
+     *
      * @return the next bit of data from standard input as a <tt>boolean</tt>
      * @throws RuntimeException if standard input is empty
      */
     public static boolean readBoolean() {
         if (isEmpty()) throw new RuntimeException("Reading from empty input stream");
-        N--;
-        boolean bit = ((buffer >> N) & 1) == 1;
-        if (N == 0) fillBuffer();
+        n--;
+        boolean bit = ((buffer >> n) & 1) == 1;
+        if (n == 0) fillBuffer();
         return bit;
     }
 
    /**
-     * Read the next 8 bits from standard input and return as an 8-bit char.
+     * Reads the next 8 bits from standard input and return as an 8-bit char.
      * Note that <tt>char</tt> is a 16-bit type;
-     * to read the next 16 bits as a char, use <tt>readChar(16)</tt>
+     * to read the next 16 bits as a char, use <tt>readChar(16)</tt>.
+     *
      * @return the next 8 bits of data from standard input as a <tt>char</tt>
      * @throws RuntimeException if there are fewer than 8 bits available on standard input
      */
@@ -94,28 +108,29 @@ public final class BinaryStdIn {
         if (isEmpty()) throw new RuntimeException("Reading from empty input stream");
 
         // special case when aligned byte
-        if (N == 8) {
+        if (n == 8) {
             int x = buffer;
             fillBuffer();
             return (char) (x & 0xff);
         }
 
-        // combine last N bits of current buffer with first 8-N bits of new buffer
+        // combine last n bits of current buffer with first 8-n bits of new buffer
         int x = buffer;
-        x <<= (8-N);
-        int oldN = N;
+        x <<= (8 - n);
+        int oldN = n;
         fillBuffer();
         if (isEmpty()) throw new RuntimeException("Reading from empty input stream");
-        N = oldN;
-        x |= (buffer >>> N);
+        n = oldN;
+        x |= (buffer >>> n);
         return (char) (x & 0xff);
-        // the above code doesn't quite work for the last character if N = 8
-        // because buffer will be -1
+        // the above code doesn't quite work for the last character if n = 8
+        // because buffer will be -1, so there is a special case for aligned byte
     }
 
    /**
-     * Read the next r bits from standard input and return as an r-bit character.
-     * @param r number of bits to read.
+     * Reads the next r bits from standard input and return as an r-bit character.
+     *
+     * @param  r number of bits to read.
      * @return the next r bits of data from standard input as a <tt>char</tt>
      * @throws IllegalArgumentException if there are fewer than r bits available on standard input
      * @throws IllegalArgumentException unless 1 &le; r &le; 16
@@ -136,10 +151,11 @@ public final class BinaryStdIn {
     }
 
    /**
-     * Read the remaining bytes of data from standard input and return as a string. 
+     * Reads the remaining bytes of data from standard input and return as a string. 
+     *
      * @return the remaining bytes of data from standard input as a <tt>String</tt>
      * @throws RuntimeException if standard input is empty or if the number of bits
-     * available on standard input is not a multiple of 8 (byte-aligned)
+     *         available on standard input is not a multiple of 8 (byte-aligned)
      */
     public static String readString() {
         if (isEmpty()) throw new RuntimeException("Reading from empty input stream");
@@ -154,7 +170,8 @@ public final class BinaryStdIn {
 
 
    /**
-     * Read the next 16 bits from standard input and return as a 16-bit short.
+     * Reads the next 16 bits from standard input and return as a 16-bit short.
+     *
      * @return the next 16 bits of data from standard input as a <tt>short</tt>
      * @throws RuntimeException if there are fewer than 16 bits available on standard input
      */
@@ -169,7 +186,8 @@ public final class BinaryStdIn {
     }
 
    /**
-     * Read the next 32 bits from standard input and return as a 32-bit int.
+     * Reads the next 32 bits from standard input and return as a 32-bit int.
+     *
      * @return the next 32 bits of data from standard input as a <tt>int</tt>
      * @throws RuntimeException if there are fewer than 32 bits available on standard input
      */
@@ -184,8 +202,9 @@ public final class BinaryStdIn {
     }
 
    /**
-     * Read the next r bits from standard input and return as an r-bit int.
-     * @param r number of bits to read.
+     * Reads the next r bits from standard input and return as an r-bit int.
+     *
+     * @param  r number of bits to read.
      * @return the next r bits of data from standard input as a <tt>int</tt>
      * @throws IllegalArgumentException if there are fewer than r bits available on standard input
      * @throws IllegalArgumentException unless 1 &le; r &le; 32
@@ -206,7 +225,8 @@ public final class BinaryStdIn {
     }
 
    /**
-     * Read the next 64 bits from standard input and return as a 64-bit long.
+     * Reads the next 64 bits from standard input and return as a 64-bit long.
+     *
      * @return the next 64 bits of data from standard input as a <tt>long</tt>
      * @throws RuntimeException if there are fewer than 64 bits available on standard input
      */
@@ -222,7 +242,8 @@ public final class BinaryStdIn {
 
 
    /**
-     * Read the next 64 bits from standard input and return as a 64-bit double.
+     * Reads the next 64 bits from standard input and return as a 64-bit double.
+     *
      * @return the next 64 bits of data from standard input as a <tt>double</tt>
      * @throws RuntimeExceptionArgument if there are fewer than 64 bits available on standard input
      */
@@ -231,7 +252,8 @@ public final class BinaryStdIn {
     }
 
    /**
-     * Read the next 32 bits from standard input and return as a 32-bit float.
+     * Reads the next 32 bits from standard input and return as a 32-bit float.
+     *
      * @return the next 32 bits of data from standard input as a <tt>float</tt>
      * @throws RuntimeException if there are fewer than 32 bits available on standard input
      */
@@ -241,7 +263,8 @@ public final class BinaryStdIn {
 
 
    /**
-     * Read the next 8 bits from standard input and return as an 8-bit byte.
+     * Reads the next 8 bits from standard input and return as an 8-bit byte.
+     *
      * @return the next 8 bits of data from standard input as a <tt>byte</tt>
      * @throws RuntimeException if there are fewer than 8 bits available on standard input
      */
@@ -265,3 +288,27 @@ public final class BinaryStdIn {
         BinaryStdOut.flush();
     }
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

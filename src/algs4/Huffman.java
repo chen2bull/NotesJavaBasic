@@ -1,6 +1,4 @@
-package algs4;
-
-/*************************************************************************
+/******************************************************************************
  *  Compilation:  javac Huffman.java
  *  Execution:    java Huffman - < input.txt   (compress)
  *  Execution:    java Huffman + < input.txt   (expand)
@@ -18,12 +16,29 @@ package algs4;
  *  % java Huffman - < abra.txt | java Huffman +
  *  ABRACADABRA!
  *
- *************************************************************************/
+ ******************************************************************************/
 
+package algs4;
+
+/**
+ *  The <tt>Huffman</tt> class provides static methods for compressing
+ *  and expanding a binary input using Huffman codes over the 8-bit extended
+ *  ASCII alphabet.
+ *  <p>
+ *  For additional documentation,
+ *  see <a href="http://algs4.cs.princeton.edu/55compress">Section 5.5</a> of
+ *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
+ *
+ *  @author Robert Sedgewick
+ *  @author Kevin Wayne
+ */
 public class Huffman {
 
     // alphabet size of extended ASCII
     private static final int R = 256;
+
+    // Do not instantiate.
+    private Huffman() { }
 
     // Huffman trie node
     private static class Node implements Comparable<Node> {
@@ -40,8 +55,8 @@ public class Huffman {
 
         // is the node a leaf node?
         private boolean isLeaf() {
-            assert (left == null && right == null) || (left != null && right != null);
-            return (left == null && right == null);
+            assert ((left == null) && (right == null)) || ((left != null) && (right != null));
+            return (left == null) && (right == null);
         }
 
         // compare, based on frequency
@@ -50,8 +65,11 @@ public class Huffman {
         }
     }
 
-
-    // compress bytes from standard input and write to standard output
+    /**
+     * Reads a sequence of 8-bit bytes from standard input; compresses them
+     * using Huffman codes with an 8-bit alphabet; and writes the results
+     * to standard output.
+     */
     public static void compress() {
         // read the input
         String s = BinaryStdIn.readString();
@@ -104,8 +122,8 @@ public class Huffman {
 
         // special case in case there is only one character with a nonzero frequency
         if (pq.size() == 1) {
-           if (freq['\0'] == 0) pq.insert(new Node('\0', 0, null, null));
-           else                 pq.insert(new Node('\1', 0, null, null));
+            if (freq['\0'] == 0) pq.insert(new Node('\0', 0, null, null));
+            else                 pq.insert(new Node('\1', 0, null, null));
         }
 
         // merge two smallest trees
@@ -142,8 +160,10 @@ public class Huffman {
         }
     }
 
-
-    // expand Huffman-encoded input from standard input and write to standard output
+    /**
+     * Reads a sequence of bits that represents a Huffman-compressed message from
+     * standard input; expands them; and writes the results to standard output.
+     */
     public static void expand() {
 
         // read in Huffman trie from input stream
@@ -176,7 +196,10 @@ public class Huffman {
         }
     }
 
-
+    /**
+     * Sample client that calls <tt>compress()</tt> if the command-line
+     * argument is "-" an <tt>expand()</tt> if it is "+".
+     */
     public static void main(String[] args) {
         if      (args[0].equals("-")) compress();
         else if (args[0].equals("+")) expand();
@@ -184,3 +207,27 @@ public class Huffman {
     }
 
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

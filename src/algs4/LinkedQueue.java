@@ -1,4 +1,4 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac LinkedQueue.java
  *  Execution:    java LinkedQueue < input.txt
  *  Dependencies: StdIn.java StdOut.java
@@ -9,7 +9,9 @@ package algs4; /****************************************************************
  *  % java Queue < tobe.txt 
  *  to be or not to be (2 left on queue)
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -34,7 +36,7 @@ import java.util.NoSuchElementException;
  *  @author Kevin Wayne
  */
 public class LinkedQueue<Item> implements Iterable<Item> {
-    private int N;         // number of elements on queue
+    private int n;         // number of elements on queue
     private Node first;    // beginning of queue
     private Node last;     // end of queue
 
@@ -50,7 +52,7 @@ public class LinkedQueue<Item> implements Iterable<Item> {
     public LinkedQueue() {
         first = null;
         last  = null;
-        N = 0;
+        n = 0;
         assert check();
     }
 
@@ -67,7 +69,7 @@ public class LinkedQueue<Item> implements Iterable<Item> {
      * @return the number of items in this queue
      */
     public int size() {
-        return N;     
+        return n;     
     }
 
     /**
@@ -91,7 +93,7 @@ public class LinkedQueue<Item> implements Iterable<Item> {
         last.next = null;
         if (isEmpty()) first = last;
         else           oldlast.next = last;
-        N++;
+        n++;
         assert check();
     }
 
@@ -104,7 +106,7 @@ public class LinkedQueue<Item> implements Iterable<Item> {
         if (isEmpty()) throw new NoSuchElementException("Queue underflow");
         Item item = first.item;
         first = first.next;
-        N--;
+        n--;
         if (isEmpty()) last = null;   // to avoid loitering
         assert check();
         return item;
@@ -123,31 +125,35 @@ public class LinkedQueue<Item> implements Iterable<Item> {
 
     // check internal invariants
     private boolean check() {
-        if (N == 0) {
+        if (n < 0) {
+            return false;
+        }
+        else if (n == 0) {
             if (first != null) return false;
             if (last  != null) return false;
         }
-        else if (N == 1) {
+        else if (n == 1) {
             if (first == null || last == null) return false;
             if (first != last)                 return false;
             if (first.next != null)            return false;
         }
         else {
+            if (first == null || last == null) return false;
             if (first == last)      return false;
             if (first.next == null) return false;
             if (last.next  != null) return false;
 
-            // check internal consistency of instance variable N
+            // check internal consistency of instance variable n
             int numberOfNodes = 0;
-            for (Node x = first; x != null; x = x.next) {
-               numberOfNodes++;
+            for (Node x = first; x != null && numberOfNodes <= n; x = x.next) {
+                numberOfNodes++;
             }
-            if (numberOfNodes != N) return false;
+            if (numberOfNodes != n) return false;
 
             // check internal consistency of instance variable last
             Node lastNode = first;
             while (lastNode.next != null) {
-               lastNode = lastNode.next;
+                lastNode = lastNode.next;
             }
             if (last != lastNode) return false;
         }
@@ -184,12 +190,38 @@ public class LinkedQueue<Item> implements Iterable<Item> {
      * Unit tests the <tt>LinkedQueue</tt> data type.
      */
     public static void main(String[] args) {
-        LinkedQueue<String> q = new LinkedQueue<String>();
+        LinkedQueue<String> queue = new LinkedQueue<String>();
         while (!StdIn.isEmpty()) {
             String item = StdIn.readString();
-            if (!item.equals("-")) q.enqueue(item);
-            else if (!q.isEmpty()) StdOut.print(q.dequeue() + " ");
+            if (!item.equals("-"))
+                queue.enqueue(item);
+            else if (!queue.isEmpty())
+                StdOut.print(queue.dequeue() + " ");
         }
-        StdOut.println("(" + q.size() + " left on queue)");
+        StdOut.println("(" + queue.size() + " left on queue)");
     }
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

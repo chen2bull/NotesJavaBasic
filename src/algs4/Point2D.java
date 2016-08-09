@@ -1,11 +1,13 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac Point2D.java
  *  Execution:    java Point2D x0 y0 N
  *  Dependencies: StdDraw.java StdRandom.java
  *
  *  Immutable point data type for points in the plane.
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -18,14 +20,15 @@ import java.util.Comparator;
  *  Note: in order to deal with the difference behavior of double and 
  *  Double with respect to -0.0 and +0.0, the Point2D constructor converts
  *  any coordinates that are -0.0 to +0.0.
- *  
- *  For additional documentation, see <a href="/algs4/12oop">Section 1.2</a> of
- *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
+ *  <p>
+ *  For additional documentation, 
+ *  see <a href="http://algs4.cs.princeton.edu/12oop">Section 1.2</a> of 
+ *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne. 
  *
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
  */
-public class Point2D implements Comparable<Point2D> {
+public final class Point2D implements Comparable<Point2D> {
 
     /**
      * Compares two points by x-coordinate.
@@ -41,21 +44,6 @@ public class Point2D implements Comparable<Point2D> {
      * Compares two points by polar radius.
      */
     public static final Comparator<Point2D> R_ORDER = new ROrder();
-
-    /**
-     * Compares two points by polar angle (between 0 and 2pi) with respect to this point.
-     */
-    public final Comparator<Point2D> POLAR_ORDER = new PolarOrder();
-
-    /**
-     * Compares two points by atan2() angle (between -pi and pi) with respect to this point.
-     */
-    public final Comparator<Point2D> ATAN2_ORDER = new Atan2Order();
-
-    /**
-     * Compares two points by distance to this point.
-     */
-    public final Comparator<Point2D> DISTANCE_TO_ORDER = new DistanceToOrder();
 
     private final double x;    // x coordinate
     private final double y;    // y coordinate
@@ -73,10 +61,11 @@ public class Point2D implements Comparable<Point2D> {
             throw new IllegalArgumentException("Coordinates must be finite");
         if (Double.isNaN(x) || Double.isNaN(y))
             throw new IllegalArgumentException("Coordinates cannot be NaN");
-        if (x == 0.0) x = 0.0;  // convert -0.0 to +0.0
-        if (y == 0.0) y = 0.0;  // convert -0.0 to +0.0
-        this.x = x;
-        this.y = y;
+        if (x == 0.0) this.x = 0.0;  // convert -0.0 to +0.0
+        else          this.x = x;
+
+        if (y == 0.0) this.y = 0.0;  // convert -0.0 to +0.0
+        else          this.y = y;
     }
 
     /**
@@ -122,7 +111,7 @@ public class Point2D implements Comparable<Point2D> {
     }
 
     /**
-     * Is a->b->c a counterclockwise turn?
+     * Returns true if a->b->c is a counterclockwise turn.
      * @param a first point
      * @param b second point
      * @param c third point
@@ -169,10 +158,16 @@ public class Point2D implements Comparable<Point2D> {
     }
 
     /**
-     * Compares this point to that point by y-coordinate, breaking ties by x-coordinate.
-     * @param that the other point
-     * @return { a negative integer, zero, a positive integer } if this point is
-     *    { less than, equal to, greater than } that point
+     * Compares two points by y-coordinate, breaking ties by x-coordinate.
+     * Formally, the invoking point (x0, y0) is less than the argument point (x1, y1)
+     * if and only if either y0 < y1 or if y0 = y1 and x0 < x1.
+     *
+     * @param  that the other point
+     * @return the value <tt>0</tt> if this string is equal to the argument
+     *         string (precisely when <tt>equals()</tt> returns <tt>true</tt>);
+     *         a negative integer if this point is less than the argument
+     *         point; and a positive integer if this point is greater than the
+     *         argument point
      */
     public int compareTo(Point2D that) {
         if (this.y < that.y) return -1;
@@ -180,6 +175,33 @@ public class Point2D implements Comparable<Point2D> {
         if (this.x < that.x) return -1;
         if (this.x > that.x) return +1;
         return 0;
+    }
+
+    /**
+     * Compares two points by polar angle (between 0 and 2pi) with respect to this point.
+     *
+     * @return the comparator
+     */
+    public Comparator<Point2D> polarOrder() {
+        return new PolarOrder();
+    }
+
+    /**
+     * Compares two points by atan2() angle (between -pi and pi) with respect to this point.
+     *
+     * @return the comparator
+     */
+    public Comparator<Point2D> atan2Order() {
+        return new Atan2Order();
+    }
+
+    /**
+     * Compares two points by distance to this point.
+     *
+     * @return the comparator
+     */
+    public Comparator<Point2D> distanceToOrder() {
+        return new DistanceToOrder();
     }
 
     // compare points according to their x-coordinate
@@ -254,11 +276,14 @@ public class Point2D implements Comparable<Point2D> {
     }
 
 
-    /**
-     * Does this point equal y?
-     * @param other the other point
-     * @return true if this point equals the other point; false otherwise
+    /**       
+     * Compares this point to the specified point.
+     *       
+     * @param  other the other point
+     * @return <tt>true</tt> if this point equals <tt>other</tt>;
+     *         <tt>false</tt> otherwise
      */
+    @Override
     public boolean equals(Object other) {
         if (other == this) return true;
         if (other == null) return false;
@@ -271,6 +296,7 @@ public class Point2D implements Comparable<Point2D> {
      * Return a string representation of this point.
      * @return a string representation of this point in the format (x, y)
      */
+    @Override
     public String toString() {
         return "(" + x + ", " + y + ")";
     }
@@ -279,6 +305,7 @@ public class Point2D implements Comparable<Point2D> {
      * Returns an integer hash code for this point.
      * @return an integer hash code for this point
      */
+    @Override
     public int hashCode() {
         int hashX = ((Double) x).hashCode();
         int hashY = ((Double) y).hashCode();
@@ -307,14 +334,16 @@ public class Point2D implements Comparable<Point2D> {
     public static void main(String[] args) {
         int x0 = Integer.parseInt(args[0]);
         int y0 = Integer.parseInt(args[1]);
-        int N = Integer.parseInt(args[2]);
+        int n = Integer.parseInt(args[2]);
 
         StdDraw.setCanvasSize(800, 800);
         StdDraw.setXscale(0, 100);
         StdDraw.setYscale(0, 100);
-        StdDraw.setPenRadius(.005);
-        Point2D[] points = new Point2D[N];
-        for (int i = 0; i < N; i++) {
+        StdDraw.setPenRadius(0.005);
+        StdDraw.enableDoubleBuffering();
+
+        Point2D[] points = new Point2D[n];
+        for (int i = 0; i < n; i++) {
             int x = StdRandom.uniform(100);
             int y = StdRandom.uniform(100);
             points[i] = new Point2D(x, y);
@@ -324,17 +353,42 @@ public class Point2D implements Comparable<Point2D> {
         // draw p = (x0, x1) in red
         Point2D p = new Point2D(x0, y0);
         StdDraw.setPenColor(StdDraw.RED);
-        StdDraw.setPenRadius(.02);
+        StdDraw.setPenRadius(0.02);
         p.draw();
 
 
         // draw line segments from p to each point, one at a time, in polar order
         StdDraw.setPenRadius();
         StdDraw.setPenColor(StdDraw.BLUE);
-        Arrays.sort(points, p.POLAR_ORDER);
-        for (int i = 0; i < N; i++) {
+        Arrays.sort(points, p.polarOrder());
+        for (int i = 0; i < n; i++) {
             p.drawTo(points[i]);
-            StdDraw.show(100);
+            StdDraw.show();
+            StdDraw.pause(100);
         }
     }
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

@@ -1,14 +1,9 @@
-package algs4;
-
-/***********************************************************************************
+/******************************************************************************
  *  Compilation: javac MSD.java
  *  Execution:   java MSD < input.txt
+ *  Dependencies: StdIn.java StdOut.java 
  *
- *    - Sort a String[] array of N extended ASCII strings (R = 256), each of length W.
- *
- *    - Sort an int[] array of N 32-bit integers, treating each integer as
- *      a sequence of W = 4 bytes (R = 256).
- *
+ *  Sort an array of strings or integers using MSD radix sort.
  *
  *  % java MSD < shells.txt 
  *  are
@@ -26,19 +21,39 @@ package algs4;
  *  the
  *  the
  *
- ***********************************************************************************/
+ ******************************************************************************/
 
+package algs4;
+
+/**
+ *  The <tt>MSD</tt> class provides static methods for sorting an
+ *  array of extended ASCII strings or integers using MSD radix sort.
+ *  <p>
+ *  For additional documentation,
+ *  see <a href="http://algs4.cs.princeton.edu/51radix">Section 5.1</a> of
+ *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
+ *
+ *  @author Robert Sedgewick
+ *  @author Kevin Wayne
+ */
 public class MSD {
     private static final int BITS_PER_BYTE =   8;
     private static final int BITS_PER_INT  =  32;   // each Java int is 32 bits 
     private static final int R             = 256;   // extended ASCII alphabet size
     private static final int CUTOFF        =  15;   // cutoff to insertion sort
 
-    // sort array of strings
+    // do not instantiate
+    private MSD() { } 
+
+   /**
+     * Rearranges the array of extended ASCII strings in ascending order.
+     *
+     * @param a the array to be sorted
+     */
     public static void sort(String[] a) {
-        int N = a.length;
-        String[] aux = new String[N];
-        sort(a, 0, N-1, 0, aux);
+        int n = a.length;
+        String[] aux = new String[n];
+        sort(a, 0, n-1, 0, aux);
     }
 
     // return dth character of s, -1 if d = length of string
@@ -79,7 +94,7 @@ public class MSD {
             a[i] = aux[i - lo];
 
 
-        // recursively sort for each character
+        // recursively sort for each character (excludes sentinel -1)
         for (int r = 0; r < R; r++)
             sort(a, lo + count[r], lo + count[r+1] - 1, d+1, aux);
     }
@@ -110,11 +125,16 @@ public class MSD {
     }
 
 
-    // MSD sort array of integers
+   /**
+     * Rearranges the array of 32-bit integers in ascending order.
+     * Currently assumes that the integers are nonnegative.
+     *
+     * @param a the array to be sorted
+     */
     public static void sort(int[] a) {
-        int N = a.length;
-        int[] aux = new int[N];
-        sort(a, 0, N-1, 0, aux);
+        int n = a.length;
+        int[] aux = new int[n];
+        sort(a, 0, n-1, 0, aux);
     }
 
     // MSD sort from a[lo] to a[hi], starting at the dth byte
@@ -139,7 +159,7 @@ public class MSD {
         for (int r = 0; r < R; r++)
             count[r+1] += count[r];
 
-/*************BUGGGY
+/************* BUGGGY CODE.
         // for most significant byte, 0x80-0xFF comes before 0x00-0x7F
         if (d == 0) {
             int shift1 = count[R] - count[R/2];
@@ -186,11 +206,40 @@ public class MSD {
     }
 
 
+    /**
+     * Reads in a sequence of extended ASCII strings from standard input;
+     * MSD radix sorts them;
+     * and prints them to standard output in ascending order.
+     */
     public static void main(String[] args) {
         String[] a = StdIn.readAllStrings();
-        int N = a.length;
+        int n = a.length;
         sort(a);
-        for (int i = 0; i < N; i++)
+        for (int i = 0; i < n; i++)
             StdOut.println(a[i]);
     }
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

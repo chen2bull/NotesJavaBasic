@@ -1,8 +1,8 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac DepthFirstSearch.java
  *  Execution:    java DepthFirstSearch filename.txt s
  *  Dependencies: Graph.java StdOut.java
- *  Data files:   http://algs4.cs.princeton.edu/41undirected/tinyG.txt
+ *  Data files:   http://algs4.cs.princeton.edu/41graph/tinyG.txt
  *
  *  Run depth first search on an undirected graph.
  *  Runs in O(E + V) time.
@@ -15,7 +15,9 @@ package algs4; /****************************************************************
  *  9 10 11 12 
  *  NOT connected
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 /**
  *  The <tt>DepthFirstSearch</tt> class represents a data type for 
@@ -29,8 +31,8 @@ package algs4; /****************************************************************
  *  where <em>V</em> is the number of vertices and <em>E</em> is the number of edges.
  *  It uses extra space (not including the graph) proportional to <em>V</em>.
  *  <p>
- *  For additional documentation, see <a href="/algs4/41graph">Section 4.1</a> of
- *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
+ *  For additional documentation, see <a href="http://algs4.cs.princeton.edu/41graph">Section 4.1</a>   
+ *  of <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
  *
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
@@ -97,3 +99,27 @@ public class DepthFirstSearch {
     }
 
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

@@ -1,6 +1,7 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac ResizingArrayQueue.java
  *  Execution:    java ResizingArrayQueue < input.txt
+ *  Dependencies: StdIn.java StdOut.java
  *  Data files:   http://algs4.cs.princeton.edu/13stacks/tobe.txt  
  *  
  *  Queue implementation with a resizing array.
@@ -8,7 +9,9 @@ package algs4; /****************************************************************
  *  % java ResizingArrayQueue < tobe.txt 
  *  to be or not to be (2 left on queue)
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -34,18 +37,20 @@ import java.util.NoSuchElementException;
  *  @author Kevin Wayne
  */
 public class ResizingArrayQueue<Item> implements Iterable<Item> {
-    private Item[] q;            // queue elements
-    private int N = 0;           // number of elements on queue
-    private int first = 0;       // index of first element of queue
-    private int last  = 0;       // index of next available slot
+    private Item[] q;       // queue elements
+    private int n;          // number of elements on queue
+    private int first;      // index of first element of queue
+    private int last;       // index of next available slot
 
 
     /**
      * Initializes an empty queue.
      */
     public ResizingArrayQueue() {
-        // cast needed since no generic array creation in Java
         q = (Item[]) new Object[2];
+        n = 0;
+        first = 0;
+        last = 0;
     }
 
     /**
@@ -53,7 +58,7 @@ public class ResizingArrayQueue<Item> implements Iterable<Item> {
      * @return true if this queue is empty; false otherwise
      */
     public boolean isEmpty() {
-        return N == 0;
+        return n == 0;
     }
 
     /**
@@ -61,19 +66,19 @@ public class ResizingArrayQueue<Item> implements Iterable<Item> {
      * @return the number of items in this queue
      */
     public int size() {
-        return N;
+        return n;
     }
 
     // resize the underlying array
-    private void resize(int max) {
-        assert max >= N;
-        Item[] temp = (Item[]) new Object[max];
-        for (int i = 0; i < N; i++) {
+    private void resize(int capacity) {
+        assert capacity >= n;
+        Item[] temp = (Item[]) new Object[capacity];
+        for (int i = 0; i < n; i++) {
             temp[i] = q[(first + i) % q.length];
         }
         q = temp;
         first = 0;
-        last  = N;
+        last  = n;
     }
 
     /**
@@ -82,10 +87,10 @@ public class ResizingArrayQueue<Item> implements Iterable<Item> {
      */
     public void enqueue(Item item) {
         // double size of array if necessary and recopy to front of array
-        if (N == q.length) resize(2*q.length);   // double size of array if necessary
+        if (n == q.length) resize(2*q.length);   // double size of array if necessary
         q[last++] = item;                        // add item
         if (last == q.length) last = 0;          // wrap-around
-        N++;
+        n++;
     }
 
     /**
@@ -97,11 +102,11 @@ public class ResizingArrayQueue<Item> implements Iterable<Item> {
         if (isEmpty()) throw new NoSuchElementException("Queue underflow");
         Item item = q[first];
         q[first] = null;                            // to avoid loitering
-        N--;
+        n--;
         first++;
         if (first == q.length) first = 0;           // wrap-around
         // shrink size of array if necessary
-        if (N > 0 && N == q.length/4) resize(q.length/2); 
+        if (n > 0 && n == q.length/4) resize(q.length/2); 
         return item;
     }
 
@@ -127,7 +132,7 @@ public class ResizingArrayQueue<Item> implements Iterable<Item> {
     // an iterator, doesn't implement remove() since it's optional
     private class ArrayIterator implements Iterator<Item> {
         private int i = 0;
-        public boolean hasNext()  { return i < N;                               }
+        public boolean hasNext()  { return i < n;                               }
         public void remove()      { throw new UnsupportedOperationException();  }
 
         public Item next() {
@@ -142,13 +147,37 @@ public class ResizingArrayQueue<Item> implements Iterable<Item> {
      * Unit tests the <tt>ResizingArrayQueue</tt> data type.
      */
     public static void main(String[] args) {
-        ResizingArrayQueue<String> q = new ResizingArrayQueue<String>();
+        ResizingArrayQueue<String> queue = new ResizingArrayQueue<String>();
         while (!StdIn.isEmpty()) {
             String item = StdIn.readString();
-            if (!item.equals("-")) q.enqueue(item);
-            else if (!q.isEmpty()) StdOut.print(q.dequeue() + " ");
+            if (!item.equals("-")) queue.enqueue(item);
+            else if (!queue.isEmpty()) StdOut.print(queue.dequeue() + " ");
         }
-        StdOut.println("(" + q.size() + " left on queue)");
+        StdOut.println("(" + queue.size() + " left on queue)");
     }
 
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

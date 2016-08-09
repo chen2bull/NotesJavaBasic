@@ -1,8 +1,8 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac CC.java
  *  Execution:    java CC filename.txt
  *  Dependencies: Graph.java StdOut.java Queue.java
- *  Data files:   http://algs4.cs.princeton.edu/41undirected/tinyG.txt
+ *  Data files:   http://algs4.cs.princeton.edu/41graph/tinyG.txt
  *
  *  Compute connected components using depth first search.
  *  Runs in O(E + V) time.
@@ -21,7 +21,9 @@ package algs4; /****************************************************************
  *  1 components
  *  0 1 2 3 4 5 6 7 8 9 10 ...
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 /**
  *  The <tt>CC</tt> class represents a data type for 
@@ -45,8 +47,8 @@ package algs4; /****************************************************************
  *  Afterwards, the <em>id</em>, <em>count</em>, <em>connected</em>,
  *  and <em>size</em> operations take constant time.
  *  <p>
- *  For additional documentation, see <a href="/algs4/41graph">Section 4.1</a> of
- *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
+ *  For additional documentation, see <a href="http://algs4.cs.princeton.edu/41graph">Section 4.1</a>   
+ *  of <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
  *
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
@@ -59,7 +61,8 @@ public class CC {
 
     /**
      * Computes the connected components of the undirected graph <tt>G</tt>.
-     * @param G the graph
+     *
+     * @param G the undirected graph
      */
     public CC(Graph G) {
         marked = new boolean[G.V()];
@@ -87,7 +90,8 @@ public class CC {
 
     /**
      * Returns the component id of the connected component containing vertex <tt>v</tt>.
-     * @param v the vertex
+     *
+     * @param  v the vertex
      * @return the component id of the connected component containing vertex <tt>v</tt>
      */
     public int id(int v) {
@@ -96,7 +100,8 @@ public class CC {
 
     /**
      * Returns the number of vertices in the connected component containing vertex <tt>v</tt>.
-     * @param v the vertex
+     *
+     * @param  v the vertex
      * @return the number of vertices in the connected component containing vertex <tt>v</tt>
      */
     public int size(int v) {
@@ -104,36 +109,40 @@ public class CC {
     }
 
     /**
-     * Returns the number of connected components.
-     * @return the number of connected components
+     * Returns the number of connected components in the graph <tt>G</tt>.
+     *
+     * @return the number of connected components in the graph <tt>G</tt>
      */
     public int count() {
         return count;
     }
 
     /**
-     * Are vertices <tt>v</tt> and <tt>w</tt> in the same connected component?
-     * @param v one vertex
-     * @param w the other vertex
+     * Returns true if vertices <tt>v</tt> and <tt>w</tt> are in the same
+     * connected component.
+     *
+     * @param  v one vertex
+     * @param  w the other vertex
      * @return <tt>true</tt> if vertices <tt>v</tt> and <tt>w</tt> are in the same
-     *     connected component, and <tt>false</tt> otherwise
+     *         connected component; <tt>false</tt> otherwise
      */
     public boolean connected(int v, int w) {
         return id(v) == id(w);
     }
 
     /**
-     * Are vertices <tt>v</tt> and <tt>w</tt> in the same connected component?
-     * @param v one vertex
-     * @param w the other vertex
+     * Returns true if vertices <tt>v</tt> and <tt>w</tt> are in the same
+     * connected component.
+     *
+     * @param  v one vertex
+     * @param  w the other vertex
      * @return <tt>true</tt> if vertices <tt>v</tt> and <tt>w</tt> are in the same
-     *     connected component, and <tt>false</tt> otherwise
-     * @deprecated Use connected(v, w) instead.
+     *         connected component; <tt>false</tt> otherwise
+     * @deprecated Replaced by {@link #connected(int, int)}.
      */
     public boolean areConnected(int v, int w) {
         return id(v) == id(w);
     }
-
 
     /**
      * Unit tests the <tt>CC</tt> data type.
@@ -144,12 +153,12 @@ public class CC {
         CC cc = new CC(G);
 
         // number of connected components
-        int M = cc.count();
-        StdOut.println(M + " components");
+        int m = cc.count();
+        StdOut.println(m + " components");
 
         // compute list of vertices in each connected component
-        Queue<Integer>[] components = (Queue<Integer>[]) new Queue[M];
-        for (int i = 0; i < M; i++) {
+        Queue<Integer>[] components = (Queue<Integer>[]) new Queue[m];
+        for (int i = 0; i < m; i++) {
             components[i] = new Queue<Integer>();
         }
         for (int v = 0; v < G.V(); v++) {
@@ -157,7 +166,7 @@ public class CC {
         }
 
         // print results
-        for (int i = 0; i < M; i++) {
+        for (int i = 0; i < m; i++) {
             for (int v : components[i]) {
                 StdOut.print(v + " ");
             }
@@ -165,3 +174,27 @@ public class CC {
         }
     }
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

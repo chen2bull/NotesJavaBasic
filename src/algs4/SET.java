@@ -1,6 +1,7 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac SET.java
  *  Execution:    java SET
+ *  Dependencies: StdOut.java
  *  
  *  Set implementation using Java's TreeSet library.
  *  Does not allow duplicates.
@@ -10,11 +11,12 @@ package algs4; /****************************************************************
  *  208.216.181.15
  *  null
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.SortedSet;
 import java.util.TreeSet;
 
 /**
@@ -23,6 +25,9 @@ import java.util.TreeSet;
  *  methods. It also provides ordered methods for finding the <em>minimum</em>,
  *  <em>maximum</em>, <em>floor</em>, and <em>ceiling</em> and set methods
  *  for <em>union</em>, <em>intersection</em>, and <em>equality</em>.
+ *  <p>
+ *  Even though this implementation include the method <tt>equals()</tt>, it
+ *  does not support the method <tt>hashCode()</tt> because sets are mutable.
  *  <p>
  *  This implementation uses a balanced binary search tree. It requires that
  *  the key type implements the <tt>Comparable</tt> interface and calls the
@@ -34,12 +39,15 @@ import java.util.TreeSet;
  *  The <em>size</em>, and <em>is-empty</em> operations take constant time.
  *  Construction takes constant time.
  *  <p>
+ *  This implementation uses a balanced binary search tree. It requires that
  *  For additional documentation, see
  *  <a href="http://algs4.cs.princeton.edu/35applications">Section 3.5</a> of
  *  <i>Algorithms in Java, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
  *
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
+ *
+ *  @param <Key> the generic type of a key in this set
  */
 
 public class SET<Key extends Comparable<Key>> implements Iterable<Key> {
@@ -53,8 +61,16 @@ public class SET<Key extends Comparable<Key>> implements Iterable<Key> {
     }
 
     /**
-     * Adds the key to the set if it is not already present.
-     * @param key the key to add
+     * Initializes a new set that is an independent copy of the specified set.
+     */
+    public SET(SET<Key> x) {
+        set = new TreeSet<Key>(x.set);
+    }
+
+    /**
+     * Adds the key to this set (if it is not already present).
+     *
+     * @param  key the key to add
      * @throws NullPointerException if <tt>key</tt> is <tt>null</tt>
      */
     public void add(Key key) {
@@ -64,10 +80,11 @@ public class SET<Key extends Comparable<Key>> implements Iterable<Key> {
 
 
     /**
-     * Does the set contain the given key?
-     * @param key the key
-     * @return <tt>true</tt> if the set contains <tt>key</tt> and
-     *     <tt>false</tt> otherwise
+     * Returns true if this set contains the given key.
+     *
+     * @param  key the key
+     * @return <tt>true</tt> if this set contains <tt>key</tt>;
+     *         <tt>false</tt> otherwise
      * @throws NullPointerException if <tt>key</tt> is <tt>null</tt>
      */
     public boolean contains(Key key) {
@@ -76,8 +93,9 @@ public class SET<Key extends Comparable<Key>> implements Iterable<Key> {
     }
 
     /**
-     * Removes the key from the set if the key is present.
-     * @param key the key
+     * Removes the specified key from this set (if the set contains the specified key).
+     *
+     * @param  key the key
      * @throws NullPointerException if <tt>key</tt> is <tt>null</tt>
      */
     public void delete(Key key) {
@@ -86,35 +104,40 @@ public class SET<Key extends Comparable<Key>> implements Iterable<Key> {
     }
 
     /**
-     * Returns the number of keys in the set.
-     * @return the number of keys in the set
+     * Returns the number of keys in this set.
+     *
+     * @return the number of keys in this set
      */
     public int size() {
         return set.size();
     }
 
     /**
-     * Is the set empty?
-     * @return <tt>true</tt> if the set is empty, and <tt>false</tt> otherwise
+     * Returns true if this set is empty.
+     *
+     * @return <tt>true</tt> if this set is empty;
+     *         <tt>false</tt> otherwise
      */
     public boolean isEmpty() {
         return size() == 0;
     }
  
     /**
-     * Returns all of the keys in the set, as an iterator.
+     * Returns all of the keys in this set, as an iterator.
      * To iterate over all of the keys in a set named <tt>set</tt>, use the
      * foreach notation: <tt>for (Key key : set)</tt>.
-     * @return an iterator to all of the keys in the set
+     *
+     * @return an iterator to all of the keys in this set
      */
     public Iterator<Key> iterator() {
         return set.iterator();
     }
 
     /**
-     * Returns the largest key in the set.
-     * @return the largest key in the set
-     * @throws java.util.NoSuchElementException if the set is empty
+     * Returns the largest key in this set.
+     *
+     * @return the largest key in this set
+     * @throws NoSuchElementException if this set is empty
      */
     public Key max() {
         if (isEmpty()) throw new NoSuchElementException("called max() with empty set");
@@ -122,9 +145,10 @@ public class SET<Key extends Comparable<Key>> implements Iterable<Key> {
     }
 
     /**
-     * Returns the smallest key in the set.
-     * @return the smallest key in the set
-     * @throws java.util.NoSuchElementException if the set is empty
+     * Returns the smallest key in this set.
+     *
+     * @return the smallest key in this set
+     * @throws NoSuchElementException if this set is empty
      */
     public Key min() {
         if (isEmpty()) throw new NoSuchElementException("called min() with empty set");
@@ -133,11 +157,12 @@ public class SET<Key extends Comparable<Key>> implements Iterable<Key> {
 
 
     /**
-     * Returns the smallest key in the set greater than or equal to <tt>key</tt>.
-     * @return the smallest key in the set greater than or equal to <tt>key</tt>
-     * @param key the key
-     * @throws java.util.NoSuchElementException if there is no such key
+     * Returns the smallest key in this set greater than or equal to <tt>key</tt>.
+     *
+     * @param  key the key
+     * @return the smallest key in this set greater than or equal to <tt>key</tt>
      * @throws NullPointerException if <tt>key</tt> is <tt>null</tt>
+     * @throws NoSuchElementException if there is no such key
      */
     public Key ceiling(Key key) {
         if (key == null) throw new NullPointerException("called ceiling() with a null key");
@@ -147,11 +172,12 @@ public class SET<Key extends Comparable<Key>> implements Iterable<Key> {
     }
 
     /**
-     * Returns the largest key in the set less than or equal to <tt>key</tt>.
-     * @return the largest key in the set table less than or equal to <tt>key</tt>
-     * @param key the key
-     * @throws java.util.NoSuchElementException if there is no such key
+     * Returns the largest key in this set less than or equal to <tt>key</tt>.
+     *
+     * @param  key the key
+     * @return the largest key in this set table less than or equal to <tt>key</tt>
      * @throws NullPointerException if <tt>key</tt> is <tt>null</tt>
+     * @throws NoSuchElementException if there is no such key
      */
     public Key floor(Key key) {
         if (key == null) throw new NullPointerException("called floor() with a null key");
@@ -162,21 +188,27 @@ public class SET<Key extends Comparable<Key>> implements Iterable<Key> {
 
     /**
      * Returns the union of this set and that set.
-     * @param that the other set
+     *
+     * @param  that the other set
      * @return the union of this set and that set
      * @throws NullPointerException if <tt>that</tt> is <tt>null</tt>
      */
     public SET<Key> union(SET<Key> that) {
         if (that == null) throw new NullPointerException("called union() with a null argument");
         SET<Key> c = new SET<Key>();
-        for (Key x : this) { c.add(x); }
-        for (Key x : that) { c.add(x); }
+        for (Key x : this) {
+            c.add(x);
+        }
+        for (Key x : that) {
+            c.add(x);
+        }
         return c;
     }
 
     /**
      * Returns the intersection of this set and that set.
-     * @param that the other set
+     *
+     * @param  that the other set
      * @return the intersection of this set and that set
      * @throws NullPointerException if <tt>that</tt> is <tt>null</tt>
      */
@@ -196,36 +228,45 @@ public class SET<Key extends Comparable<Key>> implements Iterable<Key> {
         return c;
     }
 
-    /**
-     * Does this set equal <tt>y</tt>?
+    /**       
+     * Compares this set to the specified set.
+     * <p>
      * Note that this method declares two empty sets to be equal
      * even if they are parameterized by different generic types.
      * This is consistent with the behavior of <tt>equals()</tt> 
      * within Java's Collections framework.
-     * @param y the other set
-     * @return <tt>true</tt> if the two sets are equal; <tt>false</tt> otherwise
+     *       
+     * @param  other the other set
+     * @return <tt>true</tt> if this set equals <tt>other</tt>;
+     *         <tt>false</tt> otherwise
      */
-    public boolean equals(Object y) {
-        if (y == this) return true;
-        if (y == null) return false;
-        if (y.getClass() != this.getClass()) return false;
-        SET<Key> that = (SET<Key>) y;
-        if (this.size() != that.size()) return false;
-        try {
-            for (Key k : this)
-                if (!that.contains(k)) return false;
-        }
-        catch (ClassCastException exception) {
-            return false;
-        }
-        return true;
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) return true;
+        if (other == null) return false;
+        if (other.getClass() != this.getClass()) return false;
+        SET that = (SET) other;
+        return this.set.equals(that.set);
+    }
+
+    /**
+     * This operation is not supported because sets are mutable.
+     *
+     * @return does not return a value
+     * @throws UnsupportedOperationException if called
+     */
+    @Override
+    public int hashCode() {
+        throw new UnsupportedOperationException("hashCode() is not supported because sets are mutable");
     }
 
     /**
      * Returns a string representation of this set.
+     *
      * @return a string representation of this set, with the keys separated
-     *   by single spaces
+     *         by single spaces
      */
+    @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
         for (Key key : this)
@@ -238,7 +279,6 @@ public class SET<Key extends Comparable<Key>> implements Iterable<Key> {
      */
     public static void main(String[] args) {
         SET<String> set = new SET<String>();
-
 
         // insert some keys
         set.add("www.cs.princeton.edu");
@@ -275,11 +315,38 @@ public class SET<Key extends Comparable<Key>> implements Iterable<Key> {
         StdOut.println();
 
 
-        // print out all keys in the set in lexicographic order
+        // print out all keys in this set in lexicographic order
         for (String s : set) {
             StdOut.println(s);
         }
 
+        StdOut.println();
+        SET<String> set2 = new SET<String>(set);
+        StdOut.println(set.equals(set2));
     }
 
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

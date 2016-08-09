@@ -1,21 +1,27 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac In.java
  *  Execution:    java In   (basic test --- see source for required files)
+ *  Dependencies: none
  *
  *  Reads in data of various types from standard input, files, and URLs.
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.net.HttpURLConnection;
+import java.net.Socket;
+// import java.net.HttpURLConnection;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Locale;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -33,7 +39,7 @@ import java.util.regex.Pattern;
  *  <i>Introduction to Programming in Java: An Interdisciplinary Approach</i> 
  *  by Robert Sedgewick and Kevin Wayne.
  *  <p>
- *  Like {@link java.util.Scanner}, reading a token also consumes preceding Java
+ *  Like {@link Scanner}, reading a token also consumes preceding Java
  *  whitespace, reading a full line consumes
  *  the following end-of-line delimeter, while reading a character consumes
  *  nothing extra. 
@@ -49,9 +55,7 @@ import java.util.regex.Pattern;
  */
 public final class In {
     
-    private Scanner scanner;
-
-    /*** begin: section (1 of 2) of code duplicated from In to StdIn */
+    ///// begin: section (1 of 2) of code duplicated from In to StdIn.
     
     // assume Unicode UTF-8 encoding
     private static final String CHARSET_NAME = "UTF-8";
@@ -73,10 +77,12 @@ public final class In {
     private static final Pattern EVERYTHING_PATTERN
         = Pattern.compile("\\A");
 
-    /*** end: section (1 of 2) of code duplicated from In to StdIn */
+    //// end: section (1 of 2) of code duplicated from In to StdIn.
+
+    private Scanner scanner;
 
    /**
-     * Create an input stream from standard input.
+     * Initializes an input stream from standard input.
      */
     public In() {
         scanner = new Scanner(new BufferedInputStream(System.in), CHARSET_NAME);
@@ -84,23 +90,33 @@ public final class In {
     }
 
    /**
-     * Create an input stream from a socket.
+     * Initializes an input stream from a socket.
+     *
+     * @param  socket the socket
+     * @throws IllegalArgumentException if cannot open {@code socket}
+     * @throws NullPointerException if {@code socket} is {@code null}
      */
-    public In(java.net.Socket socket) {
+    public In(Socket socket) {
+        if (socket == null) throw new NullPointerException("argument is null");
         try {
             InputStream is = socket.getInputStream();
             scanner = new Scanner(new BufferedInputStream(is), CHARSET_NAME);
             scanner.useLocale(LOCALE);
         }
         catch (IOException ioe) {
-            System.err.println("Could not open " + socket);
+            throw new IllegalArgumentException("Could not open " + socket);
         }
     }
 
    /**
-     * Create an input stream from a URL.
+     * Initializes an input stream from a URL.
+     *
+     * @param  url the URL
+     * @throws IllegalArgumentException if cannot open {@code url}
+     * @throws NullPointerException if {@code url} is {@code null}
      */
     public In(URL url) {
+        if (url == null) throw new NullPointerException("argument is null");
         try {
             URLConnection site = url.openConnection();
             InputStream is     = site.getInputStream();
@@ -108,42 +124,61 @@ public final class In {
             scanner.useLocale(LOCALE);
         }
         catch (IOException ioe) {
-            System.err.println("Could not open " + url);
+            throw new IllegalArgumentException("Could not open " + url);
         }
     }
 
    /**
-     * Create an input stream from a file.
+     * Initializes an input stream from a file.
+     *
+     * @param  file the file
+     * @throws IllegalArgumentException if cannot open {@code file}
+     * @throws NullPointerException if {@code file} is {@code null}
      */
     public In(File file) {
+        if (file == null) throw new NullPointerException("argument is null");
         try {
-            scanner = new Scanner(file, CHARSET_NAME);
+            // for consistency with StdIn, wrap with BufferedInputStream instead of use
+            // file as argument to Scanner
+            FileInputStream fis = new FileInputStream(file);
+            scanner = new Scanner(new BufferedInputStream(fis), CHARSET_NAME);
             scanner.useLocale(LOCALE);
         }
         catch (IOException ioe) {
-            System.err.println("Could not open " + file);
+            throw new IllegalArgumentException("Could not open " + file);
         }
     }
 
 
    /**
-     * Create an input stream from a filename or web page name.
+     * Initializes an input stream from a filename or web page name.
+     *
+     * @param  name the filename or web page name
+     * @throws IllegalArgumentException if cannot open {@code name} as
+     *         a file or URL
+     * @throws NullPointerException if {@code name} is {@code null}
      */
-    public In(String s) {
+    public In(String name) {
+        if (name == null) throw new NullPointerException("argument is null");
         try {
             // first try to read file from local file system
-            File file = new File(s);
+            File file = new File(name);
             if (file.exists()) {
-                scanner = new Scanner(file, CHARSET_NAME);
+                // for consistency with StdIn, wrap with BufferedInputStream instead of use
+                // file as argument to Scanner
+                FileInputStream fis = new FileInputStream(file);
+                scanner = new Scanner(new BufferedInputStream(fis), CHARSET_NAME);
                 scanner.useLocale(LOCALE);
                 return;
             }
 
             // next try for files included in jar
-            URL url = getClass().getResource(s);
+            URL url = getClass().getResource(name);
 
             // or URL from web
-            if (url == null) { url = new URL(s); }
+            if (url == null) {
+                url = new URL(name);
+            }
 
             URLConnection site = url.openConnection();
 
@@ -156,53 +191,69 @@ public final class In {
             scanner.useLocale(LOCALE);
         }
         catch (IOException ioe) {
-            System.err.println("Could not open " + s);
+            throw new IllegalArgumentException("Could not open " + name);
         }
     }
 
     /**
-     * Create an input stream from a given Scanner source; use with 
+     * Initializes an input stream from a given {@link Scanner} source; use with 
      * <tt>new Scanner(String)</tt> to read from a string.
      * <p>
      * Note that this does not create a defensive copy, so the
      * scanner will be mutated as you read on. 
+     *
+     * @param  scanner the scanner
+     * @throws NullPointerException if {@code scanner} is {@code null}
      */
     public In(Scanner scanner) {
+        if (scanner == null) throw new NullPointerException("argument is null");
         this.scanner = scanner;
     }
 
     /**
-     * Does the input stream exist?
+     * Returns true if this input stream exists.
+     *
+     * @return <tt>true</tt> if this input stream exists; <tt>false</tt> otherwise
      */
     public boolean exists()  {
         return scanner != null;
     }
     
-    /*** begin: section (2 of 2) of code duplicated from In to StdIn,
-      *  with all methods changed from "public" to "public static" ***/
+    ////  begin: section (2 of 2) of code duplicated from In to StdIn,
+    ////  with all methods changed from "public" to "public static".
 
    /**
-     * Is the input empty (except possibly for whitespace)? Use this
-     * to know whether the next call to {@link #readString()}, 
+     * Returns true if input stream is empty (except possibly whitespace).
+     * Use this to know whether the next call to {@link #readString()}, 
      * {@link #readDouble()}, etc will succeed.
+     *
+     * @return <tt>true</tt> if this input stream is empty (except possibly whitespace);
+     *         <tt>false</tt> otherwise
      */
     public boolean isEmpty() {
         return !scanner.hasNext();
     }
 
-   /**
-     * Does the input have a next line? Use this to know whether the
-     * next call to {@link #readLine()} will succeed. <p> Functionally
-     * equivalent to {@link #hasNextChar()}.
+   /** 
+     * Returns true if this input stream has a next line.
+     * Use this method to know whether the
+     * next call to {@link #readLine()} will succeed.
+     * This method is functionally equivalent to {@link #hasNextChar()}.
+     *
+     * @return <tt>true</tt> if this input stream is empty;
+     *         <tt>false</tt> otherwise
      */
     public boolean hasNextLine() {
         return scanner.hasNextLine();
     }
 
     /**
-     * Is the input empty (including whitespace)? Use this to know 
-     * whether the next call to {@link #readChar()} will succeed. <p> Functionally
-     * equivalent to {@link #hasNextLine()}.
+     * Returns true if this input stream has more inputy (including whitespace).
+     * Use this method to know whether the next call to {@link #readChar()} will succeed.
+     * This method is functionally equivalent to {@link #hasNextLine()}.
+     * 
+     * @return <tt>true</tt> if this input stream has more input (including whitespace);
+     *         <tt>false</tt> otherwise   
      */
     public boolean hasNextChar() {
         scanner.useDelimiter(EMPTY_PATTERN);
@@ -213,22 +264,30 @@ public final class In {
 
 
    /**
-     * Read and return the next line.
+     * Reads and returns the next line in this input stream.
+     *
+     * @return the next line in this input stream; <tt>null</tt> if no such line
      */
     public String readLine() {
         String line;
-        try                 { line = scanner.nextLine(); }
-        catch (Exception e) { line = null;               }
+        try {
+            line = scanner.nextLine();
+        }
+        catch (NoSuchElementException e) {
+            line = null;
+        }
         return line;
     }
 
     /**
-     * Read and return the next character.
+     * Reads and returns the next character in this input stream.
+     *
+     * @return the next character in this input stream
      */
     public char readChar() {
         scanner.useDelimiter(EMPTY_PATTERN);
         String ch = scanner.next();
-        assert (ch.length() == 1) : "Internal (Std)In.readChar() error!"
+        assert ch.length() == 1 : "Internal (Std)In.readChar() error!"
             + " Please contact the authors.";
         scanner.useDelimiter(WHITESPACE_PATTERN);
         return ch.charAt(0);
@@ -236,7 +295,9 @@ public final class In {
 
 
    /**
-     * Read and return the remainder of the input as a string.
+     * Reads and returns the remainder of this input stream, as a string.
+     *
+     * @return the remainder of this input stream, as a string
      */
     public String readAll() {
         if (!scanner.hasNextLine())
@@ -250,57 +311,82 @@ public final class In {
 
 
    /**
-     * Read and return the next string.
+     * Reads the next token from this input stream and returns it as a <tt>String</tt>.
+     *
+     * @return the next <tt>String</tt> in this input stream
      */
     public String readString() {
         return scanner.next();
     }
 
    /**
-     * Read and return the next int.
+     * Reads the next token from this input stream, parses it as a <tt>int</tt>,
+     * and returns the <tt>int</tt>.
+     *
+     * @return the next <tt>int</tt> in this input stream
      */
     public int readInt() {
         return scanner.nextInt();
     }
 
    /**
-     * Read and return the next double.
+     * Reads the next token from this input stream, parses it as a <tt>double</tt>,
+     * and returns the <tt>double</tt>.
+     *
+     * @return the next <tt>double</tt> in this input stream
      */
     public double readDouble() {
         return scanner.nextDouble();
     }
 
    /**
-     * Read and return the next float.
+     * Reads the next token from this input stream, parses it as a <tt>float</tt>,
+     * and returns the <tt>float</tt>.
+     *
+     * @return the next <tt>float</tt> in this input stream
      */
     public float readFloat() {
         return scanner.nextFloat();
     }
 
    /**
-     * Read and return the next long.
+     * Reads the next token from this input stream, parses it as a <tt>long</tt>,
+     * and returns the <tt>long</tt>.
+     *
+     * @return the next <tt>long</tt> in this input stream
      */
     public long readLong() {
         return scanner.nextLong();
     }
 
    /**
-     * Read and return the next short.
+     * Reads the next token from this input stream, parses it as a <tt>short</tt>,
+     * and returns the <tt>short</tt>.
+     *
+     * @return the next <tt>short</tt> in this input stream
      */
     public short readShort() {
         return scanner.nextShort();
     }
 
    /**
-     * Read and return the next byte.
+     * Reads the next token from this input stream, parses it as a <tt>byte</tt>,
+     * and returns the <tt>byte</tt>.
+     * <p>
+     * To read binary data, use {@link BinaryIn}.
+     *
+     * @return the next <tt>byte</tt> in this input stream
      */
     public byte readByte() {
         return scanner.nextByte();
     }
 
     /**
-     * Read and return the next boolean, allowing case-insensitive
-     * "true" or "1" for true, and "false" or "0" for false.
+     * Reads the next token from this input stream, parses it as a <tt>boolean</tt>
+     * (interpreting either <tt>"true"</tt> or <tt>"1"</tt> as <tt>true</tt>,
+     * and either <tt>"false"</tt> or <tt>"0"</tt> as <tt>false</tt>).
+     *
+     * @return the next <tt>boolean</tt> in this input stream
      */
     public boolean readBoolean() {
         String s = readString();
@@ -312,7 +398,10 @@ public final class In {
     }
 
     /**
-     * Read all strings until the end of input is reached, and return them.
+     * Reads all remaining tokens from this input stream and returns them as
+     * an array of strings.
+     *
+     * @return all remaining tokens in this input stream, as an array of strings
      */
     public String[] readAllStrings() {
         // we could use readAll.trim().split(), but that's not consistent
@@ -327,8 +416,10 @@ public final class In {
     }
 
     /**
-     * Reads all remaining lines from input stream and returns them as an array of strings.
-     * @return all remaining lines on input stream, as an array of strings
+     * Reads all remaining lines from this input stream and returns them as
+     * an array of strings.
+     *
+     * @return all remaining lines in this input stream, as an array of strings
      */
     public String[] readAllLines() {
         ArrayList<String> lines = new ArrayList<String>();
@@ -340,7 +431,10 @@ public final class In {
 
 
     /**
-     * Read all ints until the end of input is reached, and return them.
+     * Reads all remaining tokens from this input stream, parses them as integers,
+     * and returns them as an array of integers.
+     *
+     * @return all remaining lines in this input stream, as an array of integers
      */
     public int[] readAllInts() {
         String[] fields = readAllStrings();
@@ -351,7 +445,24 @@ public final class In {
     }
 
     /**
-     * Read all doubles until the end of input is reached, and return them.
+     * Reads all remaining tokens from this input stream, parses them as longs,
+     * and returns them as an array of longs.
+     *
+     * @return all remaining lines in this input stream, as an array of longs
+     */
+    public long[] readAllLongs() {
+        String[] fields = readAllStrings();
+        long[] vals = new long[fields.length];
+        for (int i = 0; i < fields.length; i++)
+            vals[i] = Long.parseLong(fields[i]);
+        return vals;
+    }
+
+    /**
+     * Reads all remaining tokens from this input stream, parses them as doubles,
+     * and returns them as an array of doubles.
+     *
+     * @return all remaining lines in this input stream, as an array of doubles
      */
     public double[] readAllDoubles() {
         String[] fields = readAllStrings();
@@ -361,68 +472,86 @@ public final class In {
         return vals;
     }
     
-    /*** end: section (2 of 2) of code duplicated from In to StdIn */
-    
+    ///// end: section (2 of 2) of code duplicated from In to StdIn */
+
    /**
-     * Close the input stream.
+     * Closes this input stream.
      */
     public void close() {
         scanner.close();  
     }
 
     /**
-     * Reads all ints from a file 
-     * @deprecated Clearer to use 
-     * <tt>new In(filename)</tt>.{@link #readAllInts()}
+     * Reads all integers from a file and returns them as
+     * an array of integers.
+     *
+     * @param      filename the name of the file
+     * @return     the integers in the file
+     * @deprecated Replaced by <tt>new In(filename)</tt>.{@link #readAllInts()}.
      */
     public static int[] readInts(String filename) {
         return new In(filename).readAllInts();
     }
 
    /**
-     * Reads all doubles from a file
-     * @deprecated Clearer to use 
-     * <tt>new In(filename)</tt>.{@link #readAllDoubles()}
+     * Reads all doubles from a file and returns them as
+     * an array of doubles.
+     *
+     * @param      filename the name of the file
+     * @return     the doubles in the file
+     * @deprecated Replaced by <tt>new In(filename)</tt>.{@link #readAllDoubles()}.
      */
     public static double[] readDoubles(String filename) {
         return new In(filename).readAllDoubles();
     }
 
    /**
-     * Reads all strings from a file
-     * @deprecated Clearer to use 
-     * <tt>new In(filename)</tt>.{@link #readAllStrings()}
+     * Reads all strings from a file and returns them as
+     * an array of strings.
+     *
+     * @param      filename the name of the file
+     * @return     the strings in the file
+     * @deprecated Replaced by <tt>new In(filename)</tt>.{@link #readAllStrings()}.
      */
     public static String[] readStrings(String filename) {
         return new In(filename).readAllStrings();
     }
 
     /**
-     * Reads all ints from stdin 
-     * @deprecated Clearer to use {@link StdIn#readAllInts()}
+     * Reads all integers from standard input and returns them
+     * an array of integers.
+     *
+     * @return     the integers on standard input
+     * @deprecated Replaced by {@link StdIn#readAllInts()}.
      */
     public static int[] readInts() {
         return new In().readAllInts();
     }
 
    /**
-     * Reads all doubles from stdin
-     * @deprecated Clearer to use {@link StdIn#readAllDoubles()}
+     * Reads all doubles from standard input and returns them as
+     * an array of doubles.
+     *
+     * @return     the doubles on standard input
+     * @deprecated Replaced by {@link StdIn#readAllDoubles()}.
      */
     public static double[] readDoubles() {
         return new In().readAllDoubles();
     }
 
    /**
-     * Reads all strings from stdin
-     * @deprecated Clearer to use {@link StdIn#readAllStrings()}
+     * Reads all strings from standard input and returns them as
+     *  an array of strings.
+     *
+     * @return     the strings on standard input
+     * @deprecated Replaced by {@link StdIn#readAllStrings()}.
      */
     public static String[] readStrings() {
         return new In().readAllStrings();
     }
     
    /**
-     * Test client.
+     * Unit tests the <tt>In</tt> data type.
      */
     public static void main(String[] args) {
         In in;
@@ -435,7 +564,9 @@ public final class In {
             in = new In(urlName);
             System.out.println(in.readAll());
         }
-        catch (Exception e) { System.out.println(e); }
+        catch (Exception e) {
+            System.out.println(e);
+        }
         System.out.println();
 
         // read one line at a time from URL
@@ -448,7 +579,9 @@ public final class In {
                 System.out.println(s);
             }
         }
-        catch (Exception e) { System.out.println(e); }
+        catch (Exception e) {
+            System.out.println(e);
+        }
         System.out.println();
 
         // read one string at a time from URL
@@ -461,7 +594,9 @@ public final class In {
                 System.out.println(s);
             }
         }
-        catch (Exception e) { System.out.println(e); }
+        catch (Exception e) {
+            System.out.println(e);
+        }
         System.out.println();
 
 
@@ -475,7 +610,9 @@ public final class In {
                 System.out.println(s);
             }
         }
-        catch (Exception e) { System.out.println(e); }
+        catch (Exception e) {
+            System.out.println(e);
+        }
         System.out.println();
 
 
@@ -489,7 +626,9 @@ public final class In {
                 System.out.println(s);
             }
         }
-        catch (Exception e) { System.out.println(e); }
+        catch (Exception e) {
+            System.out.println(e);
+        }
         System.out.println();
 
         // read one char at a time
@@ -502,7 +641,9 @@ public final class In {
                 System.out.print(c);
             }
         }
-        catch (Exception e) { System.out.println(e); }
+        catch (Exception e) {
+            System.out.println(e);
+        }
         System.out.println();
         System.out.println();
 
@@ -516,7 +657,9 @@ public final class In {
                 System.out.println(s);
             }
         }
-        catch (Exception e) { System.out.println(e); }
+        catch (Exception e) {
+            System.out.println(e);
+        }
         System.out.println();
 
 
@@ -531,9 +674,35 @@ public final class In {
             }
             System.out.println();
         }
-        catch (Exception e) { System.out.println(e); }
+        catch (Exception e) {
+            System.out.println(e);
+        }
         System.out.println();
 
     }
 
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

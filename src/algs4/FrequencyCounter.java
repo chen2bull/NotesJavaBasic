@@ -1,4 +1,4 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac FrequencyCounter.java
  *  Execution:    java FrequencyCounter L < input.txt
  *  Dependencies: ST.java StdIn.java StdOut.java
@@ -22,7 +22,9 @@ package algs4; /****************************************************************
  *  government 24763
  *
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 /**
  *  The <tt>FrequencyCounter</tt> class provides a client for 
@@ -37,6 +39,9 @@ package algs4; /****************************************************************
  *  @author Kevin Wayne
  */
 public class FrequencyCounter {
+
+    // Do not instantiate.
+    private FrequencyCounter() { }
 
     /**
      * Reads in a command-line integer and sequence of words from
@@ -77,3 +82,27 @@ public class FrequencyCounter {
         StdOut.println("words    = " + words);
     }
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

@@ -1,8 +1,7 @@
-package algs4;
-
-/*************************************************************************
+/******************************************************************************
  *  Compilation:  javac Complex.java
  *  Execution:    java Complex
+ *  Dependencies: StdOut.java
  *
  *  Data type for complex numbers.
  *
@@ -27,19 +26,44 @@ package algs4;
  *  |a|          = 7.810249675906654
  *  tan(a)       = -6.685231390246571E-6 + 1.0000103108981198i
  *
- *************************************************************************/
+ ******************************************************************************/
 
+package algs4;
+
+/**
+ *  The <tt>Complex</tt> class represents a complex number.
+ *  Complex numbers are immutable: their values cannot be changed after they
+ *  are created.
+ *  It includes methods for addition, subtraction, multiplication, division,
+ *  conjugation, and other common functions on complex numbers.
+ *  <p>
+ *  For additional documentation, see <a href="http://algs4.cs.princeton.edu/99scientific">Section 9.9</a> of
+ *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
+ *
+ *  @author Robert Sedgewick
+ *  @author Kevin Wayne
+ */
 public class Complex {
     private final double re;   // the real part
     private final double im;   // the imaginary part
 
-    // create a new object with the given real and imaginary parts
+    /**
+     * Initializes a complex number from the specified real and imaginary parts.
+     *
+     * @param real the real part
+     * @param imag the imaginary part
+     */
     public Complex(double real, double imag) {
         re = real;
         im = imag;
     }
 
-    // return a string representation of the invoking Complex object
+    /**
+     * Returns a string representation of this complex number.
+     *
+     * @return a string representation of this complex number,
+     *         of the form 34 - 56i.
+     */
     public String toString() {
         if (im == 0) return re + "";
         if (re == 0) return im + "i";
@@ -48,91 +72,172 @@ public class Complex {
     }
 
     // return abs/modulus/magnitude and angle/phase/argument
-    public double abs()   { return Math.hypot(re, im); }  // Math.sqrt(re*re + im*im)
-    public double phase() { return Math.atan2(im, re); }  // between -pi and pi
+    /**
+     * Returns the absolute value of this complex number.
+     * This quantity is also known as the <em>modulus</em> or <em>magnitude</em>.
+     *
+     * @return the absolute value of this complex number
+     */
+    public double abs() {
+        return Math.hypot(re, im);
+    }
 
-    // return a new Complex object whose value is (this + b)
-    public Complex plus(Complex b) {
-        Complex a = this;             // invoking object
-        double real = a.re + b.re;
-        double imag = a.im + b.im;
+    /**
+     * Returns the phase of this complex number.
+     * This quantity is also known as the <em>ange</em> or <em>argument</em>.
+     *
+     * @return the phase of this complex number, a real number between -pi and pi
+     */
+    public double phase() {
+        return Math.atan2(im, re);
+    }
+
+    /**
+     * Returns the sum of this complex number and the specified complex number.
+     *
+     * @param  that the other complex number
+     * @return the complex number whose value is <tt>(this + that)</tt>
+     */
+    public Complex plus(Complex that) {
+        double real = this.re + that.re;
+        double imag = this.im + that.im;
         return new Complex(real, imag);
     }
 
-    // return a new Complex object whose value is (this - b)
-    public Complex minus(Complex b) {
-        Complex a = this;
-        double real = a.re - b.re;
-        double imag = a.im - b.im;
+    /**
+     * Returns the result of subtracting the specified complex number from
+     * this complex number.
+     *
+     * @param  that the other complex number
+     * @return the complex number whose value is <tt>(this - that)</tt>
+     */
+    public Complex minus(Complex that) {
+        double real = this.re - that.re;
+        double imag = this.im - that.im;
         return new Complex(real, imag);
     }
 
-    // return a new Complex object whose value is (this * b)
-    public Complex times(Complex b) {
-        Complex a = this;
-        double real = a.re * b.re - a.im * b.im;
-        double imag = a.re * b.im + a.im * b.re;
+    /**
+     * Returns the product of this complex number and the specified complex number.
+     *
+     * @param  that the other complex number
+     * @return the complex number whose value is <tt>(this * that)</tt>
+     */
+    public Complex times(Complex that) {
+        double real = this.re * that.re - this.im * that.im;
+        double imag = this.re * that.im + this.im * that.re;
         return new Complex(real, imag);
     }
 
-    // scalar multiplication
-    // return a new object whose value is (this * alpha)
+    /**
+     * Returns the product of this complex number and the specified scalar.
+     *
+     * @param  alpha the scalar
+     * @return the complex number whose value is <tt>(alpha * this)</tt>
+     */
+    public Complex scale(double alpha) {
+        return new Complex(alpha * re, alpha * im);
+    }
+
+    /**
+     * Returns the product of this complex number and the specified scalar.
+     *
+     * @param  alpha the scalar
+     * @return the complex number whose value is <tt>(alpha * this)</tt>
+     * @deprecated Replaced by {@link #scale(double)}.
+     */
     public Complex times(double alpha) {
         return new Complex(alpha * re, alpha * im);
     }
 
-    // return a new Complex object whose value is the conjugate of this
-    public Complex conjugate() {  return new Complex(re, -im); }
+    /**
+     * Returns the complex conjugate of this complex number.
+     *
+     * @return the complex conjugate of this complex number
+     */
+    public Complex conjugate() {
+        return new Complex(re, -im);
+    }
 
-    // return a new Complex object whose value is the reciprocal of this
+    /**
+     * Returns the reciprocal of this complex number.
+     *
+     * @return the complex number whose value is <tt>(1 / this)</tt>
+     */
     public Complex reciprocal() {
         double scale = re*re + im*im;
         return new Complex(re / scale, -im / scale);
     }
 
-    // return the real or imaginary part
-    public double re() { return re; }
-    public double im() { return im; }
-
-    // return a / b
-    public Complex divides(Complex b) {
-        Complex a = this;
-        return a.times(b.reciprocal());
+    /**
+     * Returns the real part of this complex number.
+     *
+     * @return the real part of this complex number
+     */
+    public double re() {
+        return re;
     }
 
-    // return a new Complex object whose value is the complex exponential of this
+    /**
+     * Returns the imaginary part of this complex number.
+     *
+     * @return the imaginary part of this complex number
+     */
+    public double im() {
+        return im;
+    }
+
+    /**
+     * Returns the result of dividing the specified complex number into
+     * this complex number.
+     *
+     * @param  that the other complex number
+     * @return the complex number whose value is <tt>(this / that)</tt>
+     */
+    public Complex divides(Complex that) {
+        return this.times(that.reciprocal());
+    }
+
+    /**
+     * Returns the complex exponential of this complex number.
+     *
+     * @return the complex exponential of this complex number
+     */
     public Complex exp() {
         return new Complex(Math.exp(re) * Math.cos(im), Math.exp(re) * Math.sin(im));
     }
 
-    // return a new Complex object whose value is the complex sine of this
+    /**
+     * Returns the complex sine of this complex number.
+     *
+     * @return the complex sine of this complex number
+     */
     public Complex sin() {
         return new Complex(Math.sin(re) * Math.cosh(im), Math.cos(re) * Math.sinh(im));
     }
 
-    // return a new Complex object whose value is the complex cosine of this
+    /**
+     * Returns the complex cosine of this complex number.
+     *
+     * @return the complex cosine of this complex number
+     */
     public Complex cos() {
         return new Complex(Math.cos(re) * Math.cosh(im), -Math.sin(re) * Math.sinh(im));
     }
 
-    // return a new Complex object whose value is the complex tangent of this
+    /**
+     * Returns the complex tangent of this complex number.
+     *
+     * @return the complex tangent of this complex number
+     */
     public Complex tan() {
         return sin().divides(cos());
     }
     
 
-
-    // a static version of plus
-    public static Complex plus(Complex a, Complex b) {
-        double real = a.re + b.re;
-        double imag = a.im + b.im;
-        Complex sum = new Complex(real, imag);
-        return sum;
-    }
-
-
-
-    // sample client for testing
+    /**
+     * Unit tests the <tt>Complex</tt> data type.
+     */
     public static void main(String[] args) {
         Complex a = new Complex(5.0, 6.0);
         Complex b = new Complex(-3.0, 4.0);
@@ -153,3 +258,27 @@ public class Complex {
     }
 
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

@@ -1,4 +1,4 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac Selection.java
  *  Execution:    java  Selection < input.txt
  *  Dependencies: StdOut.java StdIn.java
@@ -19,7 +19,9 @@ package algs4; /****************************************************************
  *  % java Selection < words3.txt
  *  all bad bed bug dad ... yes yet zoo    [ one string per line ]
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 import java.util.Comparator;
 
@@ -43,10 +45,10 @@ public class Selection {
      * @param a the array to be sorted
      */
     public static void sort(Comparable[] a) {
-        int N = a.length;
-        for (int i = 0; i < N; i++) {
+        int n = a.length;
+        for (int i = 0; i < n; i++) {
             int min = i;
-            for (int j = i+1; j < N; j++) {
+            for (int j = i+1; j < n; j++) {
                 if (less(a[j], a[min])) min = j;
             }
             exch(a, i, min);
@@ -58,34 +60,34 @@ public class Selection {
     /**
      * Rearranges the array in ascending order, using a comparator.
      * @param a the array
-     * @param c the comparator specifying the order
+     * @param comparator the comparator specifying the order
      */
-    public static void sort(Object[] a, Comparator c) {
-        int N = a.length;
-        for (int i = 0; i < N; i++) {
+    public static void sort(Object[] a, Comparator comparator) {
+        int n = a.length;
+        for (int i = 0; i < n; i++) {
             int min = i;
-            for (int j = i+1; j < N; j++) {
-                if (less(c, a[j], a[min])) min = j;
+            for (int j = i+1; j < n; j++) {
+                if (less(comparator, a[j], a[min])) min = j;
             }
             exch(a, i, min);
-            assert isSorted(a, c, 0, i);
+            assert isSorted(a, comparator, 0, i);
         }
-        assert isSorted(a, c);
+        assert isSorted(a, comparator);
     }
 
 
-   /***********************************************************************
-    *  Helper sorting functions
-    ***********************************************************************/
+   /***************************************************************************
+    *  Helper sorting functions.
+    ***************************************************************************/
     
     // is v < w ?
     private static boolean less(Comparable v, Comparable w) {
-        return (v.compareTo(w) < 0);
+        return v.compareTo(w) < 0;
     }
 
     // is v < w ?
-    private static boolean less(Comparator c, Object v, Object w) {
-        return (c.compare(v, w) < 0);
+    private static boolean less(Comparator comparator, Object v, Object w) {
+        return comparator.compare(v, w) < 0;
     }
         
         
@@ -97,9 +99,9 @@ public class Selection {
     }
 
 
-   /***********************************************************************
-    *  Check if array is sorted - useful for debugging
-    ***********************************************************************/
+   /***************************************************************************
+    *  Check if array is sorted - useful for debugging.
+    ***************************************************************************/
 
     // is the array a[] sorted?
     private static boolean isSorted(Comparable[] a) {
@@ -114,14 +116,14 @@ public class Selection {
     }
 
     // is the array a[] sorted?
-    private static boolean isSorted(Object[] a, Comparator c) {
-        return isSorted(a, c, 0, a.length - 1);
+    private static boolean isSorted(Object[] a, Comparator comparator) {
+        return isSorted(a, comparator, 0, a.length - 1);
     }
 
     // is the array sorted from a[lo] to a[hi]
-    private static boolean isSorted(Object[] a, Comparator c, int lo, int hi) {
+    private static boolean isSorted(Object[] a, Comparator comparator, int lo, int hi) {
         for (int i = lo + 1; i <= hi; i++)
-            if (less(c, a[i], a[i-1])) return false;
+            if (less(comparator, a[i], a[i-1])) return false;
         return true;
     }
 
@@ -144,3 +146,27 @@ public class Selection {
         show(a);
     }
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

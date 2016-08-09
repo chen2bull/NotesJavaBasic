@@ -1,8 +1,8 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac TransitiveClosure.java
  *  Execution:    java TransitiveClosure filename.txt
  *  Dependencies: Digraph.java DepthFirstDirectedPaths.java In.java StdOut.java
- *  Data files:   http://algs4.cs.princeton.edu/42directed/tinyDG.txt
+ *  Data files:   http://algs4.cs.princeton.edu/42digraph/tinyDG.txt
  *
  *  Compute transitive closure of a digraph and support
  *  reachability queries.
@@ -28,7 +28,9 @@ package algs4; /****************************************************************
  *   11:   T  T  T  T  T  T           T  T  T  T
  *   12:   T  T  T  T  T  T           T  T  T  T
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 /**
  *  The <tt>TransitiveClosure</tt> class represents a data type for 
@@ -39,7 +41,13 @@ package algs4; /****************************************************************
  *  (in the worst case) and uses space proportional to <em>V</em><sup>2</sup>,
  *  where <em>V</em> is the number of vertices and <em>E</em> is the number of edges.
  *  <p>
- *  For additional documentation, see <a href="/algs4/42digraph">Section 4.2</a> of
+ *  For large digraphs, you may want to consider a more sophisticated algorithm.
+ *  <a href = "http://www.cs.hut.fi/~enu/thesis.html">Nuutila</a> proposes two
+ *  algorithm for the problem (based on strong components and an interval representation)
+ *  that runs in <em>E</em> + <em>V</em> time on typical digraphs.
+ *
+ *  For additional documentation,
+ *  see <a href="http://algs4.cs.princeton.edu/42digraph">Section 4.2</a> of
  *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
  *
  *  @author Robert Sedgewick
@@ -97,3 +105,27 @@ public class TransitiveClosure {
     }
 
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

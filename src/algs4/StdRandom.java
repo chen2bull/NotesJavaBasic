@@ -1,4 +1,4 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac StdRandom.java
  *  Execution:    java StdRandom
  *  Dependencies: StdOut.java
@@ -43,16 +43,23 @@ package algs4; /****************************************************************
  *    - See http://www.honeylocust.com/RngPack/ for an industrial
  *      strength random number generator in Java.
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 import java.util.Random;
 
 /**
- *  <i>Standard random</i>. This class provides methods for generating
- *  random number from various distributions.
+ *  The {@code StdRandom} class provides static methods for generating
+ *  random number from various discrete and continuous distributions, 
+ *  including Bernoulli, uniform, Gaussian, exponential, pareto,
+ *  Poisson, and Cauchy. It also provides method for shuffling an
+ *  array or subarray.
  *  <p>
- *  For additional documentation, see <a href="http://introcs.cs.princeton.edu/22library">Section 2.2</a> of
- *  <i>Introduction to Programming in Java: An Interdisciplinary Approach</i> by Robert Sedgewick and Kevin Wayne.
+ *  For additional documentation,
+ *  see <a href="http://introcs.cs.princeton.edu/22library">Section 2.2</a> of
+ *  <i>Introduction to Programming in Java: An Interdisciplinary Approach</i>
+ *  by Robert Sedgewick and Kevin Wayne.
  *
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
@@ -73,7 +80,12 @@ public final class StdRandom {
     private StdRandom() { }
 
     /**
-     * Sets the seed of the psedurandom number generator.
+     * Sets the seed of the pseudorandom number generator.
+     * This method enables you to produce the same sequence of "random"
+     * number for each execution of the program.
+     * Ordinarily, you should call this method at most once per program.
+     *
+     * @param s the seed
      */
     public static void setSeed(long s) {
         seed   = s;
@@ -81,26 +93,33 @@ public final class StdRandom {
     }
 
     /**
-     * Returns the seed of the psedurandom number generator.
+     * Returns the seed of the pseudorandom number generator.
+     *
+     * @return the seed
      */
     public static long getSeed() {
         return seed;
     }
 
     /**
-     * Return real number uniformly in [0, 1).
+     * Returns a random real number uniformly in [0, 1).
+     *
+     * @return a random real number uniformly in [0, 1)
      */
     public static double uniform() {
         return random.nextDouble();
     }
 
     /**
-     * Returns an integer uniformly between 0 (inclusive) and N (exclusive).
-     * @throws IllegalArgumentException if <tt>N <= 0</tt>
+     * Returns a random integer uniformly in [0, n).
+     * 
+     * @param n number of possible integers
+     * @return a random integer uniformly between 0 (inclusive) and <tt>N</tt> (exclusive)
+     * @throws IllegalArgumentException if <tt>n <= 0</tt>
      */
-    public static int uniform(int N) {
-        if (N <= 0) throw new IllegalArgumentException("Parameter N must be positive");
-        return random.nextInt(N);
+    public static int uniform(int n) {
+        if (n <= 0) throw new IllegalArgumentException("Parameter N must be positive");
+        return random.nextInt(n);
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -109,15 +128,21 @@ public final class StdRandom {
     ///////////////////////////////////////////////////////////////////////////
 
     /**
-     * Returns a real number uniformly in [0, 1).
-     * @deprecated clearer to use {@link #uniform()}
+     * Returns a random real number uniformly in [0, 1).
+     * 
+     * @return     a random real number uniformly in [0, 1)
+     * @deprecated Replaced by {@link #uniform()}.
      */
     public static double random() {
         return uniform();
     }
 
     /**
-     * Returns an integer uniformly in [a, b).
+     * Returns a random integer uniformly in [a, b).
+     * 
+     * @param  a the left endpoint
+     * @param  b the right endpoint
+     * @return a random integer uniformly in [a, b)
      * @throws IllegalArgumentException if <tt>b <= a</tt>
      * @throws IllegalArgumentException if <tt>b - a >= Integer.MAX_VALUE</tt>
      */
@@ -128,7 +153,11 @@ public final class StdRandom {
     }
 
     /**
-     * Returns a real number uniformly in [a, b).
+     * Returns a random real number uniformly in [a, b).
+     * 
+     * @param  a the left endpoint
+     * @param  b the right endpoint
+     * @return a random real number uniformly in [a, b)
      * @throws IllegalArgumentException unless <tt>a < b</tt>
      */
     public static double uniform(double a, double b) {
@@ -137,7 +166,12 @@ public final class StdRandom {
     }
 
     /**
-     * Returns a boolean, which is true with probability p, and false otherwise.
+     * Returns a random boolean from a Bernoulli distribution with success
+     * probability <em>p</em>.
+     *
+     * @param  p the probability of returning <tt>true</tt>
+     * @return <tt>true</tt> with probability <tt>p</tt> and
+     *         <tt>false</tt> with probability <tt>p</tt>
      * @throws IllegalArgumentException unless <tt>p >= 0.0</tt> and <tt>p <= 1.0</tt>
      */
     public static boolean bernoulli(double p) {
@@ -147,14 +181,21 @@ public final class StdRandom {
     }
 
     /**
-     * Returns a boolean, which is true with probability .5, and false otherwise.
+     * Returns a random boolean from a Bernoulli distribution with success
+     * probability 1/2.
+     * 
+     * @return <tt>true</tt> with probability 1/2 and
+     *         <tt>false</tt> with probability 1/2
      */
     public static boolean bernoulli() {
         return bernoulli(0.5);
     }
 
     /**
-     * Returns a real number with a standard Gaussian distribution.
+     * Returns a random real number from a standard Gaussian distribution.
+     * 
+     * @return a random real number from a standard Gaussian distribution
+     *         (mean 0 and standard deviation 1).
      */
     public static double gaussian() {
         // use the polar form of the Box-Muller transform
@@ -171,14 +212,26 @@ public final class StdRandom {
     }
 
     /**
-     * Returns a real number from a gaussian distribution with given mean and stddev
+     * Returns a random real number from a Gaussian distribution with mean &mu;
+     * and standard deviation &sigma;.
+     * 
+     * @param  mu the mean
+     * @param  sigma the standard deviation
+     * @return a real number distributed according to the Gaussian distribution
+     *         with mean <tt>mu</tt> and standard deviation <tt>sigma</tt>
      */
-    public static double gaussian(double mean, double stddev) {
-        return mean + stddev * gaussian();
+    public static double gaussian(double mu, double sigma) {
+        return mu + sigma * gaussian();
     }
 
     /**
-     * Returns an integer with a geometric distribution with mean 1/p.
+     * Returns a random integer from a geometric distribution with success
+     * probability <em>p</em>.
+     * 
+     * @param  p the parameter of the geometric distribution
+     * @return a random integer from a geometric distribution with success
+     *         probability <tt>p</tt>; or <tt>Integer.MAX_VALUE</tt> if
+     *         <tt>p</tt> is (nearly) equal to <tt>1.0</tt>.
      * @throws IllegalArgumentException unless <tt>p >= 0.0</tt> and <tt>p <= 1.0</tt>
      */
     public static int geometric(double p) {
@@ -189,7 +242,10 @@ public final class StdRandom {
     }
 
     /**
-     * Return an integer with a Poisson distribution with mean lambda.
+     * Returns a random integer from a Poisson distribution with mean &lambda;.
+     *
+     * @param  lambda the mean of the Poisson distribution
+     * @return a random integer from a Poisson distribution with mean <tt>lambda</tt>
      * @throws IllegalArgumentException unless <tt>lambda > 0.0</tt> and not infinite
      */
     public static int poisson(double lambda) {
@@ -201,16 +257,30 @@ public final class StdRandom {
         // see http://en.wikipedia.org/wiki/Poisson_distribution
         int k = 0;
         double p = 1.0;
-        double L = Math.exp(-lambda);
+        double expLambda = Math.exp(-lambda);
         do {
             k++;
             p *= uniform();
-        } while (p >= L);
+        } while (p >= expLambda);
         return k-1;
     }
 
     /**
-     * Returns a real number with a Pareto distribution with parameter alpha.
+     * Returns a random real number from the standard Pareto distribution.
+     *
+     * @return a random real number from the standard Pareto distribution
+     */
+    public static double pareto() {
+        return pareto(1.0);
+    }
+
+    /**
+     * Returns a random real number from a Pareto distribution with
+     * shape parameter &alpha;.
+     *
+     * @param  alpha shape parameter
+     * @return a random real number from a Pareto distribution with shape
+     *         parameter <tt>alpha</tt>
      * @throws IllegalArgumentException unless <tt>alpha > 0.0</tt>
      */
     public static double pareto(double alpha) {
@@ -220,23 +290,32 @@ public final class StdRandom {
     }
 
     /**
-     * Returns a real number with a Cauchy distribution.
+     * Returns a random real number from the Cauchy distribution.
+     *
+     * @return a random real number from the Cauchy distribution.
      */
     public static double cauchy() {
         return Math.tan(Math.PI * (uniform() - 0.5));
     }
 
     /**
-     * Returns a number from a discrete distribution: i with probability a[i].
-     * throws IllegalArgumentException if sum of array entries is not (very nearly) equal to <tt>1.0</tt>
-     * throws IllegalArgumentException unless <tt>a[i] >= 0.0</tt> for each index <tt>i</tt>
+     * Returns a random integer from the specified discrete distribution.
+     *
+     * @param  probabilities the probability of occurrence of each integer
+     * @return a random integer from a discrete distribution:
+     *         <tt>i</tt> with probability <tt>probabilities[i]</tt>
+     * @throws NullPointerException if <tt>probabilities</tt> is <tt>null</tt>
+     * @throws IllegalArgumentException if sum of array entries is not (very nearly) equal to <tt>1.0</tt>
+     * @throws IllegalArgumentException unless <tt>probabilities[i] >= 0.0</tt> for each index <tt>i</tt>
      */
-    public static int discrete(double[] a) {
+    public static int discrete(double[] probabilities) {
+        if (probabilities == null) throw new NullPointerException("argument array is null");
         double EPSILON = 1E-14;
         double sum = 0.0;
-        for (int i = 0; i < a.length; i++) {
-            if (!(a[i] >= 0.0)) throw new IllegalArgumentException("array entry " + i + " must be nonnegative: " + a[i]);
-            sum = sum + a[i];
+        for (int i = 0; i < probabilities.length; i++) {
+            if (!(probabilities[i] >= 0.0))
+                throw new IllegalArgumentException("array entry " + i + " must be nonnegative: " + probabilities[i]);
+            sum += probabilities[i];
         }
         if (sum > 1.0 + EPSILON || sum < 1.0 - EPSILON)
             throw new IllegalArgumentException("sum of array entries does not approximately equal 1.0: " + sum);
@@ -246,15 +325,57 @@ public final class StdRandom {
         while (true) {
             double r = uniform();
             sum = 0.0;
-            for (int i = 0; i < a.length; i++) {
-                sum = sum + a[i];
+            for (int i = 0; i < probabilities.length; i++) {
+                sum = sum + probabilities[i];
                 if (sum > r) return i;
             }
         }
     }
 
     /**
-     * Returns a real number from an exponential distribution with rate lambda.
+     * Returns a random integer from the specified discrete distribution.
+     *
+     * @param  frequencies the frequency of occurrence of each integer
+     * @return a random integer from a discrete distribution:
+     *         <tt>i</tt> with probability proportional to <tt>frequencies[i]</tt>
+     * @throws NullPointerException if <tt>frequencies</tt> is <tt>null</tt>
+     * @throws IllegalArgumentException if all array entries are <tt>0</tt>
+     * @throws IllegalArgumentException if <tt>frequencies[i]</tt> is negative for any index <tt>i</tt>
+     * @throws IllegalArgumentException if sum of frequencies exceeds <tt>Integer.MAX_VALUE</tt> (2<sup>31</sup> - 1)
+     */
+    public static int discrete(int[] frequencies) {
+        if (frequencies == null) throw new NullPointerException("argument array is null");
+        long sum = 0;
+        for (int i = 0; i < frequencies.length; i++) {
+            if (frequencies[i] < 0)
+                throw new IllegalArgumentException("array entry " + i + " must be nonnegative: " + frequencies[i]);
+            sum += frequencies[i];
+        }
+        if (sum == 0)
+            throw new IllegalArgumentException("at least one array entry must be positive");
+        if (sum >= Integer.MAX_VALUE)
+            throw new IllegalArgumentException("sum of frequencies overflows an int");
+
+        // pick index i with probabilitity proportional to frequency
+        double r = uniform((int) sum);
+        sum = 0;
+        for (int i = 0; i < frequencies.length; i++) {
+            sum += frequencies[i];
+            if (sum > r) return i;
+        }
+
+        // can't reach here
+        assert false;
+        return -1;
+    }
+
+    /**
+     * Returns a random real number from an exponential distribution
+     * with rate &lambda;.
+     * 
+     * @param  lambda the rate of the exponential distribution
+     * @return a random real number from an exponential distribution with
+     *         rate <tt>lambda</tt>
      * @throws IllegalArgumentException unless <tt>lambda > 0.0</tt>
      */
     public static double exp(double lambda) {
@@ -264,12 +385,16 @@ public final class StdRandom {
     }
 
     /**
-     * Rearrange the elements of an array in random order.
+     * Rearranges the elements of the specified array in uniformly random order.
+     *
+     * @param  a the array to shuffle
+     * @throws NullPointerException if <tt>a</tt> is <tt>null</tt>
      */
     public static void shuffle(Object[] a) {
-        int N = a.length;
-        for (int i = 0; i < N; i++) {
-            int r = i + uniform(N-i);     // between i and N-1
+        if (a == null) throw new NullPointerException("argument array is null");
+        int n = a.length;
+        for (int i = 0; i < n; i++) {
+            int r = i + uniform(n-i);     // between i and n-1
             Object temp = a[i];
             a[i] = a[r];
             a[r] = temp;
@@ -277,12 +402,16 @@ public final class StdRandom {
     }
 
     /**
-     * Rearrange the elements of a double array in random order.
+     * Rearranges the elements of the specified array in uniformly random order.
+     *
+     * @param  a the array to shuffle
+     * @throws NullPointerException if <tt>a</tt> is <tt>null</tt>
      */
     public static void shuffle(double[] a) {
-        int N = a.length;
-        for (int i = 0; i < N; i++) {
-            int r = i + uniform(N-i);     // between i and N-1
+        if (a == null) throw new NullPointerException("argument array is null");
+        int n = a.length;
+        for (int i = 0; i < n; i++) {
+            int r = i + uniform(n-i);     // between i and n-1
             double temp = a[i];
             a[i] = a[r];
             a[r] = temp;
@@ -290,12 +419,16 @@ public final class StdRandom {
     }
 
     /**
-     * Rearrange the elements of an int array in random order.
+     * Rearranges the elements of the specified array in uniformly random order.
+     *
+     * @param  a the array to shuffle
+     * @throws NullPointerException if <tt>a</tt> is <tt>null</tt>
      */
     public static void shuffle(int[] a) {
-        int N = a.length;
-        for (int i = 0; i < N; i++) {
-            int r = i + uniform(N-i);     // between i and N-1
+        if (a == null) throw new NullPointerException("argument array is null");
+        int n = a.length;
+        for (int i = 0; i < n; i++) {
+            int r = i + uniform(n-i);     // between i and n-1
             int temp = a[i];
             a[i] = a[r];
             a[r] = temp;
@@ -304,9 +437,17 @@ public final class StdRandom {
 
 
     /**
-     * Rearrange the elements of the subarray a[lo..hi] in random order.
+     * Rearranges the elements of the specified subarray in uniformly random order.
+     *
+     * @param  a the array to shuffle
+     * @param  lo the left endpoint (inclusive)
+     * @param  hi the right endpoint (inclusive)
+     * @throws NullPointerException if <tt>a</tt> is <tt>null</tt>
+     * @throws IndexOutOfBoundsException unless <tt>(0 <= lo) && (lo <= hi) && (hi < a.length)</tt>
+     * 
      */
     public static void shuffle(Object[] a, int lo, int hi) {
+        if (a == null) throw new NullPointerException("argument array is null");
         if (lo < 0 || lo > hi || hi >= a.length) {
             throw new IndexOutOfBoundsException("Illegal subarray range");
         }
@@ -319,9 +460,16 @@ public final class StdRandom {
     }
 
     /**
-     * Rearrange the elements of the subarray a[lo..hi] in random order.
+     * Rearranges the elements of the specified subarray in uniformly random order.
+     *
+     * @param  a the array to shuffle
+     * @param  lo the left endpoint (inclusive)
+     * @param  hi the right endpoint (inclusive)
+     * @throws NullPointerException if <tt>a</tt> is <tt>null</tt>
+     * @throws IndexOutOfBoundsException unless <tt>(0 <= lo) && (lo <= hi) && (hi < a.length)</tt>
      */
     public static void shuffle(double[] a, int lo, int hi) {
+        if (a == null) throw new NullPointerException("argument array is null");
         if (lo < 0 || lo > hi || hi >= a.length) {
             throw new IndexOutOfBoundsException("Illegal subarray range");
         }
@@ -334,9 +482,16 @@ public final class StdRandom {
     }
 
     /**
-     * Rearrange the elements of the subarray a[lo..hi] in random order.
+     * Rearranges the elements of the specified subarray in uniformly random order.
+     *
+     * @param  a the array to shuffle
+     * @param  lo the left endpoint (inclusive)
+     * @param  hi the right endpoint (inclusive)
+     * @throws NullPointerException if <tt>a</tt> is <tt>null</tt>
+     * @throws IndexOutOfBoundsException unless <tt>(0 <= lo) && (lo <= hi) && (hi < a.length)</tt>
      */
     public static void shuffle(int[] a, int lo, int hi) {
+        if (a == null) throw new NullPointerException("argument array is null");
         if (lo < 0 || lo > hi || hi >= a.length) {
             throw new IndexOutOfBoundsException("Illegal subarray range");
         }
@@ -352,24 +507,49 @@ public final class StdRandom {
      * Unit test.
      */
     public static void main(String[] args) {
-        int N = Integer.parseInt(args[0]);
+        int n = Integer.parseInt(args[0]);
         if (args.length == 2) StdRandom.setSeed(Long.parseLong(args[1]));
-        double[] t = { .5, .3, .1, .1 };
+        double[] probabilities = { 0.5, 0.3, 0.1, 0.1 };
+        int[] frequencies = { 5, 3, 1, 1 };
+        String[] a = "A B C D E F G".split(" ");
 
         StdOut.println("seed = " + StdRandom.getSeed());
-        for (int i = 0; i < N; i++) {
-            StdOut.printf("%2d ", uniform(100));
+        for (int i = 0; i < n; i++) {
+            StdOut.printf("%2d ",   uniform(100));
             StdOut.printf("%8.5f ", uniform(10.0, 99.0));
-            StdOut.printf("%5b ", bernoulli(.5));
-            StdOut.printf("%7.5f ", gaussian(9.0, .2));
-            StdOut.printf("%2d ", discrete(t));
+            StdOut.printf("%5b ",   bernoulli(0.5));
+            StdOut.printf("%7.5f ", gaussian(9.0, 0.2));
+            StdOut.printf("%1d ",   discrete(probabilities));
+            StdOut.printf("%1d ",   discrete(frequencies));
+            StdRandom.shuffle(a);
+            for (String s : a)
+                StdOut.print(s);
             StdOut.println();
         }
-
-        String[] a = "A B C D E F G".split(" ");
-        for (String s : a)
-            StdOut.print(s + " ");
-        StdOut.println();
     }
 
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

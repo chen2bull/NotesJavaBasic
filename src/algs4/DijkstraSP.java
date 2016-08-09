@@ -1,4 +1,4 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac DijkstraSP.java
  *  Execution:    java DijkstraSP input.txt s
  *  Dependencies: EdgeWeightedDigraph.java IndexMinPQ.java Stack.java DirectedEdge.java
@@ -27,7 +27,9 @@ package algs4; /****************************************************************
  *  0 to 4 (0.42)  0->44  0.06   44->93  0.07   ...  77->4  0.11   
  *  ...
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 
 /**
@@ -42,8 +44,9 @@ package algs4; /****************************************************************
  *  constant time and the <tt>pathTo()</tt> method takes time proportional to the
  *  number of edges in the shortest path returned.
  *  <p>
- *  For additional documentation, see <a href="/algs4/44sp">Section 4.4</a> of
- *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
+ *  For additional documentation,    
+ *  see <a href="http://algs4.cs.princeton.edu/44sp">Section 4.4</a> of    
+ *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne. 
  *
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
@@ -54,10 +57,11 @@ public class DijkstraSP {
     private IndexMinPQ<Double> pq;    // priority queue of vertices
 
     /**
-     * Computes a shortest paths tree from <tt>s</tt> to every other vertex in
-     * the edge-weighted digraph <tt>G</tt>.
-     * @param G the edge-weighted digraph
-     * @param s the source vertex
+     * Computes a shortest-paths tree from the source vertex <tt>s</tt> to every other
+     * vertex in the edge-weighted digraph <tt>G</tt>.
+     *
+     * @param  G the edge-weighted digraph
+     * @param  s the source vertex
      * @throws IllegalArgumentException if an edge weight is negative
      * @throws IllegalArgumentException unless 0 &le; <tt>s</tt> &le; <tt>V</tt> - 1
      */
@@ -99,19 +103,20 @@ public class DijkstraSP {
 
     /**
      * Returns the length of a shortest path from the source vertex <tt>s</tt> to vertex <tt>v</tt>.
-     * @param v the destination vertex
+     * @param  v the destination vertex
      * @return the length of a shortest path from the source vertex <tt>s</tt> to vertex <tt>v</tt>;
-     *    <tt>Double.POSITIVE_INFINITY</tt> if no such path
+     *         <tt>Double.POSITIVE_INFINITY</tt> if no such path
      */
     public double distTo(int v) {
         return distTo[v];
     }
 
     /**
-     * Is there a path from the source vertex <tt>s</tt> to vertex <tt>v</tt>?
-     * @param v the destination vertex
+     * Returns true if there is a path from the source vertex <tt>s</tt> to vertex <tt>v</tt>.
+     *
+     * @param  v the destination vertex
      * @return <tt>true</tt> if there is a path from the source vertex
-     *    <tt>s</tt> to vertex <tt>v</tt>, and <tt>false</tt> otherwise
+     *         <tt>s</tt> to vertex <tt>v</tt>; <tt>false</tt> otherwise
      */
     public boolean hasPathTo(int v) {
         return distTo[v] < Double.POSITIVE_INFINITY;
@@ -119,9 +124,10 @@ public class DijkstraSP {
 
     /**
      * Returns a shortest path from the source vertex <tt>s</tt> to vertex <tt>v</tt>.
-     * @param v the destination vertex
+     *
+     * @param  v the destination vertex
      * @return a shortest path from the source vertex <tt>s</tt> to vertex <tt>v</tt>
-     *    as an iterable of edges, and <tt>null</tt> if no such path
+     *         as an iterable of edges, and <tt>null</tt> if no such path
      */
     public Iterable<DirectedEdge> pathTo(int v) {
         if (!hasPathTo(v)) return null;
@@ -201,10 +207,8 @@ public class DijkstraSP {
         for (int t = 0; t < G.V(); t++) {
             if (sp.hasPathTo(t)) {
                 StdOut.printf("%d to %d (%.2f)  ", s, t, sp.distTo(t));
-                if (sp.hasPathTo(t)) {
-                    for (DirectedEdge e : sp.pathTo(t)) {
-                        StdOut.print(e + "   ");
-                    }
+                for (DirectedEdge e : sp.pathTo(t)) {
+                    StdOut.print(e + "   ");
                 }
                 StdOut.println();
             }
@@ -215,3 +219,27 @@ public class DijkstraSP {
     }
 
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

@@ -1,11 +1,13 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac FlowNetwork.java
  *  Execution:    java FlowNetwork V E
  *  Dependencies: Bag.java FlowEdge.java
  *
  *  A capacitated flow network, implemented using adjacency lists.
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 
 /**
@@ -32,6 +34,8 @@ package algs4; /****************************************************************
  *  @author Kevin Wayne
  */
 public class FlowNetwork {
+    private static final String NEWLINE = System.getProperty("line.separator");
+
     private final int V;
     private int E;
     private Bag<FlowEdge>[] adj;
@@ -39,7 +43,7 @@ public class FlowNetwork {
     /**
      * Initializes an empty flow network with <tt>V</tt> vertices and 0 edges.
      * param V the number of vertices
-     * @throws IllegalArgumentException if <tt>V</tt> < 0
+     * @throws java.lang.IllegalArgumentException if <tt>V</tt> < 0
      */
     public FlowNetwork(int V) {
         if (V < 0) throw new IllegalArgumentException("Number of vertices in a Graph must be nonnegative");
@@ -55,8 +59,8 @@ public class FlowNetwork {
      * The capacities are integers between 0 and 99 and the flow values are zero.
      * param V the number of vertices
      * param E the number of edges
-     * @throws IllegalArgumentException if <tt>V</tt> < 0
-     * @throws IllegalArgumentException if <tt>E</tt> < 0
+     * @throws java.lang.IllegalArgumentException if <tt>V</tt> < 0
+     * @throws java.lang.IllegalArgumentException if <tt>E</tt> < 0
      */
     public FlowNetwork(int V, int E) {
         this(V);
@@ -76,8 +80,8 @@ public class FlowNetwork {
      * followed by <em>E</em> pairs of vertices and edge capacities,
      * with each entry separated by whitespace.
      * @param in the input stream
-     * @throws IndexOutOfBoundsException if the endpoints of any edge are not in prescribed range
-     * @throws IllegalArgumentException if the number of vertices or edges is negative
+     * @throws java.lang.IndexOutOfBoundsException if the endpoints of any edge are not in prescribed range
+     * @throws java.lang.IllegalArgumentException if the number of vertices or edges is negative
      */
     public FlowNetwork(In in) {
         this(in.readInt());
@@ -119,7 +123,7 @@ public class FlowNetwork {
     /**
      * Adds the edge <tt>e</tt> to the network.
      * @param e the edge
-     * @throws IndexOutOfBoundsException unless endpoints of edge are between 0 and V-1
+     * @throws java.lang.IndexOutOfBoundsException unless endpoints of edge are between 0 and V-1
      */
     public void addEdge(FlowEdge e) {
         int v = e.from();
@@ -134,9 +138,9 @@ public class FlowNetwork {
     /**
      * Returns the edges incident on vertex <tt>v</tt> (includes both edges pointing to
      * and from <tt>v</tt>).
-     * @return the edges incident on vertex <tt>v</tt> as an Iterable
      * @param v the vertex
-     * @throws IndexOutOfBoundsException unless 0 <= v < V
+     * @return the edges incident on vertex <tt>v</tt> as an Iterable
+     * @throws java.lang.IndexOutOfBoundsException unless 0 <= v < V
      */
     public Iterable<FlowEdge> adj(int v) {
         validateVertex(v);
@@ -162,7 +166,6 @@ public class FlowNetwork {
      *    followed by the <em>V</em> adjacency lists
      */
     public String toString() {
-        String NEWLINE = System.getProperty("line.separator");
         StringBuilder s = new StringBuilder();
         s.append(V + " " + E + NEWLINE);
         for (int v = 0; v < V; v++) {
@@ -185,3 +188,27 @@ public class FlowNetwork {
     }
 
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

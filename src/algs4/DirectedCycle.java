@@ -1,20 +1,22 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac DirectedCycle.java
- *  Execution:    java DirectedCycle < input.txt
+ *  Execution:    java DirectedCycle input.txt
  *  Dependencies: Digraph.java Stack.java StdOut.java In.java
- *  Data files:   http://algs4.cs.princeton.edu/42directed/tinyDG.txt
- *                http://algs4.cs.princeton.edu/42directed/tinyDAG.txt
+ *  Data files:   http://algs4.cs.princeton.edu/42digraph/tinyDG.txt
+ *                http://algs4.cs.princeton.edu/42digraph/tinyDAG.txt
  *
  *  Finds a directed cycle in a digraph.
  *  Runs in O(E + V) time.
  *
  *  % java DirectedCycle tinyDG.txt 
- *  Cycle: 3 5 4 3 
+ *  Directed cycle: 3 5 4 3 
  *
  *  %  java DirectedCycle tinyDAG.txt 
- *  No cycle
+ *  No directed cycle
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 /**
  *  The <tt>DirectedCycle</tt> class represents a data type for 
@@ -34,7 +36,8 @@ package algs4; /****************************************************************
  *  See {@link Topological} to compute a topological order if the
  *  digraph is acyclic.
  *  <p>
- *  For additional documentation, see <a href="/algs4/42digraph">Section 4.2</a> of
+ *  For additional documentation,
+ *  see <a href="http://algs4.cs.princeton.edu/42digraph">Section 4.2</a> of
  *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
  *
  *  @author Robert Sedgewick
@@ -56,7 +59,7 @@ public class DirectedCycle {
         onStack = new boolean[G.V()];
         edgeTo  = new int[G.V()];
         for (int v = 0; v < G.V(); v++)
-            if (!marked[v]) dfs(G, v);
+            if (!marked[v] && cycle == null) dfs(G, v);
     }
 
     // check that algorithm computes either the topological order or finds a directed cycle
@@ -68,7 +71,7 @@ public class DirectedCycle {
             // short circuit if directed cycle found
             if (cycle != null) return;
 
-            //found new vertex, so recur
+            // found new vertex, so recur
             else if (!marked[w]) {
                 edgeTo[w] = v;
                 dfs(G, w);
@@ -82,9 +85,9 @@ public class DirectedCycle {
                 }
                 cycle.push(w);
                 cycle.push(v);
+                assert check();
             }
         }
-
         onStack[v] = false;
     }
 
@@ -106,8 +109,8 @@ public class DirectedCycle {
     }
 
 
-    // certify that digraph is either acyclic or has a directed cycle
-    private boolean check(Digraph G) {
+    // certify that digraph has a directed cycle if it reports one
+    private boolean check() {
 
         if (hasCycle()) {
             // verify cycle
@@ -135,7 +138,7 @@ public class DirectedCycle {
 
         DirectedCycle finder = new DirectedCycle(G);
         if (finder.hasCycle()) {
-            StdOut.print("Cycle: ");
+            StdOut.print("Directed cycle: ");
             for (int v : finder.cycle()) {
                 StdOut.print(v + " ");
             }
@@ -143,8 +146,33 @@ public class DirectedCycle {
         }
 
         else {
-            StdOut.println("No cycle");
+            StdOut.println("No directed cycle");
         }
+        StdOut.println();
     }
 
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

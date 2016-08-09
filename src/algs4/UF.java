@@ -1,4 +1,4 @@
-package algs4; /****************************************************************************
+/******************************************************************************
  *  Compilation:  javac UF.java
  *  Execution:    java UF < input.txt
  *  Dependencies: StdIn.java StdOut.java
@@ -19,35 +19,38 @@ package algs4; /****************************************************************
  *  6 1
  *  2 components
  *
- ****************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 
 /**
  *  The <tt>UF</tt> class represents a <em>union-find data type</em>
  *  (also known as the <em>disjoint-sets data type</em>).
  *  It supports the <em>union</em> and <em>find</em> operations,
- *  along with a <em>connected</em> operation for determinig whether
- *  two sites in the same component and a <em>count</em> operation that
+ *  along with a <em>connected</em> operation for determining whether
+ *  two sites are in the same component and a <em>count</em> operation that
  *  returns the total number of components.
  *  <p>
  *  The union-find data type models connectivity among a set of <em>N</em>
- *  sites, named 0 through <em>N</em> &ndash; 1.
+ *  sites, named 0 through <em>n</em> &ndash; 1.
  *  The <em>is-connected-to</em> relation must be an 
  *  <em>equivalence relation</em>:
  *  <ul>
  *  <p><li> <em>Reflexive</em>: <em>p</em> is connected to <em>p</em>.
  *  <p><li> <em>Symmetric</em>: If <em>p</em> is connected to <em>q</em>,
- *          <em>q</em> is connected to <em>p</em>.
+ *          then <em>q</em> is connected to <em>p</em>.
  *  <p><li> <em>Transitive</em>: If <em>p</em> is connected to <em>q</em>
  *          and <em>q</em> is connected to <em>r</em>, then
  *          <em>p</em> is connected to <em>r</em>.
  *  </ul>
+ *  <p>
  *  An equivalence relation partitions the sites into
  *  <em>equivalence classes</em> (or <em>components</em>). In this case,
  *  two sites are in the same component if and only if they are connected.
  *  Both sites and components are identified with integers between 0 and
  *  <em>N</em> &ndash; 1. 
- *  Initially, there are <em>N</em> components, with each site in its
+ *  Initially, there are <em>n</em> components, with each site in its
  *  own component.  The <em>component identifier</em> of a component
  *  (also known as the <em>root</em>, <em>canonical element</em>, <em>leader</em>,
  *  or <em>set representative</em>) is one of the sites in the component:
@@ -67,6 +70,7 @@ package algs4; /****************************************************************
  *         are in the same component, and false otherwise.
  *  <p><li><em>count</em>() returns the number of components.
  *  </ul>
+ *  <p>
  *  The component identifier of a component can change
  *  only when the component itself changes during a call to
  *  <em>union</em>&mdash;it cannot change during a call
@@ -74,7 +78,7 @@ package algs4; /****************************************************************
  *  <p>
  *  This implementation uses weighted quick union by rank with path compression
  *  by halving.
- *  Initializing a data structure with <em>N</em> sites takes linear time.
+ *  Initializing a data structure with <em>n</em> sites takes linear time.
  *  Afterwards, the <em>union</em>, <em>find</em>, and <em>connected</em> 
  *  operations take logarithmic time (in the worst case) and the
  *  <em>count</em> operation takes constant time.
@@ -92,97 +96,111 @@ package algs4; /****************************************************************
  */
 
 public class UF {
-    private int[] id;     // id[i] = parent of i
-    private byte[] rank;  // rank[i] = rank of subtree rooted at i (cannot be more than 31)
-    private int count;    // number of components
+
+    private int[] parent;  // parent[i] = parent of i
+    private byte[] rank;   // rank[i] = rank of subtree rooted at i (never more than 31)
+    private int count;     // number of components
 
     /**
-     * Initializes an empty union-find data structure with <tt>N</tt>
-     * isolated components <tt>0</tt> through <tt>N-1</tt>
-     * @throws IllegalArgumentException if <tt>N &lt; 0</tt>
-     * @param N the number of sites
+     * Initializes an empty union-find data structure with <tt>n</tt> sites
+     * <tt>0</tt> through <tt>n-1</tt>. Each site is initially in its own 
+     * component.
+     *
+     * @param  n the number of sites
+     * @throws IllegalArgumentException if <tt>n &lt; 0</tt>
      */
-    public UF(int N) {
-        if (N < 0) throw new IllegalArgumentException();
-        count = N;
-        id = new int[N];
-        rank = new byte[N];
-        for (int i = 0; i < N; i++) {
-            id[i] = i;
+    public UF(int n) {
+        if (n < 0) throw new IllegalArgumentException();
+        count = n;
+        parent = new int[n];
+        rank = new byte[n];
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
             rank[i] = 0;
         }
     }
 
     /**
      * Returns the component identifier for the component containing site <tt>p</tt>.
-     * @param p the integer representing one object
+     *
+     * @param  p the integer representing one site
      * @return the component identifier for the component containing site <tt>p</tt>
      * @throws IndexOutOfBoundsException unless <tt>0 &le; p &lt; N</tt>
      */
     public int find(int p) {
-        if (p < 0 || p >= id.length) throw new IndexOutOfBoundsException();
-        while (p != id[p]) {
-            id[p] = id[id[p]];    // path compression by halving
-            p = id[p];
+        validate(p);
+        while (p != parent[p]) {
+            parent[p] = parent[parent[p]];    // path compression by halving
+            p = parent[p];
         }
         return p;
     }
 
     /**
      * Returns the number of components.
-     * @return the number of components (between <tt>1</tt> and <tt>N</tt>)
+     *
+     * @return the number of components (between <tt>1</tt> and <tt>n</tt>)
      */
     public int count() {
         return count;
     }
   
     /**
-     * Are the two sites <tt>p</tt> and <tt>q</tt> in the same component?
-     * @param p the integer representing one site
-     * @param q the integer representing the other site
-     * @return true if the two sites <tt>p</tt> and <tt>q</tt> are in the same component; false otherwise
+     * Returns true if the the two sites are in the same component.
+     *
+     * @param  p the integer representing one site
+     * @param  q the integer representing the other site
+     * @return <tt>true</tt> if the two sites <tt>p</tt> and <tt>q</tt> are in the same component;
+     *         <tt>false</tt> otherwise
      * @throws IndexOutOfBoundsException unless
-     *      both <tt>0 &le; p &lt; N</tt> and <tt>0 &le; q &lt; N</tt>
+     *         both <tt>0 &le; p &lt; n</tt> and <tt>0 &le; q &lt; n</tt>
      */
     public boolean connected(int p, int q) {
         return find(p) == find(q);
     }
-
   
     /**
      * Merges the component containing site <tt>p</tt> with the 
      * the component containing site <tt>q</tt>.
-     * @param p the integer representing one site
-     * @param q the integer representing the other site
+     *
+     * @param  p the integer representing one site
+     * @param  q the integer representing the other site
      * @throws IndexOutOfBoundsException unless
-     *      both <tt>0 &le; p &lt; N</tt> and <tt>0 &le; q &lt; N</tt>
+     *         both <tt>0 &le; p &lt; n</tt> and <tt>0 &le; q &lt; n</tt>
      */
     public void union(int p, int q) {
-        int i = find(p);
-        int j = find(q);
-        if (i == j) return;
+        int rootP = find(p);
+        int rootQ = find(q);
+        if (rootP == rootQ) return;
 
         // make root of smaller rank point to root of larger rank
-        if      (rank[i] < rank[j]) id[i] = j;
-        else if (rank[i] > rank[j]) id[j] = i;
+        if      (rank[rootP] < rank[rootQ]) parent[rootP] = rootQ;
+        else if (rank[rootP] > rank[rootQ]) parent[rootQ] = rootP;
         else {
-            id[j] = i;
-            rank[i]++;
+            parent[rootQ] = rootP;
+            rank[rootP]++;
         }
         count--;
     }
 
+    // validate that p is a valid index
+    private void validate(int p) {
+        int n = parent.length;
+        if (p < 0 || p >= n) {
+            throw new IndexOutOfBoundsException("index " + p + " is not between 0 and " + (n-1));  
+        }
+    }
 
     /**
-     * Reads in a an integer <tt>N</tt> and a sequence of pairs of integers
-     * (between <tt>0</tt> and <tt>N-1</tt>) from standard input, where each integer
+     * Reads in a an integer <tt>n</tt> and a sequence of pairs of integers
+     * (between <tt>0</tt> and <tt>n-1</tt>) from standard input, where each integer
      * in the pair represents some site;
      * if the sites are in different components, merge the two components
      * and print the pair to standard output.
      */
     public static void main(String[] args) {
-        int N = StdIn.readInt();
-        UF uf = new UF(N);
+        int n = StdIn.readInt();
+        UF uf = new UF(n);
         while (!StdIn.isEmpty()) {
             int p = StdIn.readInt();
             int q = StdIn.readInt();
@@ -193,3 +211,28 @@ public class UF {
         StdOut.println(uf.count() + " components");
     }
 }
+
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

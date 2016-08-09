@@ -1,4 +1,4 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac TrieST.java
  *  Execution:    java TrieST < words.txt
  *  Dependencies: StdIn.java
@@ -15,7 +15,9 @@ package algs4; /****************************************************************
  *  shore 7
  *  the 5
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 /**
  *  The <tt>TrieST</tt> class represents an symbol table of key-value
@@ -57,12 +59,12 @@ public class TrieST<Value> {
         private Node[] next = new Node[R];
     }
 
-    public TrieST() {
-    }
-
    /**
      * Initializes an empty string symbol table.
      */
+    public TrieST() {
+    }
+
 
     /**
      * Returns the value associated with the given key.
@@ -208,19 +210,20 @@ public class TrieST<Value> {
      * Returns the string in the symbol table that is the longest prefix of <tt>query</tt>,
      * or <tt>null</tt>, if no such string.
      * @param query the query string
-     * @throws NullPointerException if <tt>query</tt> is <tt>null</tt>
      * @return the string in the symbol table that is the longest prefix of <tt>query</tt>,
      *     or <tt>null</tt> if no such string
+     * @throws NullPointerException if <tt>query</tt> is <tt>null</tt>
      */
     public String longestPrefixOf(String query) {
-        int length = longestPrefixOf(root, query, 0, 0);
-        return query.substring(0, length);
+        int length = longestPrefixOf(root, query, 0, -1);
+        if (length == -1) return null;
+        else return query.substring(0, length);
     }
 
     // returns the length of the longest string key in the subtrie
     // rooted at x that is a prefix of the query string,
     // assuming the first d character match and we have already
-    // found a prefix match of length length
+    // found a prefix match of given length (-1 if no such match)
     private int longestPrefixOf(Node x, String query, int d, int length) {
         if (x == null) return length;
         if (x.val != null) length = d;
@@ -258,7 +261,7 @@ public class TrieST<Value> {
     }
 
     /**
-     * Unit tests the <tt>TrieSET</tt> data type.
+     * Unit tests the <tt>TrieST</tt> data type.
      */
     public static void main(String[] args) {
 
@@ -282,6 +285,10 @@ public class TrieST<Value> {
         StdOut.println(st.longestPrefixOf("shellsort"));
         StdOut.println();
 
+        StdOut.println("longestPrefixOf(\"quicksort\"):");
+        StdOut.println(st.longestPrefixOf("quicksort"));
+        StdOut.println();
+
         StdOut.println("keysWithPrefix(\"shor\"):");
         for (String s : st.keysWithPrefix("shor"))
             StdOut.println(s);
@@ -292,3 +299,27 @@ public class TrieST<Value> {
             StdOut.println(s);
     }
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

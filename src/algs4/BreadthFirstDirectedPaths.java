@@ -1,4 +1,4 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac BreadthFirstDirectedPaths.java
  *  Execution:    java BreadthFirstDirectedPaths V E
  *  Dependencies: Digraph.java Queue.java Stack.java
@@ -21,7 +21,9 @@ package algs4; /****************************************************************
  *  3 to 11 (-):  not connected
  *  3 to 12 (-):  not connected
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 /**
  *  The <tt>BreadthDirectedFirstPaths</tt> class represents a data type for finding
@@ -33,7 +35,8 @@ package algs4; /****************************************************************
  *  where <em>V</em> is the number of vertices and <em>E</em> is the number of edges.
  *  It uses extra space (not including the digraph) proportional to <em>V</em>.
  *  <p>
- *  For additional documentation, see <a href="/algs4/41graph">Section 4.1</a> of
+ *  For additional documentation, 
+ *  see <a href="http://algs4.cs.princeton.edu/42digraph">Section 4.2</a> of 
  *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
  *
  *  @author Robert Sedgewick
@@ -54,7 +57,8 @@ public class BreadthFirstDirectedPaths {
         marked = new boolean[G.V()];
         distTo = new int[G.V()];
         edgeTo = new int[G.V()];
-        for (int v = 0; v < G.V(); v++) distTo[v] = INFINITY;
+        for (int v = 0; v < G.V(); v++)
+            distTo[v] = INFINITY;
         bfs(G, s);
     }
 
@@ -68,7 +72,8 @@ public class BreadthFirstDirectedPaths {
         marked = new boolean[G.V()];
         distTo = new int[G.V()];
         edgeTo = new int[G.V()];
-        for (int v = 0; v < G.V(); v++) distTo[v] = INFINITY;
+        for (int v = 0; v < G.V(); v++)
+            distTo[v] = INFINITY;
         bfs(G, sources);
     }
 
@@ -177,3 +182,27 @@ public class BreadthFirstDirectedPaths {
 
 
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

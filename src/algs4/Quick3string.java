@@ -1,8 +1,7 @@
-package algs4;
-
-/***********************************************************************************
- *  Compilation: javac Quick3string.java
- *  Execution:   java Quick3string < input.txt
+/******************************************************************************
+ *  Compilation:  javac Quick3string.java
+ *  Execution:    java Quick3string < input.txt
+ *  Dependencies: StdIn.java StdOut.java 
  *
  *  Reads string from standard input and 3-way string quicksort them.
  *
@@ -23,12 +22,32 @@ package algs4;
  *  the
  *
  *
- ***********************************************************************************/
+ ******************************************************************************/
 
+package algs4;
+
+/**
+ *  The <tt>Quick3string</tt> class provides static methods for sorting an
+ *  array of strings using 3-way radix quicksort.
+ *  <p>
+ *  For additional documentation,
+ *  see <a href="http://algs4.cs.princeton.edu/51radix">Section 5.1</a> of
+ *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
+ *
+ *  @author Robert Sedgewick
+ *  @author Kevin Wayne
+ */
 public class Quick3string {
     private static final int CUTOFF =  15;   // cutoff to insertion sort
 
-    // sort the array a[] of strings
+    // do not instantiate
+    private Quick3string() { } 
+
+    /**  
+     * Rearranges the array of strings in ascending order.
+     *
+     * @param a the array to be sorted
+     */
     public static void sort(String[] a) {
         StdRandom.shuffle(a);
         sort(a, 0, a.length-1, 0);
@@ -107,17 +126,46 @@ public class Quick3string {
     }
 
 
+    /**
+     * Reads in a sequence of fixed-length strings from standard input;
+     * 3-way radix quicksorts them;
+     * and prints them to standard output in ascending order.
+     */
     public static void main(String[] args) {
 
         // read in the strings from standard input
         String[] a = StdIn.readAllStrings();
-        int N = a.length;
+        int n = a.length;
 
         // sort the strings
         sort(a);
 
         // print the results
-        for (int i = 0; i < N; i++)
+        for (int i = 0; i < n; i++)
             StdOut.println(a[i]);
     }
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

@@ -1,12 +1,15 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac Bipartite.java
+ *  Execution:    java  Bipartite V E F
  *  Dependencies: Graph.java 
  *
  *  Given a graph, find either (i) a bipartition or (ii) an odd-length cycle.
  *  Runs in O(E + V) time.
  *
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 
 /**
@@ -25,9 +28,11 @@ package algs4; /****************************************************************
  *  Afterwards, the <em>isBipartite</em> and <em>color</em> operations
  *  take constant time; the <em>oddCycle</em> operation takes time proportional
  *  to the length of the cycle.
+ *  See {@link BipartiteX} for a nonrecursive version that uses breadth-first
+ *  search.
  *  <p>
- *  For additional documentation, see <a href="/algs4/41graph">Section 4.1</a> of
- *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
+ *  For additional documentation, see <a href="http://algs4.cs.princeton.edu/41graph">Section 4.1</a>   
+ *  of <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
  *
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
@@ -42,7 +47,8 @@ public class Bipartite {
     /**
      * Determines whether an undirected graph is bipartite and finds either a
      * bipartition or an odd-length cycle.
-     * @param G the graph
+     *
+     * @param  G the graph
      */
     public Bipartite(Graph G) {
         isBipartite = true;
@@ -86,8 +92,9 @@ public class Bipartite {
     }
 
     /**
-     * Is the graph bipartite?
-     * @return <tt>true</tt> if the graph is bipartite, <tt>false</tt> otherwise
+     * Returns true if the graph is bipartite.
+     *
+     * @return <tt>true</tt> if the graph is bipartite; <tt>false</tt> otherwise
      */
     public boolean isBipartite() {
         return isBipartite;
@@ -95,11 +102,14 @@ public class Bipartite {
  
     /**
      * Returns the side of the bipartite that vertex <tt>v</tt> is on.
-     * param v the vertex
+     *
+     * @param  v the vertex
      * @return the side of the bipartition that vertex <tt>v</tt> is on; two vertices
-     *    are in the same side of the bipartition if and only if they have the same color
+     *         are in the same side of the bipartition if and only if they have the
+     *         same color
+     * @throws IllegalArgumentException unless <tt>0 &le; v &lt; V</tt> 
      * @throws UnsupportedOperationException if this method is called when the graph
-     *    is not bipartite
+     *         is not bipartite
      */
     public boolean color(int v) {
         if (!isBipartite)
@@ -110,8 +120,10 @@ public class Bipartite {
     /**
      * Returns an odd-length cycle if the graph is not bipartite, and
      * <tt>null</tt> otherwise.
-     * @return an odd-length cycle (as an iterable) if the graph is not bipartite
-     *    (and hence has an odd-length cycle), and <tt>null</tt> otherwise
+     *
+     * @return an odd-length cycle if the graph is not bipartite
+     *         (and hence has an odd-length cycle), and <tt>null</tt>
+     *         otherwise
      */
     public Iterable<Integer> oddCycle() {
         return cycle; 
@@ -151,25 +163,17 @@ public class Bipartite {
      * Unit tests the <tt>Bipartite</tt> data type.
      */
     public static void main(String[] args) {
-        // create random bipartite graph with V vertices and E edges; then add F random edges
-        int V = Integer.parseInt(args[0]);
-        int E = Integer.parseInt(args[1]);
-        int F = Integer.parseInt(args[2]);
+        int V1 = Integer.parseInt(args[0]);
+        int V2 = Integer.parseInt(args[1]);
+        int E  = Integer.parseInt(args[2]);
+        int F  = Integer.parseInt(args[3]);
 
-        Graph G = new Graph(V);
-        int[] vertices = new int[V];
-        for (int i = 0; i < V; i++) vertices[i] = i;
-        StdRandom.shuffle(vertices);
-        for (int i = 0; i < E; i++) {
-            int v = StdRandom.uniform(V / 2);
-            int w = StdRandom.uniform(V / 2);
-            G.addEdge(vertices[v], vertices[V/2 + w]);
-        }
-
-        // add F extra edges
+        // create random bipartite graph with V1 vertices on left side,
+        // V2 vertices on right side, and E edges; then add F random edges
+        Graph G = GraphGenerator.bipartite(V1, V2, E);
         for (int i = 0; i < F; i++) {
-            int v = (int) (Math.random() * V);
-            int w = (int) (Math.random() * V);
+            int v = StdRandom.uniform(V1 + V2);
+            int w = StdRandom.uniform(V1 + V2);
             G.addEdge(v, w);
         }
 
@@ -194,3 +198,27 @@ public class Bipartite {
 
 
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

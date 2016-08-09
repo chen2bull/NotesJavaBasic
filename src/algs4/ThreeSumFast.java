@@ -1,4 +1,4 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac ThreeSumFast.java
  *  Execution:    java ThreeSumFast input.txt
  *  Dependencies: StdOut.java In.java Stopwatch.java
@@ -10,7 +10,7 @@ package algs4; /****************************************************************
  *                http://algs4.cs.princeton.edu/14analysis/32Kints.txt
  *                http://algs4.cs.princeton.edu/14analysis/1Mints.txt
  *
- *  A program with N^2 log N running time. Read in N integers
+ *  A program with n^2 log n running time. Reads n integers
  *  and counts the number of triples that sum to exactly 0.
  *
  *  Limitations
@@ -37,7 +37,9 @@ package algs4; /****************************************************************
  *  % java ThreeSumFast 32Kints.txt
  *  2052358
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 import java.util.Arrays;
 
@@ -47,7 +49,7 @@ import java.util.Arrays;
  *  sum to 0 (ignoring integer overflow).
  *  <p>
  *  This implementation uses sorting and binary search and takes time 
- *  proportional to N^2 log N, where N is the number of integers.
+ *  proportional to n^2 log n, where n is the number of integers.
  *  <p>
  *  For additional documentation, see <a href="http://algs4.cs.princeton.edu/14analysis">Section 1.4</a> of
  *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
@@ -56,6 +58,9 @@ import java.util.Arrays;
  *  @author Kevin Wayne
  */
 public class ThreeSumFast {
+
+    // Do not instantiate.
+    private ThreeSumFast() { }
 
     // returns true if the sorted array a[] contains any duplicated integers
     private static boolean containsDuplicates(int[] a) {
@@ -70,11 +75,11 @@ public class ThreeSumFast {
      * @throws IllegalArgumentException if the array contains duplicate integers
      */
     public static void printAll(int[] a) {
-        int N = a.length;
+        int n = a.length;
         Arrays.sort(a);
         if (containsDuplicates(a)) throw new IllegalArgumentException("array contains duplicate integers");
-        for (int i = 0; i < N; i++) {
-            for (int j = i+1; j < N; j++) {
+        for (int i = 0; i < n; i++) {
+            for (int j = i+1; j < n; j++) {
                 int k = Arrays.binarySearch(a, -(a[i] + a[j]));
                 if (k > j) StdOut.println(a[i] + " " + a[j] + " " + a[k]);
             }
@@ -87,17 +92,17 @@ public class ThreeSumFast {
      * @return the number of triples (i, j, k) with i < j < k such that a[i] + a[j] + a[k] == 0
      */
     public static int count(int[] a) {
-        int N = a.length;
+        int n = a.length;
         Arrays.sort(a);
         if (containsDuplicates(a)) throw new IllegalArgumentException("array contains duplicate integers");
-        int cnt = 0;
-        for (int i = 0; i < N; i++) {
-            for (int j = i+1; j < N; j++) {
+        int count = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = i+1; j < n; j++) {
                 int k = Arrays.binarySearch(a, -(a[i] + a[j]));
-                if (k > j) cnt++;
+                if (k > j) count++;
             }
         }
-        return cnt;
+        return count;
     } 
 
     /**
@@ -108,7 +113,31 @@ public class ThreeSumFast {
     public static void main(String[] args)  { 
         In in = new In(args[0]);
         int[] a = in.readAllInts();
-        int cnt = count(a);
-        StdOut.println(cnt);
+        int count = count(a);
+        StdOut.println(count);
     } 
 } 
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

@@ -1,6 +1,7 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac BinaryStdOut.java
  *  Execution:    java BinaryStdOut
+ *  Dependencies: none
  *
  *  Write binary data to standard output, either one 1-bit boolean,
  *  one 8-bit char, one 32-bit int, one 64-bit double, one 32-bit float,
@@ -8,7 +9,9 @@ package algs4; /****************************************************************
  *
  *  The bytes written are not aligned.
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -33,7 +36,7 @@ public final class BinaryStdOut {
     private static BufferedOutputStream out = new BufferedOutputStream(System.out);
 
     private static int buffer;     // 8-bit buffer of bits to write out
-    private static int N;          // number of bits remaining in buffer
+    private static int n;          // number of bits remaining in buffer
 
     // don't instantiate
     private BinaryStdOut() { }
@@ -47,8 +50,8 @@ public final class BinaryStdOut {
         if (bit) buffer |= 1;
 
         // if buffer is full (8 bits), write out as a single byte
-        N++;
-        if (N == 8) clearBuffer();
+        n++;
+        if (n == 8) clearBuffer();
     } 
 
    /**
@@ -58,9 +61,13 @@ public final class BinaryStdOut {
         assert x >= 0 && x < 256;
 
         // optimized if byte-aligned
-        if (N == 0) {
-            try { out.write(x); }
-            catch (IOException e) { e.printStackTrace(); }
+        if (n == 0) {
+            try {
+                out.write(x);
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
             return;
         }
 
@@ -73,11 +80,15 @@ public final class BinaryStdOut {
 
     // write out any remaining bits in buffer to standard output, padding with 0s
     private static void clearBuffer() {
-        if (N == 0) return;
-        if (N > 0) buffer <<= (8 - N);
-        try { out.write(buffer); }
-        catch (IOException e) { e.printStackTrace(); }
-        N = 0;
+        if (n == 0) return;
+        if (n > 0) buffer <<= (8 - n);
+        try {
+            out.write(buffer);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        n = 0;
         buffer = 0;
     }
 
@@ -87,8 +98,12 @@ public final class BinaryStdOut {
      */
     public static void flush() {
         clearBuffer();
-        try { out.flush(); }
-        catch (IOException e) { e.printStackTrace(); }
+        try {
+            out.flush();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
    /**
@@ -97,8 +112,12 @@ public final class BinaryStdOut {
      */
     public static void close() {
         flush();
-        try { out.close(); }
-        catch (IOException e) { e.printStackTrace(); }
+        try {
+            out.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -137,7 +156,10 @@ public final class BinaryStdOut {
      * @throws IllegalArgumentException if <tt>x</tt> is not between 0 and 2<sup>r</sup> - 1.
      */
     public static void write(int x, int r) {
-        if (r == 32) { write(x); return; }
+        if (r == 32) {
+            write(x);
+            return;
+        }
         if (r < 1 || r > 32)        throw new IllegalArgumentException("Illegal value for r = " + r);
         if (x < 0 || x >= (1 << r)) throw new IllegalArgumentException("Illegal " + r + "-bit char = " + x);
         for (int i = 0; i < r; i++) {
@@ -208,9 +230,12 @@ public final class BinaryStdOut {
      * @throws IllegalArgumentException if <tt>x</tt> is not between 0 and 2<sup>r</sup> - 1.
      */
     public static void write(char x, int r) {
-        if (r == 8) { write(x); return; }
-        if (r < 1 || r > 16)        throw new IllegalArgumentException("Illegal value for r = " + r);
-        if (x < 0 || x >= (1 << r)) throw new IllegalArgumentException("Illegal " + r + "-bit char = " + x);
+        if (r == 8) {
+            write(x);
+            return;
+        }
+        if (r < 1 || r > 16) throw new IllegalArgumentException("Illegal value for r = " + r);
+        if (x >= (1 << r))   throw new IllegalArgumentException("Illegal " + r + "-bit char = " + x);
         for (int i = 0; i < r; i++) {
             boolean bit = ((x >>> (r - i - 1)) & 1) == 1;
             writeBit(bit);
@@ -245,12 +270,37 @@ public final class BinaryStdOut {
      * Test client.
      */
     public static void main(String[] args) {
-        int T = Integer.parseInt(args[0]);
-        // write to standard output
-        for (int i = 0; i < T; i++) {
+        int m = Integer.parseInt(args[0]);
+
+        // write n integers to binary standard output
+        for (int i = 0; i < m; i++) {
             BinaryStdOut.write(i);
         }
         BinaryStdOut.flush();
     }
 
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

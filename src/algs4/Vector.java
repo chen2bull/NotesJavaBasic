@@ -1,12 +1,13 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac Vector.java
  *  Execution:    java Vector
+ *  Dependencies: StdOut.java
  *
  *  Implementation of a vector of real numbers.
  *
  *  This class is implemented to be immutable: once the client program
  *  initialize a Vector, it cannot change any of its fields
- *  (N or data[i]) either directly or indirectly. Immutability is a
+ *  (d or data[i]) either directly or indirectly. Immutability is a
  *  very desirable feature of a data type.
  *
  *  % java Vector
@@ -18,125 +19,149 @@ package algs4; /****************************************************************
  *   <x, y>  = 25.0
  * 
  *
- *  Note that Vector is also the name of an unrelated Java library class.
+ *  Note that Vector is also the name of an unrelated Java library class
+ *  in the package java.util.
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 /**
- *  The <tt>Vector</tt> class represents a <em>d</em>-dimensional mathematical vector.
+ *  The <tt>Vector</tt> class represents a <em>d</em>-dimensional Euclidean vector.
  *  Vectors are immutable: their values cannot be changed after they are created.
- *  The class <code>Vectors</code> includes methods for addition, subtraction,
- *  dot product, scalar product, unit vector, Euclidean distance, and
- *  Euclidean norm.
+ *  It includes methods for addition, subtraction,
+ *  dot product, scalar product, unit vector, Euclidean norm, and the Euclidean
+ *  distance between two vectors.
  *  <p>
- *  For additional documentation, see <a href="/algs4/12oop">Section 1.2</a> of
- *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
+ *  For additional documentation, 
+ *  see <a href="http://algs4.cs.princeton.edu/12oop">Section 1.2</a> of 
+ *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne. 
  *
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
  */
 public class Vector { 
 
-    private int N;               // length of the vector
+    private int d;               // dimension of the vector
     private double[] data;       // array of vector's components
 
 
     /**
      * Initializes a d-dimensional zero vector.
+     *
      * @param d the dimension of the vector
      */
     public Vector(int d) {
-        N = d;
-        data = new double[N];
+        this.d = d;
+        data = new double[d];
     }
 
     /**
      * Initializes a vector from either an array or a vararg list.
      * The vararg syntax supports a constructor that takes a variable number of
      * arugments such as Vector x = new Vector(1.0, 2.0, 3.0, 4.0).
-     * @param a the array or vararg list
+     *
+     * @param a  the array or vararg list
      */
     public Vector(double... a) {
-        N = a.length;
+        d = a.length;
 
         // defensive copy so that client can't alter our copy of data[]
-        data = new double[N];
-        for (int i = 0; i < N; i++)
+        data = new double[d];
+        for (int i = 0; i < d; i++)
             data[i] = a[i];
     }
 
     /**
      * Returns the length of this vector.
+     *
      * @return the dimension of this vector
+     * @deprecated Replaced by {@link #dimension()}.
      */
     public int length() {
-        return N;
+        return d;
     }
 
     /**
-     * Returns the inner product of this vector with that vector.
-     * @throws IllegalArgumentException if the lengths of the two vectors are not equal.
-     * @param that the other vector
-     * @return the dot product between this vector and that vector
+     * Returns the dimension of this vector.
+     *
+     * @return the dimension of this vector
+     */
+    public int dimension() {
+        return d;
+    }
+
+    /**
+     * Returns the do product of this vector with the specified vector.
+     *
+     * @param  that the other vector
+     * @return the dot product of this vector and that vector
+     * @throws IllegalArgumentException if the dimensions of the two vectors are not equal
      */
     public double dot(Vector that) {
-        if (this.N != that.N) throw new IllegalArgumentException("Dimensions don't agree");
+        if (this.d != that.d) throw new IllegalArgumentException("Dimensions don't agree");
         double sum = 0.0;
-        for (int i = 0; i < N; i++)
+        for (int i = 0; i < d; i++)
             sum = sum + (this.data[i] * that.data[i]);
         return sum;
     }
 
     /**
-     * Returns the Euclidean norm of this vector.
-     * @return the Euclidean norm of this vector
+     * Returns the magnitude of this vector.
+     * This is also known as the L2 norm or the Euclidean norm.
+     *
+     * @return the magnitude of this vector
      */
     public double magnitude() {
         return Math.sqrt(this.dot(this));
     }
 
     /**
-     * Returns the Euclidean distance between this vector and that vector.
-     * @throws IllegalArgumentException if the lengths of the two vectors are not equal.
-     * @param that the other vector 
+     * Returns the Euclidean distance between this vector and the specified vector.
+     *
+     * @param  that the other vector 
      * @return the Euclidean distance between this vector and that vector
+     * @throws IllegalArgumentException if the dimensions of the two vectors are not equal
      */
     public double distanceTo(Vector that) {
-        if (this.N != that.N) throw new IllegalArgumentException("Dimensions don't agree");
+        if (this.d != that.d) throw new IllegalArgumentException("Dimensions don't agree");
         return this.minus(that).magnitude();
     }
 
     /**
-     * Returns the sum of this vector and that vector: this + that.
-     * @throws IllegalArgumentException if the lengths of the two vectors are not equal.
-     * @param that the vector to add to this vector
-     * @return the sum of this vector and that vector
+     * Returns the sum of this vector and the specified vector.
+     *
+     * @param  that the vector to add to this vector
+     * @return the vector whose value is <tt>(this + that)</tt>
+     * @throws IllegalArgumentException if the dimensions of the two vectors are not equal
      */
     public Vector plus(Vector that) {
-        if (this.N != that.N) throw new IllegalArgumentException("Dimensions don't agree");
-        Vector c = new Vector(N);
-        for (int i = 0; i < N; i++)
+        if (this.d != that.d) throw new IllegalArgumentException("Dimensions don't agree");
+        Vector c = new Vector(d);
+        for (int i = 0; i < d; i++)
             c.data[i] = this.data[i] + that.data[i];
         return c;
     }
 
     /**
-     * Returns the difference between this vector and that vector: this - that.
-     * @param that the vector to subtract from this vector
-     * @return the difference between this vector and that vector
-     * @throws IllegalArgumentException if the lengths of the two vectors are not equal.
+     * Returns the difference between this vector and the specified vector.
+     *
+     * @param  that the vector to subtract from this vector
+     * @return the vector whose value is <tt>(this - that)</tt>
+     * @throws IllegalArgumentException if the dimensions of the two vectors are not equal
      */
     public Vector minus(Vector that) {
-        if (this.N != that.N) throw new IllegalArgumentException("Dimensions don't agree");
-        Vector c = new Vector(N);
-        for (int i = 0; i < N; i++)
+        if (this.d != that.d) throw new IllegalArgumentException("Dimensions don't agree");
+        Vector c = new Vector(d);
+        for (int i = 0; i < d; i++)
             c.data[i] = this.data[i] - that.data[i];
         return c;
     }
 
     /**
      * Returns the ith cartesian coordinate.
-     * @param i the coordinate index
+     *
+     * @param  i the coordinate index
      * @return the ith cartesian coordinate
      */
     public double cartesian(int i) {
@@ -144,21 +169,37 @@ public class Vector {
     }
 
     /**
-     * Returns the product of this factor multiplied by the scalar factor: this * factor.
-     * @param factor the multiplier
-     * @return the scalar product of this vector and factor
+     * Returns the scalar-vector product of this vector and the specified scalar
+     *
+     * @param  alpha the scalar
+     * @return the vector whose value is <tt>(alpha * this)</tt>
+     * @deprecated Replaced by {@link #scale(double)}.
      */
-    public Vector times(double factor) {
-        Vector c = new Vector(N);
-        for (int i = 0; i < N; i++)
-            c.data[i] = factor * data[i];
+    public Vector times(double alpha) {
+        Vector c = new Vector(d);
+        for (int i = 0; i < d; i++)
+            c.data[i] = alpha * data[i];
+        return c;
+    }
+
+    /**
+     * Returns the scalar-vector product of this vector and the specified scalar
+     *
+     * @param  alpha the scalar
+     * @return the vector whose value is <tt>(alpha * this)</tt>
+     */
+    public Vector scale(double alpha) {
+        Vector c = new Vector(d);
+        for (int i = 0; i < d; i++)
+            c.data[i] = alpha * data[i];
         return c;
     }
 
     /**
      * Returns a unit vector in the direction of this vector.
+     *
      * @return a unit vector in the direction of this vector
-     * @throws ArithmeticException if this vector is the zero vector.
+     * @throws ArithmeticException if this vector is the zero vector
      */
     public Vector direction() {
         if (this.magnitude() == 0.0) throw new ArithmeticException("Zero-vector has no direction");
@@ -168,18 +209,19 @@ public class Vector {
 
     /**
      * Returns a string representation of this vector.
+     *
      * @return a string representation of this vector, which consists of the 
-     *    the vector entries, separates by single spaces
+     *         the vector entries, separates by single spaces
      */
     public String toString() {
-        String s = "";
-        for (int i = 0; i < N; i++)
-            s = s + data[i] + " ";
-        return s;
+        StringBuilder s = new StringBuilder();
+        for (int i = 0; i < d; i++)
+            s.append(data[i] + " ");
+        return s.toString();
     }
 
     /**
-     * Unit tests the data type methods.
+     * Unit tests the <tt>Vector</tt> data type.
      */
     public static void main(String[] args) {
         double[] xdata = { 1.0, 2.0, 3.0, 4.0 };
@@ -203,3 +245,27 @@ public class Vector {
 
     }
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

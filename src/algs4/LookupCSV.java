@@ -1,6 +1,4 @@
-package algs4;
-
-/*************************************************************************
+/******************************************************************************
  *  Compilation:  javac LookupCSV.java
  *  Execution:    java LookupCSV file.csv keyField valField
  *  Dependencies: ST.java In.java StdIn.java StdOut.java
@@ -30,9 +28,27 @@ package algs4;
  *                                     1738.74
  *
  *
- *************************************************************************/
+ ******************************************************************************/
 
+package algs4;
+
+/**
+ *  The <tt>LookupCSV</tt> class provides a data-driven client for reading in a
+ *  key-value pairs from a file; then, printing the values corresponding to the
+ *  keys found on standard input. Both keys and values are strings.
+ *  The fields to serve as the key and value are taken as command-line arguments.
+ *  <p>
+ *  For additional documentation, see <a href="http://algs4.cs.princeton.edu/35applications">Section 3.5</a> of
+ *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
+ *  
+ *  @author Robert Sedgewick
+ *  @author Kevin Wayne
+ */
 public class LookupCSV {
+
+    // Do not instantiate.
+    private LookupCSV() { }
+
     public static void main(String[] args) {
         int keyField = Integer.parseInt(args[1]);
         int valField = Integer.parseInt(args[2]);
@@ -57,3 +73,27 @@ public class LookupCSV {
         }
     }
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

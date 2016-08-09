@@ -1,8 +1,9 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac Knuth.java
  *  Execution:    java Knuth < list.txt
  *  Dependencies: StdIn.java StdOut.java
  *  Data files:   http://algs4.cs.princeton.edu/11model/cards.txt
+ *                http://algs4.cs.princeton.edu/11model/cardsUnicode.txt
  *  
  *  Reads in a list of strings and prints them in random order.
  *  The Knuth (or Fisher-Yates) shuffling algorithm guarantees
@@ -25,7 +26,24 @@ package algs4; /****************************************************************
  *  ...
  *  KH
  *
- *************************************************************************/
+ *  % more cardsUnicode.txt
+ *  2♣ 3♣ 4♣ 5♣ 6♣ 7♣ 8♣ 9♣ 10♣ J♣ Q♣ K♣ A♣ 
+ *  2♦ 3♦ 4♦ 5♦ 6♦ 7♦ 8♦ 9♦ 10♦ J♦ Q♦ K♦ A♦ 
+ *  2♥ 3♥ 4♥ 5♥ 6♥ 7♥ 8♥ 9♥ 10♥ J♥ Q♥ K♥ A♥ 
+ *  2♠ 3♠ 4♠ 5♠ 6♠ 7♠ 8♠ 9♠ 10♠ J♠ Q♠ K♠ A♠ 
+ * 
+ *  % java Knuth < cardsUnicode.txt
+ *  2♠
+ *  K♥
+ *  6♥
+ *  5♣
+ *  J♣
+ *  ...
+ *  A♦
+ *
+ ******************************************************************************/
+
+package algs4;
 
 /**
  *  The <tt>Knuth</tt> class provides a client for reading in a 
@@ -35,23 +53,25 @@ package algs4; /****************************************************************
  *  the assumption that Math.random() generates independent and
  *  uniformly distributed numbers between 0 and 1.
  *  <p>
- *  For additional documentation, see <a href="http://algs4.cs.princeton.edu/11model">Section 1.1</a> of
+ *  For additional documentation,
+ *  see <a href="http://algs4.cs.princeton.edu/11model">Section 1.1</a> of
  *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
+ *  See {@link StdRandom} for versions that shuffle arrays and
+ *  subarrays of objects, doubles, and ints.
  *
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
  */
 public class Knuth { 
 
-   // this class should not be instantiated
-   private Knuth() { }
+    // this class should not be instantiated
+    private Knuth() { }
 
     /**
      * Rearranges an array of objects in uniformly random order
      * (under the assumption that <tt>Math.random()</tt> generates independent
      * and uniformly distributed numbers between 0 and 1).
      * @param a the array to be shuffled
-     * @see StdRandom
      */
     public static void shuffle(Object[] a) {
         int N = a.length;
@@ -81,3 +101,27 @@ public class Knuth {
             StdOut.println(a[i]);
     }
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

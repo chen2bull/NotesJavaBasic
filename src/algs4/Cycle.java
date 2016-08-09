@@ -1,6 +1,7 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac Cycle.java
- *  Dependencies: Graph.java Stack.java
+ *  Execution:    java  Cycle filename.txt
+ *  Dependencies: Graph.java Stack.java In.java StdOut.java
  *
  *  Identifies a cycle.
  *  Runs in O(E + V) time.
@@ -14,7 +15,9 @@ package algs4; /****************************************************************
  *  % java Cycle largeG.txt 
  *  996673 762 840164 4619 785187 194717 996673 
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 /**
  *  The <tt>Cycle</tt> class represents a data type for 
@@ -30,8 +33,8 @@ package algs4; /****************************************************************
  *  the <em>cycle</em> operation takes time proportional
  *  to the length of the cycle.
  *  <p>
- *  For additional documentation, see <a href="/algs4/41graph">Section 4.1</a> of
- *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
+ *  For additional documentation, see <a href="http://algs4.cs.princeton.edu/41graph">Section 4.1</a>   
+ *  of <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
  *
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
@@ -42,9 +45,10 @@ public class Cycle {
     private Stack<Integer> cycle;
 
     /**
-     * Determines whether the undirected graph <tt>G</tt> has a cycle and, if so,
-     * finds such a cycle.
-     * @param G the graph
+     * Determines whether the undirected graph <tt>G</tt> has a cycle and,
+     * if so, finds such a cycle.
+     *
+     * @param G the undirected graph
      */
     public Cycle(Graph G) {
         if (hasSelfLoop(G)) return;
@@ -101,19 +105,20 @@ public class Cycle {
     }
 
     /**
-     * Does the graph have a cycle?
-     * @return <tt>true</tt> if the graph has a cycle, <tt>false</tt> otherwise
+     * Returns true if the graph <tt>G</tt> has a cycle.
+     *
+     * @return <tt>true</tt> if the graph has a cycle; <tt>false</tt> otherwise
      */
     public boolean hasCycle() {
         return cycle != null;
     }
 
      /**
-     * Returns a cycle if the graph has a cycle, and <tt>null</tt> otherwise.
-     * @return a cycle (as an iterable) if the graph has a cycle,
-     *    and <tt>null</tt> otherwise
+     * Returns a cycle in the graph <tt>G</tt>.
+     * @return a cycle if the graph <tt>G</tt> has a cycle,
+     *         and <tt>null</tt> otherwise
      */
-   public Iterable<Integer> cycle() {
+    public Iterable<Integer> cycle() {
         return cycle;
     }
 
@@ -162,3 +167,27 @@ public class Cycle {
 
 }
 
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

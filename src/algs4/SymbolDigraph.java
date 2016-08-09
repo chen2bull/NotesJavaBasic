@@ -1,4 +1,4 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac SymbolDigraph.java
  *  Execution:    java SymbolDigraph
  *  Dependencies: ST.java Digraph.java In.java
@@ -13,7 +13,9 @@ package algs4; /****************************************************************
  *     MCO
  *  LAX
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 /**
  *  The <tt>SymbolDigraph</tt> class represents a digraph, where the
@@ -27,9 +29,9 @@ package algs4; /****************************************************************
  *  This implementation uses an {@link ST} to map from strings to integers,
  *  an array to map from integers to strings, and a {@link Digraph} to store
  *  the underlying graph.
- *  The <em>index</em> and <em>contains</em> operations take time 
+ *  The <em>indexOf</em> and <em>contains</em> operations take time 
  *  proportional to log <em>V</em>, where <em>V</em> is the number of vertices.
- *  The <em>name</em> operation takes constant time.
+ *  The <em>nameOf</em> operation takes constant time.
  *  <p>
  *  For additional documentation, see <a href="http://algs4.cs.princeton.edu/42digraph">Section 4.2</a> of
  *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
@@ -97,8 +99,18 @@ public class SymbolDigraph {
      * Returns the integer associated with the vertex named <tt>s</tt>.
      * @param s the name of a vertex
      * @return the integer (between 0 and <em>V</em> - 1) associated with the vertex named <tt>s</tt>
+     * @deprecated Replaced by {@link #indexOf(String)}.
      */
     public int index(String s) {
+        return st.get(s);
+    }
+
+    /**
+     * Returns the integer associated with the vertex named <tt>s</tt>.
+     * @param s the name of a vertex
+     * @return the integer (between 0 and <em>V</em> - 1) associated with the vertex named <tt>s</tt>
+     */
+    public int indexOf(String s) {
         return st.get(s);
     }
 
@@ -106,9 +118,28 @@ public class SymbolDigraph {
      * Returns the name of the vertex associated with the integer <tt>v</tt>.
      * @param v the integer corresponding to a vertex (between 0 and <em>V</em> - 1) 
      * @return the name of the vertex associated with the integer <tt>v</tt>
+     * @deprecated Replaced by {@link #nameOf(int)}.
      */
     public String name(int v) {
         return keys[v];
+    }
+
+    /**
+     * Returns the name of the vertex associated with the integer <tt>v</tt>.
+     * @param v the integer corresponding to a vertex (between 0 and <em>V</em> - 1) 
+     * @return the name of the vertex associated with the integer <tt>v</tt>
+     */
+    public String nameOf(int v) {
+        return keys[v];
+    }
+
+    /**
+     * Returns the digraph assoicated with the symbol graph. It is the client's responsibility
+     * not to mutate the digraph.
+     * @deprecated Replaced by {@link #digraph()}.
+     */
+    public Digraph G() {
+        return G;
     }
 
     /**
@@ -116,10 +147,9 @@ public class SymbolDigraph {
      * not to mutate the digraph.
      * @return the digraph associated with the symbol digraph
      */
-    public Digraph G() {
+    public Digraph digraph() {
         return G;
     }
-
 
     /**
      * Unit tests the <tt>SymbolDigraph</tt> data type.
@@ -137,3 +167,27 @@ public class SymbolDigraph {
         }
     }
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

@@ -1,10 +1,13 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac Out.java
  *  Execution:    java Out
+ *  Dependencies: none
  *
  *  Writes data of various types to: stdout, file, or socket.
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 
 import java.io.FileOutputStream;
@@ -38,23 +41,31 @@ public class Out {
     private PrintWriter out;
 
    /**
-     * Create an Out object using an OutputStream.
+     * Initializes an output stream from a {@link OutputStream}.
+     *
+     * @param  os the <tt>OutputStream</tt>
      */
     public Out(OutputStream os) {
         try {
             OutputStreamWriter osw = new OutputStreamWriter(os, CHARSET_NAME);
             out = new PrintWriter(osw, true);
         }
-        catch (IOException e) { e.printStackTrace(); }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
    /**
-     * Create an Out object using standard output.
+     * Initializes an output stream from standard output.
      */
-    public Out() { this(System.out); }
+    public Out() {
+        this(System.out);
+    }
 
    /**
-     * Create an Out object using a Socket.
+     * Initializes an output stream from a socket.
+     *
+     * @param  socket the socket
      */
     public Out(Socket socket) {
         try {
@@ -62,86 +73,110 @@ public class Out {
             OutputStreamWriter osw = new OutputStreamWriter(os, CHARSET_NAME);
             out = new PrintWriter(osw, true);
         }
-        catch (IOException e) { e.printStackTrace(); }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
    /**
-     * Create an Out object using a file specified by the given name.
+     * Initializes an output stream from a file.
+     *
+     * @param  filename the name of the file
      */
-    public Out(String s) {
+    public Out(String filename) {
         try {
-            OutputStream os = new FileOutputStream(s);
+            OutputStream os = new FileOutputStream(filename);
             OutputStreamWriter osw = new OutputStreamWriter(os, CHARSET_NAME);
             out = new PrintWriter(osw, true);
         }
-        catch (IOException e) { e.printStackTrace(); }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
    /**
-     * Close the output stream.
+     * Closes the output stream.
      */
-    public void close() { out.close(); }
-
-
+    public void close() {
+        out.close();
+    }
 
    /**
-     * Terminate the line.
+     * Terminates the current line by printing the line-separator string.
      */
     public void println() {
         out.println();
     }
 
    /**
-     * Print an object and then terminate the line.
+     * Prints an object to this output stream and then terminates the line.
+     *
+     * @param x the object to print
      */
     public void println(Object x) {
         out.println(x);
     }
 
    /**
-     * Print a boolean and then terminate the line.
+     * Prints a boolean to this output stream and then terminates the line.
+     *
+     * @param x the boolean to print
      */
     public void println(boolean x) {
         out.println(x);
     }
 
    /**
-     * Print a char and then terminate the line.
+     * Prints a character to this output stream and then terminates the line.
+     *
+     * @param x the character to print
      */
     public void println(char x) {
         out.println(x);
     }
 
    /**
-     * Print an double and then terminate the line.
+     * Prints a double to this output stream and then terminates the line.
+     *
+     * @param x the double to print
      */
     public void println(double x) {
         out.println(x);
     }
 
    /**
-     * Print a float and then terminate the line.
+     * Prints a float to this output stream and then terminates the line.
+     *
+     * @param x the float to print
      */
     public void println(float x) {
         out.println(x);
     }
 
    /**
-     * Print an int and then terminate the line.
+     * Prints an integer to this output stream and then terminates the line.
+     *
+     * @param x the integer to print
      */
     public void println(int x) {
         out.println(x);
     }
 
    /**
-     * Print a long and then terminate the line.
+     * Prints a long to this output stream and then terminates the line.
+     *
+     * @param x the long to print
      */
     public void println(long x) {
         out.println(x);
     }
 
    /**
-     * Print a byte and then terminate the line.
+     * Prints a byte to this output stream and then terminates the line.
+     * <p>
+     * To write binary data, see {@link BinaryOut}.
+     *
+     * @param x the byte to print
      */
     public void println(byte x) {
         out.println(x);
@@ -150,14 +185,16 @@ public class Out {
 
 
    /**
-     * Flush the output stream.
+     * Flushes this output stream.
      */
     public void print() {
         out.flush();
     }
 
    /**
-     * Print an object and then flush the output stream.
+     * Prints an object to this output stream and flushes this output stream.
+     * 
+     * @param x the object to print
      */
     public void print(Object x) {
         out.print(x);
@@ -165,7 +202,9 @@ public class Out {
     }
 
    /**
-     * Print an boolean and then flush the output stream.
+     * Prints a boolean to this output stream and flushes this output stream.
+     * 
+     * @param x the boolean to print
      */
     public void print(boolean x) {
         out.print(x);
@@ -173,7 +212,9 @@ public class Out {
     }
 
    /**
-     * Print an char and then flush the output stream.
+     * Prints a character to this output stream and flushes this output stream.
+     * 
+     * @param x the character to print
      */
     public void print(char x) {
         out.print(x);
@@ -181,7 +222,9 @@ public class Out {
     }
 
    /**
-     * Print an double and then flush the output stream.
+     * Prints a double to this output stream and flushes this output stream.
+     * 
+     * @param x the double to print
      */
     public void print(double x) {
         out.print(x);
@@ -189,7 +232,9 @@ public class Out {
     }
 
    /**
-     * Print a float and then flush the output stream.
+     * Prints a float to this output stream and flushes this output stream.
+     * 
+     * @param x the float to print
      */
     public void print(float x) {
         out.print(x);
@@ -197,7 +242,9 @@ public class Out {
     }
 
    /**
-     * Print an int and then flush the output stream.
+     * Prints an integer to this output stream and flushes this output stream.
+     * 
+     * @param x the integer to print
      */
     public void print(int x) {
         out.print(x);
@@ -205,7 +252,9 @@ public class Out {
     }
 
    /**
-     * Print a long and then flush the output stream.
+     * Prints a long integer to this output stream and flushes this output stream.
+     * 
+     * @param x the long integer to print
      */
     public void print(long x) {
         out.print(x);
@@ -213,7 +262,9 @@ public class Out {
     }
 
    /**
-     * Print a byte and then flush the output stream.
+     * Prints a byte to this output stream and flushes this output stream.
+     * 
+     * @param x the byte to print
      */
     public void print(byte x) {
         out.print(x);
@@ -221,8 +272,11 @@ public class Out {
     }
 
    /**
-     * Print a formatted string using the specified format string and arguments,
-     * and then flush the output stream.
+     * Prints a formatted string to this output stream, using the specified format
+     * string and arguments, and then flushes this output stream.
+     *
+     * @param format the format string
+     * @param args   the arguments accompanying the format string
      */
     public void printf(String format, Object... args) {
         out.printf(LOCALE, format, args);
@@ -230,8 +284,12 @@ public class Out {
     }
 
    /**
-     * Print a formatted string using the specified locale, format string and arguments,
-     * and then flush the output stream.
+     * Prints a formatted string to this output stream, using the specified
+     * locale, format string, and arguments, and then flushes this output stream.
+     *
+     * @param locale the locale
+     * @param format the format string
+     * @param args   the arguments accompanying the format string
      */
     public void printf(Locale locale, String format, Object... args) {
         out.printf(locale, format, args);
@@ -257,3 +315,27 @@ public class Out {
     }
 
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

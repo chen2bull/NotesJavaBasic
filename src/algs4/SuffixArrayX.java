@@ -1,6 +1,7 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac SuffixArrayX.java
  *  Execution:    java SuffixArrayX < input.txt
+ *  Dependencies: StdIn.java StdOut.java
  *  
  *  A data type that computes the suffix array of a string using 3-way
  *  radix quicksort.
@@ -21,13 +22,14 @@ package algs4; /****************************************************************
  *   10   9   0  10  RA!
  *   11   2   2  11  RACADABRA!
  *
- *   Consider using Bentley-McIlroy 3-way partitioning instead.
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 /**
  *  The <tt>SuffixArrayX</tt> class represents a suffix array of a string of
- *  length <em>N</em>.
+ *  length <em>n</em>.
  *  It supports the <em>selecting</em> the <em>i</em>th smallest suffix,
  *  getting the <em>index</em> of the <em>i</em>th smallest suffix,
  *  computing the length of the <em>longest common prefix</em> between the
@@ -44,6 +46,16 @@ package algs4; /****************************************************************
  *  The <em>select</em> operation takes time proportional
  *  to the length of the suffix and should be used primarily for debugging.
  *  <p>
+ *  This implementation uses '\0' as a sentinel and assumes that the charater
+ *  '\0' does not appear in the text.
+ *  <p>
+ *  In practice, this algorithm runs very fast. However, in the worst-case
+ *  it can be very poor (e.g., a string consisting of N copies of the same
+ *  character. We do not shuffle the array of suffixes before sorting because
+ *  shuffling is relatively expensive and a pathologial input for which 
+ *  the suffixes start out in a bad order (e.g., sorted) is likely to be
+ *  a bad input for this algorithm with or without the shuffle.
+ *  <p>
  *  For additional documentation, see <a href="http://algs4.cs.princeton.edu/63suffix">Section 6.3</a> of
  *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
  */
@@ -52,23 +64,21 @@ public class SuffixArrayX {
 
     private final char[] text;
     private final int[] index;   // index[i] = j means text.substring(j) is ith largest suffix
-    private final int N;         // number of characters in text
+    private final int n;         // number of characters in text
 
     /**
      * Initializes a suffix array for the given <tt>text</tt> string.
      * @param text the input string
      */
     public SuffixArrayX(String text) {
-        N = text.length();
+        n = text.length();
         text = text + '\0';
         this.text = text.toCharArray();
-        this.index = new int[N];
-        for (int i = 0; i < N; i++)
+        this.index = new int[n];
+        for (int i = 0; i < n; i++)
             index[i] = i;
 
-        // shuffle
-
-        sort(0, N-1, 0);
+        sort(0, n-1, 0);
     }
 
     // 3-way string quicksort lo..hi starting at dth character
@@ -84,7 +94,7 @@ public class SuffixArrayX {
         char v = text[index[lo] + d];
         int i = lo + 1;
         while (i <= gt) {
-            int t = text[index[i] + d];
+            char t = text[index[i] + d];
             if      (t < v) exch(lt++, i++);
             else if (t > v) exch(i, gt--);
             else            i++;
@@ -103,12 +113,12 @@ public class SuffixArrayX {
                 exch(j, j-1);
     }
 
-    // is text[i+d..N) < text[j+d..N) ?
+    // is text[i+d..n) < text[j+d..n) ?
     private boolean less(int i, int j, int d) {
         if (i == j) return false;
         i = i + d;
         j = j + d;
-        while (i < N && j < N) {
+        while (i < n && j < n) {
             if (text[i] < text[j]) return true;
             if (text[i] > text[j]) return false;
             i++;
@@ -129,39 +139,39 @@ public class SuffixArrayX {
      * @return the length of the input string
      */
     public int length() {
-        return N;
+        return n;
     }
 
 
     /**
      * Returns the index into the original string of the <em>i</em>th smallest suffix.
      * That is, <tt>text.substring(sa.index(i))</tt> is the <em>i</em> smallest suffix.
-     * @param i an integer between 0 and <em>N</em>-1
+     * @param i an integer between 0 and <em>n</em>-1
      * @return the index into the original string of the <em>i</em>th smallest suffix
-     * @throws IndexOutOfBoundsException unless 0 &le; <em>i</em> &lt; <Em>N</em>
+     * @throws java.lang.IndexOutOfBoundsException unless 0 &le; <em>i</em> &lt; <em>n</em>
      */
     public int index(int i) {
-        if (i < 0 || i >= N) throw new IndexOutOfBoundsException();
+        if (i < 0 || i >= n) throw new IndexOutOfBoundsException();
         return index[i];
     }
 
     /**
      * Returns the length of the longest common prefix of the <em>i</em>th
      * smallest suffix and the <em>i</em>-1st smallest suffix.
-     * @param i an integer between 1 and <em>N</em>-1
+     * @param i an integer between 1 and <em>n</em>-1
      * @return the length of the longest common prefix of the <em>i</em>th
      * smallest suffix and the <em>i</em>-1st smallest suffix.
-     * @throws IndexOutOfBoundsException unless 1 &le; <em>i</em> &lt; <em>N</em>
+     * @throws java.lang.IndexOutOfBoundsException unless 1 &le; <em>i</em> &lt; <em>n</em>
      */
     public int lcp(int i) {
-        if (i < 1 || i >= N) throw new IndexOutOfBoundsException();
+        if (i < 1 || i >= n) throw new IndexOutOfBoundsException();
         return lcp(index[i], index[i-1]);
     }
 
-    // longest common prefix of text[i..N) and text[j..N)
+    // longest common prefix of text[i..n) and text[j..n)
     private int lcp(int i, int j) {
         int length = 0;
-        while (i < N && j < N) {
+        while (i < n && j < n) {
             if (text[i] != text[j]) return length;
             i++;
             j++;
@@ -174,22 +184,22 @@ public class SuffixArrayX {
      * Returns the <em>i</em>th smallest suffix as a string.
      * @param i the index
      * @return the <em>i</em> smallest suffix as a string
-     * @throws IndexOutOfBoundsException unless 0 &le; <em>i</em> &lt; <Em>N</em>
+     * @throws java.lang.IndexOutOfBoundsException unless 0 &le; <em>i</em> &lt; <em>n</em>
      */
     public String select(int i) {
-        if (i < 0 || i >= N) throw new IndexOutOfBoundsException();
-        return new String(text, index[i], N - index[i]);
+        if (i < 0 || i >= n) throw new IndexOutOfBoundsException();
+        return new String(text, index[i], n - index[i]);
     }
 
     /**
      * Returns the number of suffixes strictly less than the <tt>query</tt> string.
      * We note that <tt>rank(select(i))</tt> equals <tt>i</tt> for each <tt>i</tt>
-     * between 0 and <em>N</em>-1. 
+     * between 0 and <em>n</em>-1. 
      * @param query the query string
      * @return the number of suffixes strictly less than <tt>query</tt>
      */
     public int rank(String query) {
-        int lo = 0, hi = N - 1;
+        int lo = 0, hi = n - 1;
         while (lo <= hi) {
             int mid = lo + (hi - lo) / 2;
             int cmp = compare(query, index[mid]);
@@ -200,18 +210,18 @@ public class SuffixArrayX {
         return lo;
     } 
 
-    // is query < text[i..N) ?
+    // is query < text[i..n) ?
     private int compare(String query, int i) {
-        int M = query.length();
+        int m = query.length();
         int j = 0;
-        while (i < N && j < M) {
+        while (i < n && j < m) {
             if (query.charAt(j) != text[i]) return query.charAt(j) - text[i];
             i++;
             j++;
 
         }
-        if (i < N) return -1;
-        if (j < M) return +1;
+        if (i < n) return -1;
+        if (j < m) return +1;
         return 0;
     }
 
@@ -221,41 +231,62 @@ public class SuffixArrayX {
      */
     public static void main(String[] args) {
         String s = StdIn.readAll().replaceAll("\n", " ").trim();
-        SuffixArrayX suffix = new SuffixArrayX(s);
-
-        SuffixArray  suffixReference = new SuffixArray(s);
+        SuffixArrayX suffix1 = new SuffixArrayX(s);
+        SuffixArray suffix2 = new SuffixArray(s);
         boolean check = true;
         for (int i = 0; check && i < s.length(); i++) {
-            if (suffixReference.index(i) != suffix.index(i)) {
-                StdOut.println("suffixReference(" + i + ") = " + suffixReference.index(i));
-                StdOut.println("suffix(" + i + ") = " + suffix.index(i));
-                String ith = "\"" + s.substring(suffix.index(i), Math.min(suffix.index(i) + 50, s.length())) + "\"";
-                String jth = "\"" + s.substring(suffixReference.index(i), Math.min(suffixReference.index(i) + 50, s.length())) + "\"";
+            if (suffix1.index(i) != suffix2.index(i)) {
+                StdOut.println("suffix1(" + i + ") = " + suffix1.index(i));
+                StdOut.println("suffix2(" + i + ") = " + suffix2.index(i));
+                String ith = "\"" + s.substring(suffix1.index(i), Math.min(suffix1.index(i) + 50, s.length())) + "\"";
+                String jth = "\"" + s.substring(suffix2.index(i), Math.min(suffix2.index(i) + 50, s.length())) + "\"";
                 StdOut.println(ith);
                 StdOut.println(jth);
                 check = false;
             }
         }
 
-        // StdOut.println("rank(" + args[0] + ") = " + suffix.rank(args[0]));
-
         StdOut.println("  i ind lcp rnk  select");
         StdOut.println("---------------------------");
 
         for (int i = 0; i < s.length(); i++) {
-            int index = suffix.index(i);
+            int index = suffix2.index(i);
             String ith = "\"" + s.substring(index, Math.min(index + 50, s.length())) + "\"";
-            int rank = suffix.rank(s.substring(index));
-            assert s.substring(index).equals(suffix.select(i));
+            int rank = suffix2.rank(s.substring(index));
+            assert s.substring(index).equals(suffix2.select(i));
             if (i == 0) {
                 StdOut.printf("%3d %3d %3s %3d  %s\n", i, index, "-", rank, ith);
             }
             else {
-                // int lcp  = suffix.lcp(suffix.index(i), suffix.index(i-1));
-                int lcp  = suffix.lcp(i);
+                // int lcp  = suffix.lcp(suffix2.index(i), suffix2.index(i-1));
+                int lcp  = suffix2.lcp(i);
                 StdOut.printf("%3d %3d %3d %3d  %s\n", i, index, lcp, rank, ith);
             }
         }
     }
 
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

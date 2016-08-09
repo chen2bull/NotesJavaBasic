@@ -1,10 +1,10 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac DepthFirstOrder.java
  *  Execution:    java DepthFirstOrder filename.txt
  *  Dependencies: Digraph.java Queue.java Stack.java StdOut.java
  *                EdgeWeightedDigraph.java DirectedEdge.java
- *  Data files:   http://algs4.cs.princeton.edu/42directed/tinyDAG.txt
- *                http://algs4.cs.princeton.edu/42directed/tinyDG.txt
+ *  Data files:   http://algs4.cs.princeton.edu/42digraph/tinyDAG.txt
+ *                http://algs4.cs.princeton.edu/42digraph/tinyDG.txt
  *
  *  Compute preorder and postorder for a digraph or edge-weighted digraph.
  *  Runs in O(E + V) time.
@@ -29,7 +29,9 @@ package algs4; /****************************************************************
  *  Postorder: 4 5 1 12 11 10 9 6 0 3 2 7 8 
  *  Reverse postorder: 8 7 2 3 0 6 9 10 11 12 1 5 4 
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 /**
  *  The <tt>DepthFirstOrder</tt> class represents a data type for 
@@ -44,7 +46,8 @@ package algs4; /****************************************************************
  *  operation takes take time proportional to <em>V</em>.
  *  <p>
  *  <p>
- *  For additional documentation, see <a href="/algs4/42digraph">Section 4.2</a> of
+ *  For additional documentation,
+ *  see <a href="http://algs4.cs.princeton.edu/42digraph">Section 4.2</a> of
  *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
  *
  *  @author Robert Sedgewick
@@ -71,6 +74,8 @@ public class DepthFirstOrder {
         marked    = new boolean[G.V()];
         for (int v = 0; v < G.V(); v++)
             if (!marked[v]) dfs(G, v);
+
+        assert check(G);
     }
 
     /**
@@ -225,3 +230,27 @@ public class DepthFirstOrder {
     }
 
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

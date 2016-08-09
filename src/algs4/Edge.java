@@ -1,10 +1,13 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac Edge.java
  *  Execution:    java Edge
+ *  Dependencies: StdOut.java
  *
  *  Immutable weighted edge.
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 /**
  *  The <tt>Edge</tt> class represents a weighted edge in an 
@@ -27,13 +30,14 @@ public class Edge implements Comparable<Edge> {
     private final double weight;
 
     /**
-     * Initializes an edge between vertices <tt>v/tt> and <tt>w</tt> of
+     * Initializes an edge between vertices <tt>v</tt> and <tt>w</tt> of
      * the given <tt>weight</tt>.
-     * param v one vertex
-     * param w the other vertex
-     * param weight the weight of the edge
+     *
+     * @param  v one vertex
+     * @param  w the other vertex
+     * @param  weight the weight of this edge
      * @throws IndexOutOfBoundsException if either <tt>v</tt> or <tt>w</tt> 
-     *    is a negative integer
+     *         is a negative integer
      * @throws IllegalArgumentException if <tt>weight</tt> is <tt>NaN</tt>
      */
     public Edge(int v, int w, double weight) {
@@ -46,29 +50,30 @@ public class Edge implements Comparable<Edge> {
     }
 
     /**
-     * Returns the weight of the edge.
-     * @return the weight of the edge
+     * Returns the weight of this edge.
+     *
+     * @return the weight of this edge
      */
     public double weight() {
         return weight;
     }
 
     /**
-     * Returns either endpoint of the edge.
-     * @return either endpoint of the edge
+     * Returns either endpoint of this edge.
+     *
+     * @return either endpoint of this edge
      */
     public int either() {
         return v;
     }
 
     /**
-     * Returns the endpoint of the edge that is different from the given vertex
-     * (unless the edge represents a self-loop in which case it returns the same vertex).
-     * @param vertex one endpoint of the edge
-     * @return the endpoint of the edge that is different from the given vertex
-     *   (unless the edge represents a self-loop in which case it returns the same vertex)
-     * @throws IllegalArgumentException if the vertex is not one of the endpoints
-     *   of the edge
+     * Returns the endpoint of this edge that is different from the given vertex.
+     *
+     * @param  vertex one endpoint of this edge
+     * @return the other endpoint of this edge
+     * @throws IllegalArgumentException if the vertex is not one of the
+     *         endpoints of this edge
      */
     public int other(int vertex) {
         if      (vertex == v) return w;
@@ -78,19 +83,23 @@ public class Edge implements Comparable<Edge> {
 
     /**
      * Compares two edges by weight.
-     * @param that the other edge
+     * Note that <tt>compareTo()</tt> is not consistent with <tt>equals()</tt>,
+     * which uses the reference equality implementation inherited from <tt>Object</tt>.
+     *
+     * @param  that the other edge
      * @return a negative integer, zero, or positive integer depending on whether
-     *    this edge is less than, equal to, or greater than that edge
+     *         the weight of this is less than, equal to, or greater than the
+     *         argument edge
      */
+    @Override
     public int compareTo(Edge that) {
-        if      (this.weight() < that.weight()) return -1;
-        else if (this.weight() > that.weight()) return +1;
-        else                                    return  0;
+        return Double.compare(this.weight, that.weight);
     }
 
     /**
-     * Returns a string representation of the edge.
-     * @return a string representation of the edge
+     * Returns a string representation of this edge.
+     *
+     * @return a string representation of this edge
      */
     public String toString() {
         return String.format("%d-%d %.5f", v, w, weight);
@@ -100,7 +109,31 @@ public class Edge implements Comparable<Edge> {
      * Unit tests the <tt>Edge</tt> data type.
      */
     public static void main(String[] args) {
-        Edge e = new Edge(12, 23, 3.14);
+        Edge e = new Edge(12, 34, 5.67);
         StdOut.println(e);
     }
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

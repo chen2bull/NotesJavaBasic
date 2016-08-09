@@ -1,4 +1,4 @@
-package algs4; /*************************************************************************
+/******************************************************************************
  *  Compilation:  javac Insertion.java
  *  Execution:    java Insertion < input.txt
  *  Dependencies: StdOut.java StdIn.java
@@ -19,13 +19,26 @@ package algs4; /****************************************************************
  *  % java Insertion < words3.txt
  *  all bad bed bug dad ... yes yet zoo   [ one string per line ]
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 import java.util.Comparator;
 
 /**
  *  The <tt>Insertion</tt> class provides static methods for sorting an
  *  array using insertion sort.
+ *  <p>
+ *  This implementation makes ~ 1/2 n^2 compares and exchanges in
+ *  the worst case, so it is not suitable for sorting large arbitrary arrays.
+ *  More precisely, the number of exchanges is exactly equal to the number
+ *  of inversions. So, for example, it sorts a partially-sorted array
+ *  in linear time.
+ *  <p>
+ *  The sorting algorithm is stable and uses O(1) extra memory.
+ *  <p>
+ *  See <a href="http://algs4.cs.princeton.edu/21elementary/InsertionPedantic.java.html">InsertionPedantic.java</a>
+ *  for a version that eliminates the compiler warning.
  *  <p>
  *  For additional documentation, see <a href="http://algs4.cs.princeton.edu/21elementary">Section 2.1</a> of
  *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
@@ -43,8 +56,8 @@ public class Insertion {
      * @param a the array to be sorted
      */
     public static void sort(Comparable[] a) {
-        int N = a.length;
-        for (int i = 0; i < N; i++) {
+        int n = a.length;
+        for (int i = 0; i < n; i++) {
             for (int j = i; j > 0 && less(a[j], a[j-1]); j--) {
                 exch(a, j, j-1);
             }
@@ -54,20 +67,52 @@ public class Insertion {
     }
 
     /**
-     * Rearranges the array in ascending order, using a comparator.
-     * @param a the array
-     * @param c the comparator specifying the order
+     * Rearranges the subarray a[lo..hi] in ascending order, using the natural order.
+     * @param a the array to be sorted
+     * @param lo left endpoint
+     * @param hi right endpoint
      */
-    public static void sort(Object[] a, Comparator c) {
-        int N = a.length;
-        for (int i = 0; i < N; i++) {
-            for (int j = i; j > 0 && less(c, a[j], a[j-1]); j--) {
+    public static void sort(Comparable[] a, int lo, int hi) {
+        for (int i = lo; i <= hi; i++) {
+            for (int j = i; j > lo && less(a[j], a[j-1]); j--) {
                 exch(a, j, j-1);
             }
-            assert isSorted(a, c, 0, i);
         }
-        assert isSorted(a, c);
+        assert isSorted(a, lo, hi);
     }
+
+    /**
+     * Rearranges the array in ascending order, using a comparator.
+     * @param a the array
+     * @param comparator the comparator specifying the order
+     */
+    public static void sort(Object[] a, Comparator comparator) {
+        int n = a.length;
+        for (int i = 0; i < n; i++) {
+            for (int j = i; j > 0 && less(a[j], a[j-1], comparator); j--) {
+                exch(a, j, j-1);
+            }
+            assert isSorted(a, 0, i, comparator);
+        }
+        assert isSorted(a, comparator);
+    }
+
+    /**
+     * Rearranges the subarray a[lo..hi] in ascending order, using a comparator.
+     * @param a the array
+     * @param lo left endpoint
+     * @param hi right endpoint
+     * @param comparator the comparator specifying the order
+     */
+    public static void sort(Object[] a, int lo, int hi, Comparator comparator) {
+        for (int i = lo; i <= hi; i++) {
+            for (int j = i; j > lo && less(a[j], a[j-1], comparator); j--) {
+                exch(a, j, j-1);
+            }
+        }
+        assert isSorted(a, lo, hi, comparator);
+    }
+
 
     // return a permutation that gives the elements in a[] in ascending order
     // do not change the original array a[]
@@ -75,33 +120,33 @@ public class Insertion {
      * Returns a permutation that gives the elements in the array in ascending order.
      * @param a the array
      * @return a permutation <tt>p[]</tt> such that <tt>a[p[0]]</tt>, <tt>a[p[1]]</tt>,
-     *    ..., <tt>a[p[N-1]]</tt> are in ascending order
+     *    ..., <tt>a[p[n-1]]</tt> are in ascending order
      */
     public static int[] indexSort(Comparable[] a) {
-        int N = a.length;
-        int[] index = new int[N];
-        for (int i = 0; i < N; i++)
+        int n = a.length;
+        int[] index = new int[n];
+        for (int i = 0; i < n; i++)
             index[i] = i;
 
-        for (int i = 0; i < N; i++)
+        for (int i = 0; i < n; i++)
             for (int j = i; j > 0 && less(a[index[j]], a[index[j-1]]); j--)
                 exch(index, j, j-1);
 
         return index;
     }
 
-   /***********************************************************************
-    *  Helper sorting functions
-    ***********************************************************************/
+   /***************************************************************************
+    *  Helper sorting functions.
+    ***************************************************************************/
     
     // is v < w ?
     private static boolean less(Comparable v, Comparable w) {
-        return (v.compareTo(w) < 0);
+        return v.compareTo(w) < 0;
     }
 
     // is v < w ?
-    private static boolean less(Comparator c, Object v, Object w) {
-        return (c.compare(v, w) < 0);
+    private static boolean less(Object v, Object w, Comparator comparator) {
+        return comparator.compare(v, w) < 0;
     }
         
     // exchange a[i] and a[j]
@@ -118,28 +163,28 @@ public class Insertion {
         a[j] = swap;
     }
 
-   /***********************************************************************
-    *  Check if array is sorted - useful for debugging
-    ***********************************************************************/
+   /***************************************************************************
+    *  Check if array is sorted - useful for debugging.
+    ***************************************************************************/
     private static boolean isSorted(Comparable[] a) {
         return isSorted(a, 0, a.length - 1);
     }
 
     // is the array sorted from a[lo] to a[hi]
     private static boolean isSorted(Comparable[] a, int lo, int hi) {
-        for (int i = lo + 1; i <= hi; i++)
+        for (int i = lo+1; i <= hi; i++)
             if (less(a[i], a[i-1])) return false;
         return true;
     }
 
-    private static boolean isSorted(Object[] a, Comparator c) {
-        return isSorted(a, c, 0, a.length - 1);
+    private static boolean isSorted(Object[] a, Comparator comparator) {
+        return isSorted(a, 0, a.length - 1, comparator);
     }
 
     // is the array sorted from a[lo] to a[hi]
-    private static boolean isSorted(Object[] a, Comparator c, int lo, int hi) {
+    private static boolean isSorted(Object[] a, int lo, int hi, Comparator comparator) {
         for (int i = lo + 1; i <= hi; i++)
-            if (less(c, a[i], a[i-1])) return false;
+            if (less(a[i], a[i-1], comparator)) return false;
         return true;
     }
 
@@ -160,3 +205,27 @@ public class Insertion {
         show(a);
     }
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/

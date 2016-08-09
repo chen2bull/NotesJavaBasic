@@ -1,41 +1,45 @@
-package algs4; /*************************************************************************
- * Compilation:  javac FloydWarshall.java
- * Execution:  java FloydWarshall V E
- * Dependencies: AdjMatrixEdgeWeightedDigraph.java
+/******************************************************************************
+ *  Compilation:  javac FloydWarshall.java
+ *  Execution:    java FloydWarshall V E
+ *  Dependencies: AdjMatrixEdgeWeightedDigraph.java
  *
- * Floyd-Warshall all-pairs shortest path algorithm.
+ *  Floyd-Warshall all-pairs shortest path algorithm.
  *
- * % java FloydWarshall 100 500
+ *  % java FloydWarshall 100 500
  *
- * Should check for negative cycles during triple loop; otherwise
- * intermediate numbers can get exponentially large.
- * Reference: "The Floyd-Warshall algorithm on graphs with negative cycles"
- * by Stefan Hougardy
+ *  Should check for negative cycles during triple loop; otherwise
+ *  intermediate numbers can get exponentially large.
+ *  Reference: "The Floyd-Warshall algorithm on graphs with negative cycles"
+ *  by Stefan Hougardy
  *
- *************************************************************************/
+ ******************************************************************************/
+
+package algs4;
 
 
 /**
- * The <tt>FloydWarshall</tt> class represents a data type for solving the
- * all-pairs shortest paths problem in edge-weighted digraphs with
- * no negative cycles.
- * The edge weights can be positive, negative, or zero.
- * This class finds either a shortest path between every pair of vertices
- * or a negative cycle.
- * <p>
- * This implementation uses the Floyd-Warshall algorithm.
- * The constructor takes time proportional to <em>V</em><sup>3</sup> in the
- * worst case, where <em>V</em> is the number of vertices.
- * Afterwards, the <tt>dist()</tt>, <tt>hasPath()</tt>, and <tt>hasNegativeCycle()</tt>
- * methods take constant time; the <tt>path()</tt> and <tt>negativeCycle()</tt>
- * method takes time proportional to the number of edges returned.
- * <p>
- * For additional documentation, see <a href="/algs4/44sp">Section 4.4</a> of
- * <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
+ *  The <tt>FloydWarshall</tt> class represents a data type for solving the
+ *  all-pairs shortest paths problem in edge-weighted digraphs with
+ *  no negative cycles.
+ *  The edge weights can be positive, negative, or zero.
+ *  This class finds either a shortest path between every pair of vertices
+ *  or a negative cycle.
+ *  <p>
+ *  This implementation uses the Floyd-Warshall algorithm.
+ *  The constructor takes time proportional to <em>V</em><sup>3</sup> in the
+ *  worst case, where <em>V</em> is the number of vertices.
+ *  Afterwards, the <tt>dist()</tt>, <tt>hasPath()</tt>, and <tt>hasNegativeCycle()</tt>
+ *  methods take constant time; the <tt>path()</tt> and <tt>negativeCycle()</tt>
+ *  method takes time proportional to the number of edges returned.
+ *  <p>
+ *  For additional documentation,    
+ *  see <a href="http://algs4.cs.princeton.edu/44sp">Section 4.4</a> of    
+ *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne. 
  *
- * @author Robert Sedgewick
- * @author Kevin Wayne
- */ public class FloydWarshall {
+ *  @author Robert Sedgewick
+ *  @author Kevin Wayne
+ */
+public class FloydWarshall {
     private boolean hasNegativeCycle;  // is there a negative cycle?
     private double[][] distTo;  // distTo[v][w] = length of shortest v->w path
     private DirectedEdge[][] edgeTo;  // edgeTo[v][w] = last edge on shortest v->w path
@@ -89,6 +93,7 @@ package algs4; /****************************************************************
                 }
             }
         }
+        assert check(G);
     }
 
     /**
@@ -166,7 +171,7 @@ package algs4; /****************************************************************
     }
 
     // check optimality conditions
-    private boolean check(EdgeWeightedDigraph G, int s) {
+    private boolean check(AdjMatrixEdgeWeightedDigraph G) {
 
         // no negative cycle
         if (!hasNegativeCycle()) {
@@ -196,9 +201,9 @@ package algs4; /****************************************************************
         int E = Integer.parseInt(args[1]);
         AdjMatrixEdgeWeightedDigraph G = new AdjMatrixEdgeWeightedDigraph(V);
         for (int i = 0; i < E; i++) {
-            int v = (int) (V * Math.random());
-            int w = (int) (V * Math.random());
-            double weight = Math.round(100 * (Math.random() - 0.15)) / 100.0;
+            int v = StdRandom.uniform(V);
+            int w = StdRandom.uniform(V);
+            double weight = Math.round(100 * (StdRandom.uniform() - 0.15)) / 100.0;
             if (v == w) G.addEdge(new DirectedEdge(v, w, Math.abs(weight)));
             else G.addEdge(new DirectedEdge(v, w, weight));
         }
@@ -251,3 +256,27 @@ package algs4; /****************************************************************
     }
 
 }
+
+/******************************************************************************
+ *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.
+ *
+ *  This file is part of algs4.jar, which accompanies the textbook
+ *
+ *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
+ *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
+ *      http://algs4.cs.princeton.edu
+ *
+ *
+ *  algs4.jar is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  algs4.jar is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
+ ******************************************************************************/
