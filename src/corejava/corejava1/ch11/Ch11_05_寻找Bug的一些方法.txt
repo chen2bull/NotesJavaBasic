@@ -1,0 +1,19 @@
+1.使用System.out或者日志输出一些信息
+2.在main方法中进行单元测试
+3.TODO:学会使用JUnit
+4.使用日志代理
+    JPanel panel = new JPanel() {
+        public void setBackground(Color c) {
+            logger.info("SetBackground: c=" + c);
+            super.setBackground(c);
+        }
+    };
+
+5.重定向错误流的方法是java MyProgram 2> error.txt而不是java MyProgram 2> error.txt
+而采用java MyProgram >& error.txt 则是将System.err和System.out都重定向到同一个文件中
+
+6.在使用javac的时候加入 -Xlint选项可以报告一些可疑的、但不违反语法规则的代码问题
+
+7.可以使用jconsole对一个java程序进行监控
+
+8.更多的方法参考书本

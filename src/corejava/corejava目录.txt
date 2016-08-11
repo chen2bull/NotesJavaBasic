@@ -1,0 +1,332 @@
+============================Core java 1============================
+===================================================================
+101,02,03入门知识：
+    01.基本类型：Ch1_01_Types
+    02.大数运算:Ch1_02_BigIntegerTest
+    03.字符串的使用：Ch1_03_StringUsage
+    04.基本IO:Ch1_04_BasicIO
+    05.数组的使用：Ch1_05_ArrayTest
+    06.定义过时的API/函数
+
+
+04对象与类:
+    01.根据Java文件的注释生成文档：Ch4_01_TestComments
+    02.静态域、静态方法、包的静态导入：Ch4_02_StaticTest
+    03.参数的四种默认构造方法：略
+    类设计的原则（无代码）：略
+
+
+05继承：
+    01.多态、抽象类和四种访问方式：Ch5_01_PersonTest.java
+        防问控制：public>protected(在本包和子类中可见)
+                        >缺省(对本包可见)>private(本类可见)
+    02.Object类(equals,hashCode,toString)：Ch5_02_EqualsTest.java
+    03.泛型数组列表（CoreJava中放在第5章）：Ch5_03_ArrayListTest.java
+    04.对象包装器与自动打包(方便ArrayList<Integer>)：Ch5_04_Autoboxing.java
+       (数字字符串 转 数值；)
+    05.参数数量可变的方法：Ch5_05_VariableArg.java
+    06.枚举类的使用：Ch5_06_EnumTest.java
+    07.反射1：打印类的全部信息（使用反射API,分析类）:Ch5_07_ClassPrinter.java
+       反射2：通用toString的写法(使用反射API，分析对象):Ch5_07_GeneralToString.java
+       反射3：令数组增加的函数（使用反射编写泛型数组代码）Ch05_07_ArrayGrowTest.java
+       反射4：//TODO 能不能利用反射写出通用的equals方法、hashCode方法和clone方法
+
+
+06接口与内部类
+    01.接口：Comparable接口（实现了这个接口就可以用Array.sort方法排序）：Ch6_01_ComparableTest.java
+    02.接口：实现Cloneable接口的方法:Ch6_02_CloneTest.java
+    03.接口：接口与回调（ActionListener接口的实现方法）:Ch6_03_TimerTest.java
+    04.内部类：基本用法:Ch6_04_InnerClassTest.java
+    05.内部类：匿名内部类的用法：Ch6_05_AnonymousInnerClassTest.java
+    06.内部类：静态内部类的用法：Ch6_06_StaticInnerClassTest.java(这种内部类没有对外围类的引用)
+    07.代理：// TODO 
+
+
+07图形程序设计
+    01.框架的定位、属性和大小: Ch7_01_SizedFrameTest.java
+        !!! JFrame, JPanel, Toolkit, Dimension, Image
+    02.在组件中显示文本和图形: Ch7_02_DrawTest.java
+        !!! Graphics, Graphics2D, Rectangle2D.Double, Ellipse2D.Double,
+        !!! Line2D.Double, Point2D.Double, Point2D.Double, Dimension2D
+    03.设置显示的颜色和字体大小:Ch7_03_FontAndColor.java
+        !!! Font, FontRenderContext, Color
+    04.显示图像:Ch7_04_ImageTest.java
+        !!! ImageIO, JComponent
+
+
+08事件处理
+    01.事件处理(处理按钮点击事件):Ch8_01_ButtonTest.java
+        !!! JButton, ActionListener接口
+    02.创建包含方法调用的监听器,eg:改变观感:Ch8_02_PlafTest.java
+    03.WindowsEvent和适配器类:Ch8_03_WindowsEvent和适配器类.txt
+    04.动作(键盘动作):Ch8_04_ActionTest.java
+        !!! Action接口, InputMap, ActionMap, AbstractAction抽象类
+    05.鼠标事件:Ch8_05_MouseTest.java
+        !!! MouseListener接口, MouseAdapter抽象类, MouseMotionListener接口
+
+
+09用户界面组件
+    01.布局管理器(简单的计算器程序):Ch9_01_Calculator.java
+        !!! FlowLayout, BorderLayout, GridLayout
+    02.文本输入 C9_02_TextComponentTest.java
+        !!! JTextField, JPasswordField, JLabel, JTextArea, JScrollPane
+    03.选择组件,复选框 Ch9_03_CheckBoxTest.java
+        !!! JCheckBox, 
+    04.选择组件,单选按钮及按钮组 Ch9_04_RadioButtonTest.java
+        !!! JRadioButton, ButtonGroup
+    05.选择组件,边框 Ch9_05_BorderTest.java
+        !!! BoderFactory
+    06.选择组件,组合框 (获得系统的所有字体)Ch9_06_ComboBoxTest.java
+        !!! JComboBox
+    07.选择组件,滑块 Ch9_07_SliderTest.java
+        !!! JSlider
+    08.菜单 Ch9_08_MenuTest.java
+        !!! JMenuBar, JMenu, JMenuItem, JCheckBoxMenuItem, JRadioButtonMenuItem, JPopupMenu
+    09.工具栏 Ch9_09_ToolBarTest.java
+        !!! JToolBar
+    10.网格组布局 Ch9_10_GridBagLayoutTest.java
+        !!! GridBagLayout
+        简化网格组布局使用的一个帮助类
+        !!! 自定义的GBC
+    11.对话框,swing自带的对话框 Ch9_11_OptionDialogTest.java
+        !!! JOptionPane.show...
+    12.对话框,自己定义对话框 Ch9_12_DialogTest.java
+        !!! JDialog(和JFrame一样,通常需要扩展这个类)
+    13.数据交换的例子(设置默认按钮)Ch9_13_DataExchangeTest.java
+    14.文件对话框 Ch9_14_FileChooserTest.java
+        !!! JFileChooser, FileNameExtensionFilter, FileView
+    15.颜色对话框(三种风格的对话框,模式,非模式,立即生效) Ch9_15_ColorChooserTest.java
+        !!! JColorChooser
+    16.自定义一个字体对话框 // TODO
+
+
+10.部署应用程序和Applet
+    01.jar文件的说明: Ch10_01_Jar文件.txt
+    02.定位资源Ch10_02_ResourceTest.java
+    03.属性映射 Ch10_03_PropertiesTest.java
+        !!!Properties
+    04.配置信息的中心知识库 Ch10_04_PreferencesTest.java
+        !!!Preferences
+    05.// TODO 同时使用02，03，04中的方法，在jar中某个的相对位置处保存属性映射和配置信息的中心知识库。
+       其中，属性映射仅保存中心知识库对应的那个xml文件的位置，中心知识库则保存其它的配置信息。
+
+
+11.异常、断言、日志和调试
+    01.处理异常： Ch11_01_处理异常.txt
+    02.分析堆栈跟踪元素: Ch11_02_StackTraceTest.java
+    03.日志: 基本的日志用法 Ch11_03_TestLogger.java
+        !!!Logger
+    04.日志用法:例,带日志浏览器的图像浏览器 Ch11_04_LoggingImageViewer.java
+    05.发现程序中错误的一些方法 Ch11_05_寻找Bug的一些方法.txt
+    06.使用控制台窗口 Ch11_06_ConsoleWindowTest.java
+    
+12.泛型程序设计
+
+13.集合
+    00.泛型数组列表:见Ch5_03
+    01.链表Ch13_01_LinkedListTest.java
+    02.散列集Ch13_02_HashSetTest.java(快速查找,无序)
+    03.树集Ch13_03_TreeSetTest.java
+    04.优先级队列Ch13_04_PriorityQueueTest.java
+        !!!ArrayQueue队列,ArrayDeque双端队列,Stack栈(不出现在Demo中)
+        !!!PriorityQueue优先级队列
+    05.映射表Ch13_05_MapTest.java
+        !!!HashMap,TreeMap
+    06.集合算法Ch13_06_CollectionsTest.java
+        !!!帮助类Collections
+    07.位集Ch13_07_Sieve.java
+        !!!BitSet不是范型的,作用相当于ArrayList<Boolean>类,性能快很多
+        
+14.多线程
+    01.实现多线程程序的方法Ch14_01_MutiThread.java
+        !!!Runnable接口(两个n哦),Thread类
+    02.多线程的一个实用的例子(显示一个动态的小球)
+        未使用多线程的程序Ch14_02_Bounce.java
+        使用多线程的程序例子Ch14_02_BounceThread.java
+        上两个文件都要用到的类(Ball.java , BallComponent.java)
+    03.线程属性：
+        a.线程优先级(setPriority可以设置线程优先级，yield方法导致当前线程处于让步状态)
+            让步以后有可能立即轮到自己，也可能轮到其它线程执行
+        b.守护线程Ch14_03_Daemon.java
+        c.未捕获线程异常处理器(见Ch14_03中的注释)
+    04.同步存取的两种方法（注意看Bank中的代码和注释）
+        程序模拟一个有若干账户的银行。随机地生成在这些账户转移一定数目的钱款到另一个账户。
+        在运行的同时，输出总金额。
+        a.例1：没有使用同步的，数据会出错见corejava1.ch14.SynchBank
+        b.例2:使用锁对象SynchBank（JavaSE5引入，性能和功能都优于例3）
+            corejava.corejava1.ch14.SynchBank
+            !!!ReentrantLock类
+        c.例3:使用synchronized关键字 corejava.corejava1.ch14.SynchBank2
+            !!!synchronized关键字
+        d.原则：上两种方法都不用 > Lock/Condition > synchronized
+    05.读写锁用法的说明Ch14_05_ReentrantReadWriteLock.java
+            !!!ReentrantReadWriteLock,Lock
+    06.弃用suspend和resume。用下面的方法来安全的挂起线程 Ch14_06_MySuspend.java
+    07.阻塞队列(实际编程时，尽量使用线程安全的数据结构)
+        Ch14_07_BlockingQueueTest.java
+        !!!BlockingQueue
+    08.线程安全的集合Ch14_08_ThreadSafe.txt（文本说明）
+    09.Callable和Future，以及FutureTask包装器
+        Ch14_08_FutureTest.java
+    10.执行器 !!!ExecutorService接口和Executors类（注意有s）
+        a.线程池 Ch14_10_ThreadPoolTest.java
+        b.计划任务 Ch14_10_ExecutorService.txt
+            !!!ScheduledExecutorService接口和ScheduledFuture接口
+        c.控制任务组
+            !!!将一组实现了Runnable或Callable接口类放到一个线程池中的两个方法
+        
+    11.同步器 Ch14_11_AlgorithmAnimation.java
+    12.线程与Swing一起使用时的两个原则
+        Ch14_12_SwingThreadTest.java
+        !!!EventQueue.invokeLater方法和invokeAndWait方法
+        
+        Ch14_13_SwingWorkerTest.java
+        !!!SwingWorker<T, U>
+        
+        
+        a.如果一个动作要花费很长时间，在一个单独的工作器线程中做这件事，不要在事件分配线程中做。
+        b.除了以下方法，不要在事件线程以外的线程中接触Swing组件
+            JComponent.repaint      //重绘
+            JComponent.revalidate   //强制执行组件的布局
+            JTextComponent.setText
+            JTextArea.insert
+            JTextArea.append
+            JTextArea.replaceRange
+    
+zz日期处理：
+    Date与GregorianCalendar类的使用：
+zz反射(CoreJava中放在第5章)：
+
+============================Core java 2============================
+===================================================================
+01.流与文件
+    01.文本输入输出CH01_01_TextFileTest.java
+        !!!PrintWriter,PrintWriter
+        !!!FileInputStream,BufferedInputStream,PushbackInputStream
+        !!!FileOutputStream,BufferedOutputStream
+    02.字符集CH01_02_CharSetTest.java
+    03.读写二进制数据CH01_03_RandomFileTest.java
+        !!!DataOutputStream,RandomAccessFile
+    04.读写Zip文件CH01_04_Ziptest.java
+        !!!ZipInputStream,ZipEntry\
+        (JDK自带的Zip处理的包中文处理不是很好可以用Apache的ant中的Zip处理包代替,用法完全一样)
+    05.对象序列化CH01_05_ObjectStreamTest.java
+        !!!Serializable接口
+        可以修改默认的序列化机制（典型的是保存Point2D 等对象，例略）
+    06.使用序列化创建通用的克隆方法CH01_06_SerialCloneTest.java(这个方法很慢，仅在不关心性能时用)
+    07.文件管理CH01_07_FindDirectories.java
+        !!!File
+    08.新IO之内存映射文件CH01_08_FileChannelTest.java
+        !!!FileChannel（可快速随机访问）
+    09.正则表达式
+        CH01_09_RegExTest.java 基本用法
+        CH01_09_HrefMatch.java 寻找输入中一个或者多个匹配的子串
+
+02.XML
+    01.XML的基本使用 CH02_01_DOMTreeTest
+        !!!DocumentBuilderFactory,DocumentBuilder,Document,Element,Node,NodeList,Text
+    02.用XML的配置一个窗口布局和元素(使用反射),分别使用dtd和xsd来验证文件的合法性
+    03.XPath的使用 CH02_03_XPathTest
+        !!!XPathFactory,XPath
+    04.SAX解析器,用SAX实现的简单的网络爬虫,CH02_04_SAXTest
+        !!!SAXParserFactory,SAXParser,DefaultHandler
+        !!!ContentHandler,DTDHandler,EntityResolver,ErrorHandler
+    05.StAX解析器,用SAX实现的简单的网络爬虫,
+        !!!XMLInputFactory,XMLStreamReader
+    06.分别使用DOM和SAX写入XML文件,svg格式文件的处理
+        !!XMLOutputFactory(SAX机制用),XMLStreamWriter(SAX机制用)
+    07.XSL转换(即XSLT)的基本使用
+        !!StreamSource,Source(DOMSource,SAXSource,StreamSource),Result(DOMResult,SAXResult,StreamResult)
+
+03.网络
+    01.IP地址 CH03_01_TestInetAddress.java
+    02.URL CH03_02_URLReader.java
+
+04.数据库编程
+    01.链接数据库CH_04_01_TestDB
+        !!!Connection,Statement,ResultSet,DriverManager
+        首先要安装mysql,创建要用到的数据库Corejava2,然后工程里面还导入mysql-connector-java.jar
+    02.执行SQL语句CH_04_02_ExecSQL（将目录下的*.sql文件的文件明作为这个例子程序的参数）
+        !!!ResultSetMetaData
+    03.预备语句CH04_03_QueryDB
+        !!!PreparedStatement
+        这个例子必需运行包中的SQL文件(可以用CH04_02这个DEMO)
+    04.行集的使用CH04_04_ViewDB (行集是用来代替"可滚动可滚动结果集"的)
+        !!!RowSet
+    05.LDAP的使用(略,比较适合用户管理,貌似不常用)
+        要先安装配置openldap,用ldapadd将*.ldif中的数据导入数据库中
+       如果要用NoSQL,MongoDB是比较好的选择
+    
+05.国际化
+
+06.高级swing
+
+07.高级AWT
+
+08.JavaBean构件
+
+09.安全
+
+10.分布式对象
+
+11.脚本、编译与注解处理
+
+12.本地方法
+
+
+13.读写Excel文件
+	1.读写*.xls和*.xlsx文件的一般方法
+	2.写*.xlsx文件的方法(省内存)
+	3.用流机制读*.xls(与SAX机制类似)
+	4.用流机制读*.xlsx(用SAX机制)
+
+
+
+介绍的书
+详细介绍XSLT
+    Essential XML 
+    www.w3c.org/TR/xslt
+SQL
+    Learning SQL
+    或者A Guide to the SQL Standard
+JDBC
+    JDBC API Tutorial and Reference
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,25 @@
+<!ELEMENT gridbag (row)*> <!-- 一个gridbag元素中有零到多个row -->
+<!ELEMENT row (cell)*>
+<!ELEMENT cell (bean)> <!-- 一个cell中只有一个bean -->
+<!ATTLIST cell gridx CDATA #IMPLIED> <!-- gridx和gridy属性是可选的 -->
+<!ATTLIST cell gridy CDATA #IMPLIED>
+<!ATTLIST cell gridwidth CDATA "1"> <!--gridwidth属性也是可选的,如果没有指定,默认为1 -->
+<!ATTLIST cell gridheight CDATA "1">
+<!ATTLIST cell weightx CDATA "0">
+<!ATTLIST cell weighty CDATA "0">
+<!ATTLIST cell fill (NONE|BOTH|HORIZONTAL|VERTICAL) "NONE">
+<!ATTLIST cell anchor 
+   (CENTER|NORTH|NORTHEAST|EAST|SOUTHEAST|SOUTH|SOUTHWEST|WEST|NORTHWEST) "CENTER">
+<!ATTLIST cell ipadx CDATA "0">
+<!ATTLIST cell ipady CDATA "0">
+
+<!ELEMENT bean (class, property*)> <!--bean中只有一个类和零到多个property-->
+<!ATTLIST bean id ID #IMPLIED> <!-- id属性是可选的,一旦指定了,它必须是唯一的(由ID指定) -->
+
+<!ELEMENT class (#PCDATA)> <!-- class中有一个文本元素 -->
+<!ELEMENT property (name, value)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT value (int|string|boolean|bean)> <!-- value的子元素有可能是以下子元素中的一个 -->
+<!ELEMENT int (#PCDATA)>
+<!ELEMENT string (#PCDATA)>
+<!ELEMENT boolean (#PCDATA)>

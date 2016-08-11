@@ -1,0 +1,37 @@
+对于像JFrame对象等WindowsEvent的事件源.常常有不止一个响应事件.
+一个WindowListener监听器内要定义多个响应事件来响应不同的动作.
+
+下面是实现的WindowsListener接口的方法.
+class Terminator implements WindowListener {
+    public void windowClosed(WindowEvent arg0) {            //窗口关闭后调用
+        // something
+    }
+
+    public void windowActivated(WindowEvent arg0) {    }    //窗口被激活后调用(只有框架和对话框可以被激活)
+    public void windowClosing(WindowEvent arg0) {    }      //用户发出窗口管理器命令关闭窗口时调用这个方法
+    public void windowDeactivated(WindowEvent arg0) {    }  //窗口变为示激活后调用
+    public void windowDeiconified(WindowEvent arg0) {    }  //窗口非图标化后调用(图标化即最小化)
+    public void windowIconified(WindowEvent arg0) {    }    //窗口图标化后调用(图标化即最小化)
+    public void windowOpened(WindowEvent arg0) {    }       //窗口打开后调用
+    
+}
+
+如果不想书写定义不做任何的方法,也可以扩展WindowAdapter类作为事件监听器类.
+class Terminator extends WindowAdapter {
+    public void windowClosing(WindowEvent e) {
+        //something
+        //e.getOldState()返回窗口状态改变事件中窗口的旧状态
+        //e.getNewState()............................新状态
+        // 新旧状态只能是以下的值
+        // Frame.NORMAL;
+        // Frame.ICONIFIED;
+        // Frame.MAXIMIZED_VERT;
+        // Frame.MAXIMIZED_HORIZ;
+        // Frame.MAXIMIZED_BOTH;
+    }
+}
+
+java.awt.event.WindowStateListener 接口有以下方法,
+void windowStateChangeed(WindowEvent event) {在窗口被极大化,图标化或恢复正常大小时调用这个方法
+    
+}

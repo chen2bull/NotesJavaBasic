@@ -1,0 +1,79 @@
+1.异常的分类
+    a.Java语言规范将派生于Error类或RuntimeException类的所有异常称为未检查异常。所有其它的异常称为已检查异常。
+    b.如果出现RuntimeException异常，那么一定是代码的问题。（相当有道理的规则）
+    c.注意：Java中的RuntimeException与C++中的logic_error类似。Error相当于C++中的runtime_error
+
+2.声明已检查异常
+    a.不需要声明从Error继承的异常。任何代码都有抛出这些异常的能力，并且我们对其没有任何控制能力。
+    b.不需要声明从RuntimeException继承的异常。这些异常完全在我们的控制之下，应该将更多的时间花在避免这些异常上。
+
+3.抛出异常
+    如果一个方法有可能抛出多个已检查异常，写法如下
+    class MyAnimation {
+        public Image loadImage(String s) throw EOFException,MalformedURLException {...
+        }
+    }
+
+4.创建异常类
+    class FileFormatException extends IOException {
+        public FileFormatException() {}
+        public FileFormatException(String gripe) {
+            super(gripe);
+        }
+    }
+//这样就可以在发生预想的错误的情况下，抛出这类异常
+//如 throw new FileFormatException();
+
+5.捕获异常
+    a.通常最好的选择是什么也不做，而是将异常传递给调用者。
+    b.但是也有例外的情况。覆盖超类方法时，如果超类中这个方法没有抛出异常，子类中就必须捕获方法代码中出现的每一个已检查异常。
+    不允许在子类的throws说明符中出现超过超类方法所列出的异常类范围。
+
+6.再次抛出异常与异常链
+    try {
+        // access the database
+    } catch( SQLException e ) {
+        Throwable se = new ServletException("database error");
+        se.initCause(e);
+        throw se;
+    }
+// 当捕获到se这个异常时，就可以使用Throwable e = se.getCause();重新得到原始异常
+// 这种方法可以让用户抛出子系统中的高级异常，而不会丢失原始异常的细节。
+
+7.finally子句
+强烈建议使用try/catch和try/finally语句块
+InputStream in = ...
+try {
+    try {
+        //有可能抛出异常的代码
+    }
+    finally {
+        in.close(); //保证输入流已经关闭的子句
+    }
+}
+catch (IOException e) {
+    //在控制台或者对话框中显示错误信息
+}
+
+8.使用异常的建议
+a.不要用异常代替简单的测试
+    eg.使用 if(!s.empty())s.pop();
+    比使用
+    try {
+        s.pop;
+    } catch(EmptyStackException e) {
+        ......
+    }
+    更好。因为异常的时间代价是很大的。
+
+b.不要过分地细化异常，应该将正常处理和错误处理分开。
+    （简单地说，就是采用一try多catch的方法）
+
+c.利用异常的层次结构
+    (不要只抛出RuntimeException,也不要只捕获Thowable异常.要适当使用不同的异常.)
+    
+d.不要压制异常(即catch子名不要为空)
+
+e.早抛出,晚捕获(在函数中,尽量将异常传递给调用者)
+
+

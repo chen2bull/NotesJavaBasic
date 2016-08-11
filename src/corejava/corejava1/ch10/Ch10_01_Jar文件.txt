@@ -1,0 +1,47 @@
+1.清单文件
+    每个JAR文件包含一个用于描述归档特征的清单文件。
+    清单文件被命名为MANIFEST.MF，它位于JAR文件的一个特殊META-INF子目录中。
+    最小的清单文件如下：
+    Mainfest-Version:1.0
+    复杂的清单文件可以加入描述文件／包的行
+    Name:MyClass.class                //描述这个文件的行
+    Name:com/mycompany/mypkg/         //描述这个包的行
+    
+    要想编辑清单文件，需要将希望添加到清单文件中的行放到文本文件中，然后运行jar cfm JARFileName ManifestFileName ...
+    
+    例：如要创建一个包含清单的JAR文件，应该运行：
+    jar cfm MyArchive.jar manifest.mf com/mycompany/mypkg/*.class
+    
+    要想更新一个已有的JAR文件的清单，则要将增加的部分放置到一个文本文件中（本例中是manifest-additions.mf），然后执行以下命令：
+    jar ufm MyArchive.jar mainfest-additions.mf
+
+
+2.可运行JAR文件
+    在使用jar命令时加入e选项。(不加也可以双击执行（Ch10_02_PropertiesTest）？原因未知)
+    eg:
+        jar cvfe MyProgram.jar com.mycompany.mypkg.MainAppClass  ...(要添加的文件)
+    这样，用户可以简单地通过下面命令来启动程序：
+        java -jar MyProgram.jar
+
+
+3.资源
+    一般将资料文件与其它的程序文件一起放在JAR文件中。
+    可以使用将资源文件与类文件放在同一个目录中，也可以将它放在子目录中。
+    定位资源的方法见Ch10_02_PropertiesTest.java
+
+
+4.密封
+    将Java包密封可以保证不会有其他的类加入其中。
+    
+    在默认情况下，JAR文件中的包是没有密封的。
+    要密封一个包，先要将包中的所有类放到一个JAR文件中。
+    在清单文件中的“主节”中加入下面一行：
+    Sealed：true
+    
+    而对于单独的包，可以通过在JAR文件的清单文件中增加一节，来指定是否想要密封一个包。
+    Name:com/mycompany/util/
+    Sealed:true
+    
+    Name:com/mycompany/misc/
+    Sealed:false
+

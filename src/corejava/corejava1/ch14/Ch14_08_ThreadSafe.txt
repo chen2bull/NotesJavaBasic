@@ -1,0 +1,22 @@
+1.高效的映像、集合和队列
+    java.util.concurrent包中提供了各种安全的Map、Set和Queue等：
+        ConcurrentHashMap<K, V>     //可高效地支持大量的读者和一定数量的写者
+        ConcurrentLinkedQueue<E>
+        ConcurrentSkipListMap<K, V>
+        ConcurrentSkipListSet<E>3
+        
+2.高效的线程安全的数组
+    java.util.concurrent
+        CopyOnWriteArrayList<E>
+        CopyOnWriteArraySet<E>
+       
+03.旧的线程安全的集合
+        ArrayList和HashMap都不是线程安全的
+        但是可以使用同步包装器来使它们变成线程安全的
+        如下
+        List<Integer> synchList = Collections.synchronizedList(new ArrayList<Integer>());
+        Map<Double, String> synchMap = Collections.synchronizedMap(new HashMap<Double, String>());
+        
+        
+    
+    

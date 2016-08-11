@@ -1,0 +1,40 @@
+1.预定执行
+ScheduledExecutorService有以下的方法
+    schedule                可以预定在指定的时间之后执行任务;
+    scheduleAtFixedRate     周期地运行给定的任务
+    scheduleWithDelay       周期地运行给定的任务，两次调用之间可以有延时
+    
+    
+2.控制任务组（将一组实现了Runnable或Callable接口类放到一个线程池中）
+方法一
+        ExecutorService executor = Executors.newCachedThreadPool();
+        List<Callable<T>> tasks= ...;
+        
+        // 执行给定的任务,返回所有任务的结果
+        // 如果将invokeAny将执行给定的任务，返回其中一个
+        List<Future<T>> results = executor.invokeAll(tasks);
+        
+        // 这个遍历方法的缺点是如果第一个任务恰巧花去了很多时间，则可能不得不进行等待。
+        for (Future<T> result : results) {
+            // 加入处理的代码
+            // 调用result的get方法
+        }
+        
+方法二
+        // 这个方法克服了上述的缺点，以结果按可获得的顺序更有实际意义。
+        
+        ExecutorCompletionService<T> executor = ExecutorCompletionService<T>();
+        List<Callable<T>> tasks= ...;
+        for (Callable<T> task : tasks) {
+            executor.submin(task);
+        }
+        for (int i = 0; i < tasks.size(); i++) {
+            // do something with 
+            // executor.take().get() 移除下一个已完成的结果，如果没有已经完成的，则阻塞
+            // executor.poll().get() 移除下一个已完成的结果，如果没有已经完成的，则返回null
+        }
+        List<Future<T>> results = executor.invokeAll(tasks);
+        for (Future<T> result : results) {
+            // 加入处理的代码
+            // 调用result的get方法
+        }
