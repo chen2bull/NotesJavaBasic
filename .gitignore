@@ -22,3 +22,4 @@ hs_err_pid*
 /out/production/GenComplete/GenConfig.tokens
 /out/production/GenComplete/GenConfigLexer.tokens
 /out
+/*.iml
