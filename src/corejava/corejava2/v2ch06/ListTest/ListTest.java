@@ -32,6 +32,7 @@ public class ListTest
  */
 class ListFrame extends JFrame
 {
+   @SuppressWarnings("deprecation")
    public ListFrame()
    {
       setTitle("ListTest");
