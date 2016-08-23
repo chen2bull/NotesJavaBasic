@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package phei.netty.pio;
+package netty_guide.pio;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import phei.netty.bio.TimeServerHandler;
+import netty_guide.bio.TimeServerHandler;
 
 /**
  * @author lilinfeng

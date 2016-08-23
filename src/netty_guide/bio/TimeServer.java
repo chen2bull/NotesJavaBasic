@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package phei.netty.bio;
+package netty_guide.bio;
 
 import java.io.IOException;
 import java.net.ServerSocket;
