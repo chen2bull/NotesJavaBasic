@@ -145,7 +145,7 @@ public class MultiplexerTimeServer implements Runnable {
 	if (response != null && response.trim().length() > 0) {
 	    byte[] bytes = response.getBytes();
 	    ByteBuffer writeBuffer = ByteBuffer.allocate(bytes.length);
-	    writeBuffer.put(bytes);
+	    writeBuffer.put(bytes);	// 这里没有处理"写半包"问题,数据有可能没有写完
 	    writeBuffer.flip();
 	    channel.write(writeBuffer);
 	}

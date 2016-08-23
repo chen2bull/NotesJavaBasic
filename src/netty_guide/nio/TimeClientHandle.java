@@ -104,32 +104,32 @@ public class TimeClientHandle implements Runnable {
 
 	if (key.isValid()) {
 	    // 判断是否连接成功
-	    SocketChannel sc = (SocketChannel) key.channel();
-	    if (key.isConnectable()) {
-		if (sc.finishConnect()) {
-		    sc.register(selector, SelectionKey.OP_READ);
-		    doWrite(sc);
-		} else
-		    System.exit(1);// 连接失败，进程退出
-	    }
-	    if (key.isReadable()) {
-		ByteBuffer readBuffer = ByteBuffer.allocate(1024);
-		int readBytes = sc.read(readBuffer);
-		if (readBytes > 0) {
-		    readBuffer.flip();
-		    byte[] bytes = new byte[readBuffer.remaining()];
-		    readBuffer.get(bytes);
-		    String body = new String(bytes, "UTF-8");
-		    System.out.println("Now is : " + body);
-		    this.stop = true;
-		} else if (readBytes < 0) {
-		    // 对端链路关闭
-		    key.cancel();
-		    sc.close();
-		} else
-		    ; // 读到0字节，忽略
-	    }
-	}
+        SocketChannel sc = (SocketChannel) key.channel();
+        if (key.isConnectable()) {
+            if (sc.finishConnect()) {
+                sc.register(selector, SelectionKey.OP_READ);
+                doWrite(sc);
+            } else
+                System.exit(1);// 连接失败，进程退出
+        }
+        if (key.isReadable()) {
+            ByteBuffer readBuffer = ByteBuffer.allocate(1024);
+            int readBytes = sc.read(readBuffer);
+            if (readBytes > 0) {
+                readBuffer.flip();
+                byte[] bytes = new byte[readBuffer.remaining()];
+                readBuffer.get(bytes);
+                String body = new String(bytes, "UTF-8");
+                System.out.println("Now is : " + body);
+                this.stop = true;
+            } else if (readBytes < 0) {
+                // 对端链路关闭
+                key.cancel();
+                sc.close();
+            } else
+                ; // 读到0字节，忽略
+        }
+    }
 
     }
 
@@ -138,7 +138,7 @@ public class TimeClientHandle implements Runnable {
 	if (socketChannel.connect(new InetSocketAddress(host, port))) {
 	    socketChannel.register(selector, SelectionKey.OP_READ);
 	    doWrite(socketChannel);
-	} else
+	} else  // 异步连接,成功以后,相应的key.isConnectable方法返回true
 	    socketChannel.register(selector, SelectionKey.OP_CONNECT);
     }
 
