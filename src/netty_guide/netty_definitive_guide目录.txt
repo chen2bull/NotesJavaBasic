@@ -1,8 +1,18 @@
-同步IO
-phei.netty.bio
+=============================================
+chap2 Java的NIO
+同步阻塞IO
+netty_guide.bio
 
 伪异步IO
-phei.netty.pio
+netty_guide.pio
 
+非阻塞IO
+netty_guide.nio
 
+异步IO
+netty_guide.aio
+
+=============================================
+chap3 netty 入门应用
+netty_guide.basic5
 
