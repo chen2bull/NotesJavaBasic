@@ -55,7 +55,7 @@ public class ReadCompletionHandler implements
     private void doWrite(String currentTime) {
 	if (currentTime != null && currentTime.trim().length() > 0) {
 	    byte[] bytes = (currentTime).getBytes();
-	    ByteBuffer writeBuffer = ByteBuffer.allocate(bytes.length);
+	    ByteBuffer writeBuffer = ByteBuffer.allocate(bytes.length); 	// 这里有GC问题,每次都创建一个新的Buffer(由于不是new,所以是不是每次创建新buffer依赖于实现,不确定是否有问题)
 	    writeBuffer.put(bytes);
 	    writeBuffer.flip();
 	    channel.write(writeBuffer, writeBuffer,
