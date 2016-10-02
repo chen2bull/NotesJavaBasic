@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package netty_guide.aio;
+package netty.guide.aio;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package netty_guide.nio;
+package netty.guide.nio;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

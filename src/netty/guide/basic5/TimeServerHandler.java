@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package netty_guide.basic5;
+package netty.guide.basic5;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;

@@ -13,22 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package netty_guide.nio;
-
-import java.io.IOException;
+package netty.guide.aio;
 
 /**
  * @author lilinfeng
  * @date 2014年2月14日
  * @version 1.0
  */
-public class TimeServer {
+public class TimeClient {
 
     /**
      * @param args
-     * @throws IOException
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 	int port = 8080;
 	if (args != null && args.length > 0) {
 	    try {
@@ -36,8 +33,10 @@ public class TimeServer {
 	    } catch (NumberFormatException e) {
 		// 采用默认值
 	    }
+
 	}
-	MultiplexerTimeServer timeServer = new MultiplexerTimeServer(port);
-	new Thread(timeServer, "NIO-MultiplexerTimeServer-001").start();
+	new Thread(new AsyncTimeClientHandler("127.0.0.1", port),
+		"AIO-AsyncTimeClientHandler-001").start();
+
     }
 }
