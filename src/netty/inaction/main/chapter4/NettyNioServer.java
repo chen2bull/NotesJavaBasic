@@ -34,16 +34,18 @@ public class NettyNioServer {
             // 使用NIO异步模式
             b.group(new NioEventLoopGroup(), new NioEventLoopGroup()).channel(NioServerSocketChannel.class).localAddress(new InetSocketAddress(port))
                     // 指定ChannelInitializer初始化handlers
-                    .childHandler(new ChannelInitializer<SocketChannel>() {
+                    // An ChannelInitializer is also itself a ChannelHandler which automatically removes itself
+                    // from the ChannelPipeline after it has added the other handlers.
+            .childHandler(new ChannelInitializer<SocketChannel>() {
+                @Override
+                public void initChannel(SocketChannel ch)
+                        throws Exception {
+                    // 添加一个“入站”handler到ChannelPipeline
+                    ch.pipeline().addLast(new ChannelInboundHandlerAdapter() {
                         @Override
-                        public void initChannel(SocketChannel ch)
-                                throws Exception {
-                            // 添加一个“入站”handler到ChannelPipeline
-                            ch.pipeline().addLast(new ChannelInboundHandlerAdapter() {
-                                @Override
-                                public void channelActive(ChannelHandlerContext ctx) throws Exception {
-                                    // 连接后，写消息到客户端，写完后便关闭连接
-                                    ctx.writeAndFlush(buf.duplicate()).addListener(ChannelFutureListener.CLOSE);
+                        public void channelActive(ChannelHandlerContext ctx) throws Exception {
+                            // 连接后，写消息到客户端，写完后便关闭连接
+                            ctx.writeAndFlush(buf.duplicate()).addListener(ChannelFutureListener.CLOSE);
                                 }
                             });
                         }
