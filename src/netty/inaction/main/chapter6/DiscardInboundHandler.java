@@ -7,7 +7,7 @@ import io.netty.util.ReferenceCountUtil;
 
 /**
  *
- * Listing 6.3 of <i>Netty in Action</i>
+ * Listing 6.10 of <i>Netty in Action</i>
  *
  * @author <a href="mailto:norman.maurer@googlemail.com">Norman Maurer</a>
  */
@@ -15,8 +15,7 @@ import io.netty.util.ReferenceCountUtil;
 public class DiscardInboundHandler extends ChannelInboundHandlerAdapter {
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx,
-                                     Object msg) {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
         ReferenceCountUtil.release(msg);
     }
 

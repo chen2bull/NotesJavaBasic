@@ -6,8 +6,8 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 
 /**
  *
- * Listing 6.10 of <i>Netty in Action</i>
- *
+ * Listing 6.6 of <i>Netty in Action</i>
+ * ChannelHandler如果带有@Sharable注解,则可以被添加到多个ChannelPipeline。
  * @author <a href="mailto:nmaurer@redhat.com">Norman Maurer</a>
  */
 @ChannelHandler.Sharable

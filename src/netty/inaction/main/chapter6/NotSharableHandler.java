@@ -16,7 +16,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
  */
 @ChannelHandler.Sharable
 public class NotSharableHandler extends ChannelInboundHandlerAdapter {
-    private int count;
+    private int count;  // 这样的话,这个类就不是线程安全的
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
