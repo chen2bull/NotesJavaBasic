@@ -156,6 +156,7 @@ public class ByteBufExamples {
      * 操作7.搜索操作Search operations
      * Listing 5.9
      */
+    @SuppressWarnings("deprecation")
     public static void byteBufProcessor(ByteBuf buffer) {
         // 检查数据中的空字节的index
         int index = buffer.forEachByte(ByteBufProcessor.FIND_CR);
